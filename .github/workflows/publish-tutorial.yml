@@ -1,0 +1,68 @@
+# Place this file at the ROOT of the EBV_resources repo, at:
+#   .github/workflows/publish-tutorial.yml
+# GitHub only reads workflow files from .github/workflows/ at the repo root,
+# even though this workflow only builds the tutorial/ subfolder.
+
+name: Publish EBV tutorial
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "tutorial/**"
+      - ".github/workflows/publish-tutorial.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: "1.5.56"
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "release"
+          use-public-rspm: true
+
+      - name: Install system dependencies (Linux)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libhdf5-dev libgdal-dev libproj-dev libgeos-dev libudunits2-dev
+
+      - name: Install R package dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::knitr
+            any::rmarkdown
+            any::ebvcube
+            any::ggplot2
+            any::terra
+            any::tidyterra
+            any::sf
+            bioc::rhdf5
+            bioc::DelayedArray
+            bioc::HDF5Array
+
+      # `path` tells the action to treat tutorial/ as the Quarto project,
+      # so only this book is rendered and published — the manual/ and
+      # presentation/ folders elsewhere in the repo are left untouched.
+      - name: Render and publish to GitHub Pages
+        uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+          path: tutorial
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

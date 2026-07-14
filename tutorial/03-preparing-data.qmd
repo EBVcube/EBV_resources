@@ -1,0 +1,25 @@
+# Preparing biodiversity data for conversion {#sec-preparing}
+
+*Learning objectives: structure raster outputs and metadata so they're ready for `ebv_create()`/`ebv_add_data()`.*
+
+## What `ebv_create()` needs
+
+<!-- TODO -->
+
+## Revisiting the four dimensions, as a producer
+
+<!-- TODO: adapt core-concepts.qmd "Scenarios, metrics and the group hierarchy", from the producer's point of view -->
+
+## Pre-flight checklist
+
+<!-- TODO: aligned rasters, naming scheme, fill value/units decisions, entity/taxonomy CSV -->
+
+## Downloading dataset 30 for a full worked example
+
+<!-- TODO: ebv_download() or manual download from https://portal.geobon.org/ebv-detail?id=30 (3.27 MB), then ebv_properties()/ebv_datacubepaths() to inspect its scenario/metric/entity structure -->
+
+## Building the metadata JSON
+
+<!-- TODO: adapt advanced-usage.qmd "Step 1 — the metadata JSON" -->
+
+**Checkpoint:** aligned rasters (or bundled example tifs), an entities list, and a metadata JSON in hand.

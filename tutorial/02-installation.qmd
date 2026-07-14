@@ -1,0 +1,21 @@
+# Installing the required software and the `ebvcube` package {#sec-installation}
+
+*Learning objectives: install R, RStudio, and `ebvcube` with all dependencies; verify the install.*
+
+## Prerequisites
+
+<!-- TODO: adapt installation.qmd "Prerequisites" -->
+
+## Installing from CRAN
+
+<!-- TODO: adapt installation.qmd "Installing the released version" -->
+
+## Bioconductor dependencies
+
+<!-- TODO: adapt installation.qmd "Bioconductor dependencies" -->
+
+## Verifying your installation
+
+<!-- TODO: adapt installation.qmd "Verifying your installation", using martins_comcom_subset.nc -->
+
+**Checkpoint:** `library(ebvcube)` loads without error and `ebv_properties()` prints a dataset title.

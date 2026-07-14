@@ -1,0 +1,25 @@
+# Validating the generated file {#sec-validating}
+
+*Learning objectives: confirm the file is portal-ready before attempting upload.*
+
+## Structural self-checks
+
+<!-- TODO: ebv_properties() slot by slot -->
+
+## Visual check with `ebv_map()`
+
+<!-- TODO: adapt faq.qmd "The map looks shifted by 180°" -->
+
+## Cross-checking against the metadata JSON
+
+<!-- TODO -->
+
+## External validation (Panoply, portal validator)
+
+<!-- TODO -->
+
+## Pre-flight checklist
+
+<!-- TODO: tick-box summary -->
+
+**Checkpoint:** you can explain why each check matters and have run all of them on your file.

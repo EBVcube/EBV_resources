@@ -1,0 +1,25 @@
+# Uploading the dataset to the EBV Data Portal {#sec-uploading}
+
+*Learning objectives: submit a dataset through the portal UI and understand its review lifecycle.*
+
+## Account & login
+
+<!-- TODO: register at members.geobon.org, sign in -->
+
+## Filling in the metadata form
+
+<!-- TODO: general info / EBV attributes / entities tabs, mirroring dataset 30's page structure -->
+
+## Uploading the netCDF and preview image
+
+<!-- TODO -->
+
+## Draft, submit for review, and versioning
+
+<!-- TODO: portal status states observed: Draft -> Submit for review -> published; dataset 30 shows "Initial Version", 1 version available -->
+
+## After publication: DOI and citation
+
+<!-- TODO -->
+
+**Checkpoint:** you've completed a real (or walked-through) submission using dataset 30 as reference.

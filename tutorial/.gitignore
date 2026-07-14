@@ -1,0 +1,7 @@
+/_book/
+/.quarto/
+/_freeze/
+*_cache/
+*_files/
+.Rhistory
+.RData

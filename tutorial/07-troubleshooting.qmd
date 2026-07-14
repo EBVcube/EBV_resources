@@ -1,0 +1,25 @@
+# Troubleshooting common issues and best practices {#sec-troubleshooting}
+
+## Installation
+
+<!-- TODO: adapt faq.qmd "Installation" section wholesale -->
+
+## Creating data
+
+<!-- TODO: adapt faq.qmd "Creating data" section -->
+
+## Validating
+
+<!-- TODO: adapt faq.qmd "Reading data" section, reframed -->
+
+## Uploading / portal-specific
+
+<!-- TODO: new content — file size limits, unsupported CRS/class combos, stuck-in-review, who to contact -->
+
+## Performance
+
+<!-- TODO: adapt faq.qmd "Performance" section -->
+
+## Best practices
+
+<!-- TODO: adapt faq.qmd "Citation, licensing and contribution" -->
