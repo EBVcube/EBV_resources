@@ -1,0 +1,442 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Creating an EBV NetCDF and Publishing to the EBV Data Portal",
+    "section": "",
+    "text": "0.1 Why this tutorial exists\nBiodiversity data is only useful to decision-makers if it can be found, trusted, and compared across studies. That is the problem Essential Biodiversity Variables (EBVs) were designed to solve: a common language and file format so that a species-distribution model from one team and a community-composition model from another can sit side by side on the same map.\nThis tutorial walks you through the full path from “I have some raster outputs on my laptop” to “my dataset is live on the EBV Data Portal” — using a real, published dataset as the running example, so every step produces something you can check against the real thing.\nBy the end, you will be able to:",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>From Raster to Portal: Publishing Biodiversity Data as an EBV NetCDF</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#why-this-tutorial-exists",
+    "href": "index.html#why-this-tutorial-exists",
+    "title": "Creating an EBV NetCDF and Publishing to the EBV Data Portal",
+    "section": "",
+    "text": "explain what an EBV is and why the EBV netCDF format looks the way it does;\ninstall and configure the ebvcube R package;\nprepare your own raster/species data for conversion;\nbuild a valid EBV netCDF with ebv_create() and ebv_add_data();\nvalidate the file before submitting it;\nupload and publish the dataset on the EBV Data Portal;\ntroubleshoot the errors you are most likely to hit along the way.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>From Raster to Portal: Publishing Biodiversity Data as an EBV NetCDF</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#what-is-an-ebv-in-one-paragraph",
+    "href": "index.html#what-is-an-ebv-in-one-paragraph",
+    "title": "Creating an EBV NetCDF and Publishing to the EBV Data Portal",
+    "section": "0.2 What is an EBV, in one paragraph",
+    "text": "0.2 What is an EBV, in one paragraph\nAn Essential Biodiversity Variable is a measurement standardized well enough to be tracked consistently over time, across regions, and across research groups — the biodiversity equivalent of an Essential Climate Variable. GEO BON groups them into six classes (genetic composition, species populations, species traits, community composition, ecosystem structure, ecosystem function), and every EBV dataset shares the same underlying file format: a CF- and ACDD-compliant netCDF with up to four dimensions — longitude, latitude, time, and entity (species, group, or ecosystem type). That shared format is what lets the EBV Data Portal host, filter, and compare hundreds of otherwise very different datasets.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>From Raster to Portal: Publishing Biodiversity Data as an EBV NetCDF</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#the-dataset-well-use",
+    "href": "index.html#the-dataset-well-use",
+    "title": "Creating an EBV NetCDF and Publishing to the EBV Data Portal",
+    "section": "0.3 The dataset we’ll use",
+    "text": "0.3 The dataset we’ll use\nRather than a toy example, this tutorial anchors its portal-facing sections to a real, already-published dataset:\n\nGlobal trends in biodiversity (BES-SIM cSAR-iDiv) — Inês Martins & Henrique Pereira (2022). Community-composition projections from 1900–2050 under multiple SSP/RCP scenarios, produced for the BES-SIM inter-model comparison for IPBES. Dataset page · DOI: 10.25829/5zmy41 · netCDF download: 3.27 MB\n\nWe use this dataset (portal ID 30) whenever we’re exploring the portal — its metadata form, entity list, DOI, citation, and versioning — so everything you see corresponds to something you can open yourself, right now, on the live portal.\nFor the hands-on R code, we mostly use the small example file bundled with the ebvcube package (martins_comcom_subset.nc), so every chunk runs instantly with no download. That file is a related but different dataset by the same author and model family — portal ID 1, “Local bird diversity (cSAR/BES-SIM)”, a spatial (African) subset of a 1900–2015 land-use-driven bird diversity product. Unit 3 shows how to download the actual dataset‑30 netCDF (small enough, at 3.27 MB, to work with directly) if you want to run the full workflow against it end-to-end instead.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>From Raster to Portal: Publishing Biodiversity Data as an EBV NetCDF</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#the-workflow-at-a-glance",
+    "href": "index.html#the-workflow-at-a-glance",
+    "title": "Creating an EBV NetCDF and Publishing to the EBV Data Portal",
+    "section": "0.4 The workflow at a glance",
+    "text": "0.4 The workflow at a glance\n\nflowchart LR\n    A[\"1. Prepare your data\\n(rasters + metadata)\"] --&gt; B[\"2. Generate the metadata JSON\\n(portal form or ebv_metadata())\"]\n    B --&gt; C[\"3. ebv_create()\\nempty, valid netCDF skeleton\"]\n    C --&gt; D[\"4. ebv_add_data()\\nfill in each entity / time step\"]\n    D --&gt; E[\"5. Validate\\nebv_properties(), Panoply, portal validator\"]\n    E --&gt; F[\"6. Upload to the\\nEBV Data Portal\"]\n    F --&gt; G[\"7. Review & publish\\n(DOI assigned)\"]\n\n\n\n\nflowchart LR\n    A[\"1. Prepare your data\\n(rasters + metadata)\"] --&gt; B[\"2. Generate the metadata JSON\\n(portal form or ebv_metadata())\"]\n    B --&gt; C[\"3. ebv_create()\\nempty, valid netCDF skeleton\"]\n    C --&gt; D[\"4. ebv_add_data()\\nfill in each entity / time step\"]\n    D --&gt; E[\"5. Validate\\nebv_properties(), Panoply, portal validator\"]\n    E --&gt; F[\"6. Upload to the\\nEBV Data Portal\"]\n    F --&gt; G[\"7. Review & publish\\n(DOI assigned)\"]",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>From Raster to Portal: Publishing Biodiversity Data as an EBV NetCDF</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#how-this-tutorial-is-organized",
+    "href": "index.html#how-this-tutorial-is-organized",
+    "title": "Creating an EBV NetCDF and Publishing to the EBV Data Portal",
+    "section": "0.5 How this tutorial is organized",
+    "text": "0.5 How this tutorial is organized\n\n\n\nUnit\nTopic\n\n\n\n\n1\nIntroduction to EBVs and the EBV Data Portal\n\n\n2\nInstalling R, RStudio, and the ebvcube package\n\n\n3\nPreparing your biodiversity data for conversion\n\n\n4\nCreating an EBV netCDF with ebvcube\n\n\n5\nValidating the generated file\n\n\n6\nUploading your dataset to the EBV Data Portal\n\n\n7\nTroubleshooting common issues and best practices\n\n\n8\nFurther resources, repositories, and references\n\n\n\nEach unit opens with its learning objectives, works through the step with runnable code and screenshots, and closes with a short checkpoint so you know you’re ready to move on.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>From Raster to Portal: Publishing Biodiversity Data as an EBV NetCDF</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#before-you-start",
+    "href": "index.html#before-you-start",
+    "title": "Creating an EBV NetCDF and Publishing to the EBV Data Portal",
+    "section": "0.6 Before you start",
+    "text": "0.6 Before you start\nYou don’t need prior netCDF experience — Unit 1 covers the concepts you need. You should be comfortable with:\n\nbasic R (installing packages, running scripts);\nbasic geospatial data in R (terra/raster basics);\nhaving your own species or biodiversity raster data ready, or being happy to follow along with the example dataset.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>From Raster to Portal: Publishing Biodiversity Data as an EBV NetCDF</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#key-resources",
+    "href": "index.html#key-resources",
+    "title": "Creating an EBV NetCDF and Publishing to the EBV Data Portal",
+    "section": "0.7 Key resources",
+    "text": "0.7 Key resources\n\nEBV Data Portal — https://portal.geobon.org/ — discover, download, and publish EBV datasets.\nebvcube R package — https://github.com/EBVcube/ebvcube — read, visualize, and create EBV netCDFs. Also on CRAN and the b-cubed r-universe.\nebvcube documentation book — https://EBVcube.github.io/ebvcube/ — the full function reference this tutorial builds on.\nEBV netCDF format specification — https://github.com/EBVcube/EBVCube-format — the structural rules behind the format.\nGEO BON — What are EBVs? — https://geobon.org/ebvs/what-are-ebvs/ — the canonical definition and the six EBV classes.\nMethods paper — Quoss et al. (2022), describing the package and the netCDF structure it implements.\n\n\n\n\n\n\n\nWorking alongside this tutorial. Every code chunk is runnable as-is against the bundled example dataset. If you’re preparing your own dataset for the portal, follow the same steps but substitute your rasters and metadata where indicated in Units 3–4.\n\n\n\nReady? Start with Unit 1 — Introduction to EBVs and the EBV Data Portal.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>From Raster to Portal: Publishing Biodiversity Data as an EBV NetCDF</span>"
+    ]
+  },
+  {
+    "objectID": "01-introduction.html",
+    "href": "01-introduction.html",
+    "title": "2  Introduction to EBVs and the EBV Data Portal",
+    "section": "",
+    "text": "2.1 What is an Essential Biodiversity Variable?",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to EBVs and the EBV Data Portal</span>"
+    ]
+  },
+  {
+    "objectID": "01-introduction.html#the-six-ebv-classes",
+    "href": "01-introduction.html#the-six-ebv-classes",
+    "title": "2  Introduction to EBVs and the EBV Data Portal",
+    "section": "2.2 The six EBV classes",
+    "text": "2.2 The six EBV classes",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to EBVs and the EBV Data Portal</span>"
+    ]
+  },
+  {
+    "objectID": "01-introduction.html#why-netcdf",
+    "href": "01-introduction.html#why-netcdf",
+    "title": "2  Introduction to EBVs and the EBV Data Portal",
+    "section": "2.3 Why netCDF?",
+    "text": "2.3 Why netCDF?",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to EBVs and the EBV Data Portal</span>"
+    ]
+  },
+  {
+    "objectID": "01-introduction.html#touring-the-ebv-data-portal",
+    "href": "01-introduction.html#touring-the-ebv-data-portal",
+    "title": "2  Introduction to EBVs and the EBV Data Portal",
+    "section": "2.4 Touring the EBV Data Portal",
+    "text": "2.4 Touring the EBV Data Portal\nWe’ll use dataset 30, “Global trends in biodiversity (BES-SIM cSAR-iDiv)” by Inês Martins & Henrique Pereira, as our worked example throughout this tutorial.\n\n\n\n\n\n\n\nA note on datasets\n\n\n\nThis tutorial uses two related datasets by the same research group:\n\nDataset 30 (above) — our real-world example whenever we talk about the portal itself.\nThe small file bundled with the ebvcube package — a subset of a different dataset (portal ID 1, “Local bird diversity”) — which we use for hands-on R code so nothing needs downloading.\n\nUnit 3 shows how to download dataset 30’s actual file if you want full end-to-end fidelity.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to EBVs and the EBV Data Portal</span>"
+    ]
+  },
+  {
+    "objectID": "01-introduction.html#where-ebvcube-fits",
+    "href": "01-introduction.html#where-ebvcube-fits",
+    "title": "2  Introduction to EBVs and the EBV Data Portal",
+    "section": "2.5 Where ebvcube fits",
+    "text": "2.5 Where ebvcube fits\n\nCheckpoint: Can you open dataset 30’s page and identify its EBV class, DOI, and file formats?",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to EBVs and the EBV Data Portal</span>"
+    ]
+  },
+  {
+    "objectID": "02-installation.html",
+    "href": "02-installation.html",
+    "title": "3  Installing the required software and the ebvcube package",
+    "section": "",
+    "text": "3.1 Prerequisites",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Installing the required software and the `ebvcube` package</span>"
+    ]
+  },
+  {
+    "objectID": "02-installation.html#installing-from-cran",
+    "href": "02-installation.html#installing-from-cran",
+    "title": "3  Installing the required software and the ebvcube package",
+    "section": "3.2 Installing from CRAN",
+    "text": "3.2 Installing from CRAN",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Installing the required software and the `ebvcube` package</span>"
+    ]
+  },
+  {
+    "objectID": "02-installation.html#bioconductor-dependencies",
+    "href": "02-installation.html#bioconductor-dependencies",
+    "title": "3  Installing the required software and the ebvcube package",
+    "section": "3.3 Bioconductor dependencies",
+    "text": "3.3 Bioconductor dependencies",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Installing the required software and the `ebvcube` package</span>"
+    ]
+  },
+  {
+    "objectID": "02-installation.html#verifying-your-installation",
+    "href": "02-installation.html#verifying-your-installation",
+    "title": "3  Installing the required software and the ebvcube package",
+    "section": "3.4 Verifying your installation",
+    "text": "3.4 Verifying your installation\n\nCheckpoint: library(ebvcube) loads without error and ebv_properties() prints a dataset title.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Installing the required software and the `ebvcube` package</span>"
+    ]
+  },
+  {
+    "objectID": "03-preparing-data.html",
+    "href": "03-preparing-data.html",
+    "title": "4  Preparing biodiversity data for conversion",
+    "section": "",
+    "text": "4.1 What ebv_create() needs",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Preparing biodiversity data for conversion</span>"
+    ]
+  },
+  {
+    "objectID": "03-preparing-data.html#revisiting-the-four-dimensions-as-a-producer",
+    "href": "03-preparing-data.html#revisiting-the-four-dimensions-as-a-producer",
+    "title": "4  Preparing biodiversity data for conversion",
+    "section": "4.2 Revisiting the four dimensions, as a producer",
+    "text": "4.2 Revisiting the four dimensions, as a producer",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Preparing biodiversity data for conversion</span>"
+    ]
+  },
+  {
+    "objectID": "03-preparing-data.html#pre-flight-checklist",
+    "href": "03-preparing-data.html#pre-flight-checklist",
+    "title": "4  Preparing biodiversity data for conversion",
+    "section": "4.3 Pre-flight checklist",
+    "text": "4.3 Pre-flight checklist",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Preparing biodiversity data for conversion</span>"
+    ]
+  },
+  {
+    "objectID": "03-preparing-data.html#downloading-dataset-30-for-a-full-worked-example",
+    "href": "03-preparing-data.html#downloading-dataset-30-for-a-full-worked-example",
+    "title": "4  Preparing biodiversity data for conversion",
+    "section": "4.4 Downloading dataset 30 for a full worked example",
+    "text": "4.4 Downloading dataset 30 for a full worked example",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Preparing biodiversity data for conversion</span>"
+    ]
+  },
+  {
+    "objectID": "03-preparing-data.html#building-the-metadata-json",
+    "href": "03-preparing-data.html#building-the-metadata-json",
+    "title": "4  Preparing biodiversity data for conversion",
+    "section": "4.5 Building the metadata JSON",
+    "text": "4.5 Building the metadata JSON\n\nCheckpoint: aligned rasters (or bundled example tifs), an entities list, and a metadata JSON in hand.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Preparing biodiversity data for conversion</span>"
+    ]
+  },
+  {
+    "objectID": "04-creating-the-cube.html",
+    "href": "04-creating-the-cube.html",
+    "title": "5  Creating an EBVCube NetCDF using the R package",
+    "section": "",
+    "text": "5.1 Step 2 — ebv_create()",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating an EBVCube NetCDF using the R package</span>"
+    ]
+  },
+  {
+    "objectID": "04-creating-the-cube.html#step-3-ebv_add_data",
+    "href": "04-creating-the-cube.html#step-3-ebv_add_data",
+    "title": "5  Creating an EBVCube NetCDF using the R package",
+    "section": "5.2 Step 3 — ebv_add_data()",
+    "text": "5.2 Step 3 — ebv_add_data()",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating an EBVCube NetCDF using the R package</span>"
+    ]
+  },
+  {
+    "objectID": "04-creating-the-cube.html#step-4-ebv_attribute",
+    "href": "04-creating-the-cube.html#step-4-ebv_attribute",
+    "title": "5  Creating an EBVCube NetCDF using the R package",
+    "section": "5.3 Step 4 — ebv_attribute()",
+    "text": "5.3 Step 4 — ebv_attribute()",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating an EBVCube NetCDF using the R package</span>"
+    ]
+  },
+  {
+    "objectID": "04-creating-the-cube.html#taxonomic-species-level-datasets",
+    "href": "04-creating-the-cube.html#taxonomic-species-level-datasets",
+    "title": "5  Creating an EBVCube NetCDF using the R package",
+    "section": "5.4 Taxonomic / species-level datasets",
+    "text": "5.4 Taxonomic / species-level datasets",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating an EBVCube NetCDF using the R package</span>"
+    ]
+  },
+  {
+    "objectID": "04-creating-the-cube.html#sanity-checking-the-result",
+    "href": "04-creating-the-cube.html#sanity-checking-the-result",
+    "title": "5  Creating an EBVCube NetCDF using the R package",
+    "section": "5.5 Sanity-checking the result",
+    "text": "5.5 Sanity-checking the result\n\nCheckpoint: you have produced your own .nc file and can list its datacube paths.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating an EBVCube NetCDF using the R package</span>"
+    ]
+  },
+  {
+    "objectID": "05-validating.html",
+    "href": "05-validating.html",
+    "title": "6  Validating the generated file",
+    "section": "",
+    "text": "6.1 Structural self-checks",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Validating the generated file</span>"
+    ]
+  },
+  {
+    "objectID": "05-validating.html#visual-check-with-ebv_map",
+    "href": "05-validating.html#visual-check-with-ebv_map",
+    "title": "6  Validating the generated file",
+    "section": "6.2 Visual check with ebv_map()",
+    "text": "6.2 Visual check with ebv_map()",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Validating the generated file</span>"
+    ]
+  },
+  {
+    "objectID": "05-validating.html#cross-checking-against-the-metadata-json",
+    "href": "05-validating.html#cross-checking-against-the-metadata-json",
+    "title": "6  Validating the generated file",
+    "section": "6.3 Cross-checking against the metadata JSON",
+    "text": "6.3 Cross-checking against the metadata JSON",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Validating the generated file</span>"
+    ]
+  },
+  {
+    "objectID": "05-validating.html#external-validation-panoply-portal-validator",
+    "href": "05-validating.html#external-validation-panoply-portal-validator",
+    "title": "6  Validating the generated file",
+    "section": "6.4 External validation (Panoply, portal validator)",
+    "text": "6.4 External validation (Panoply, portal validator)",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Validating the generated file</span>"
+    ]
+  },
+  {
+    "objectID": "05-validating.html#pre-flight-checklist",
+    "href": "05-validating.html#pre-flight-checklist",
+    "title": "6  Validating the generated file",
+    "section": "6.5 Pre-flight checklist",
+    "text": "6.5 Pre-flight checklist\n\nCheckpoint: you can explain why each check matters and have run all of them on your file.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Validating the generated file</span>"
+    ]
+  },
+  {
+    "objectID": "06-uploading.html",
+    "href": "06-uploading.html",
+    "title": "7  Uploading the dataset to the EBV Data Portal",
+    "section": "",
+    "text": "7.1 Account & login",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Uploading the dataset to the EBV Data Portal</span>"
+    ]
+  },
+  {
+    "objectID": "06-uploading.html#filling-in-the-metadata-form",
+    "href": "06-uploading.html#filling-in-the-metadata-form",
+    "title": "7  Uploading the dataset to the EBV Data Portal",
+    "section": "7.2 Filling in the metadata form",
+    "text": "7.2 Filling in the metadata form",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Uploading the dataset to the EBV Data Portal</span>"
+    ]
+  },
+  {
+    "objectID": "06-uploading.html#uploading-the-netcdf-and-preview-image",
+    "href": "06-uploading.html#uploading-the-netcdf-and-preview-image",
+    "title": "7  Uploading the dataset to the EBV Data Portal",
+    "section": "7.3 Uploading the netCDF and preview image",
+    "text": "7.3 Uploading the netCDF and preview image",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Uploading the dataset to the EBV Data Portal</span>"
+    ]
+  },
+  {
+    "objectID": "06-uploading.html#draft-submit-for-review-and-versioning",
+    "href": "06-uploading.html#draft-submit-for-review-and-versioning",
+    "title": "7  Uploading the dataset to the EBV Data Portal",
+    "section": "7.4 Draft, submit for review, and versioning",
+    "text": "7.4 Draft, submit for review, and versioning",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Uploading the dataset to the EBV Data Portal</span>"
+    ]
+  },
+  {
+    "objectID": "06-uploading.html#after-publication-doi-and-citation",
+    "href": "06-uploading.html#after-publication-doi-and-citation",
+    "title": "7  Uploading the dataset to the EBV Data Portal",
+    "section": "7.5 After publication: DOI and citation",
+    "text": "7.5 After publication: DOI and citation\n\nCheckpoint: you’ve completed a real (or walked-through) submission using dataset 30 as reference.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Uploading the dataset to the EBV Data Portal</span>"
+    ]
+  },
+  {
+    "objectID": "07-troubleshooting.html",
+    "href": "07-troubleshooting.html",
+    "title": "8  Troubleshooting common issues and best practices",
+    "section": "",
+    "text": "8.1 Installation",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Troubleshooting common issues and best practices</span>"
+    ]
+  },
+  {
+    "objectID": "07-troubleshooting.html#creating-data",
+    "href": "07-troubleshooting.html#creating-data",
+    "title": "8  Troubleshooting common issues and best practices",
+    "section": "8.2 Creating data",
+    "text": "8.2 Creating data",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Troubleshooting common issues and best practices</span>"
+    ]
+  },
+  {
+    "objectID": "07-troubleshooting.html#validating",
+    "href": "07-troubleshooting.html#validating",
+    "title": "8  Troubleshooting common issues and best practices",
+    "section": "8.3 Validating",
+    "text": "8.3 Validating",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Troubleshooting common issues and best practices</span>"
+    ]
+  },
+  {
+    "objectID": "07-troubleshooting.html#uploading-portal-specific",
+    "href": "07-troubleshooting.html#uploading-portal-specific",
+    "title": "8  Troubleshooting common issues and best practices",
+    "section": "8.4 Uploading / portal-specific",
+    "text": "8.4 Uploading / portal-specific",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Troubleshooting common issues and best practices</span>"
+    ]
+  },
+  {
+    "objectID": "07-troubleshooting.html#performance",
+    "href": "07-troubleshooting.html#performance",
+    "title": "8  Troubleshooting common issues and best practices",
+    "section": "8.5 Performance",
+    "text": "8.5 Performance",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Troubleshooting common issues and best practices</span>"
+    ]
+  },
+  {
+    "objectID": "07-troubleshooting.html#best-practices",
+    "href": "07-troubleshooting.html#best-practices",
+    "title": "8  Troubleshooting common issues and best practices",
+    "section": "8.6 Best practices",
+    "text": "8.6 Best practices",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Troubleshooting common issues and best practices</span>"
+    ]
+  },
+  {
+    "objectID": "08-resources.html",
+    "href": "08-resources.html",
+    "title": "9  Additional resources, documentation, repositories, and references",
+    "section": "",
+    "text": "ebvcube R package — https://github.com/EBVcube/ebvcube, CRAN, b-cubed r-universe\nebvcube documentation book — https://EBVcube.github.io/ebvcube/\nEBV netCDF format specification — https://github.com/EBVcube/EBVCube-format\nEBV Data Portal — https://portal.geobon.org/\nGEO BON — What are EBVs? — https://geobon.org/ebvs/what-are-ebvs/\nExample dataset (portal) — Martins, I., Pereira, H. (2022). Global trends in biodiversity (BES-SIM cSAR-iDiv) (Version 1) [Dataset]. iDiv. https://doi.org/10.25829/5zmy41\nGetting help — GitHub issues, GitHub Discussions, portal contact",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Additional resources, documentation, repositories, and references</span>"
+    ]
+  }
+]
