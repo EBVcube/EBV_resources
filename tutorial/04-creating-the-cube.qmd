@@ -1,0 +1,25 @@
+# Creating an EBVCube NetCDF using the R package {#sec-creating}
+
+*Learning objectives: run the four-step creation pipeline end-to-end and produce a valid netCDF.*
+
+## Step 2 — `ebv_create()`
+
+<!-- TODO: adapt advanced-usage.qmd, full runnable code block -->
+
+## Step 3 — `ebv_add_data()`
+
+<!-- TODO: adapt advanced-usage.qmd -->
+
+## Step 4 — `ebv_attribute()`
+
+<!-- TODO: adapt advanced-usage.qmd -->
+
+## Taxonomic / species-level datasets
+
+<!-- TODO: adapt advanced-usage.qmd "Taxonomic datasets" — relevant since dataset 30 is community composition -->
+
+## Sanity-checking the result
+
+<!-- TODO: ebv_properties(), ebv_datacubepaths(); optional Panoply callout -->
+
+**Checkpoint:** you have produced your own `.nc` file and can list its datacube paths.

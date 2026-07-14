@@ -1,0 +1,37 @@
+# Introduction to EBVs and the EBV Data Portal {#sec-intro}
+
+*Learning objectives: define an EBV; name the six EBV classes; describe why netCDF was chosen; locate a dataset on the portal.*
+
+## What is an Essential Biodiversity Variable?
+
+<!-- TODO: adapt core-concepts.qmd's "What is an EBV?" section from ../core-concepts.qmd -->
+
+## The six EBV classes
+
+<!-- TODO: adapt core-concepts.qmd's callout on canonical classes vs. portal labels -->
+
+## Why netCDF?
+
+<!-- TODO: adapt core-concepts.qmd's "Why netCDF?" section -->
+
+## Touring the EBV Data Portal
+
+We'll use [dataset 30](https://portal.geobon.org/ebv-detail?id=30), *"Global trends in biodiversity (BES-SIM cSAR-iDiv)"* by Inês Martins & Henrique Pereira, as our worked example throughout this tutorial.
+
+<!-- TODO: screenshots of Discover page, dataset 30 detail page, class filters -->
+
+::: {.callout-note}
+## A note on datasets
+This tutorial uses **two** related datasets by the same research group:
+
+- **Dataset 30** (above) — our real-world example whenever we talk about the *portal itself*.
+- The small file bundled with the `ebvcube` package — a subset of a *different* dataset (portal ID 1, "Local bird diversity") — which we use for hands-on R code so nothing needs downloading.
+
+Unit 3 shows how to download dataset 30's actual file if you want full end-to-end fidelity.
+:::
+
+## Where `ebvcube` fits
+
+<!-- TODO: one paragraph bridging "data on your laptop" -> "data on the portal" -->
+
+**Checkpoint:** Can you open dataset 30's page and identify its EBV class, DOI, and file formats?

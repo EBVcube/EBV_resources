@@ -1,0 +1,9 @@
+# Additional resources, documentation, repositories, and references {#sec-resources}
+
+- **`ebvcube` R package** — <https://github.com/EBVcube/ebvcube>, [CRAN](https://cran.r-project.org/package=ebvcube), [b-cubed r-universe](https://b-cubed-eu.r-universe.dev/ebvcube)
+- **`ebvcube` documentation book** — <https://EBVcube.github.io/ebvcube/>
+- **EBV netCDF format specification** — <https://github.com/EBVcube/EBVCube-format>
+- **EBV Data Portal** — <https://portal.geobon.org/>
+- **GEO BON — What are EBVs?** — <https://geobon.org/ebvs/what-are-ebvs/>
+- **Example dataset (portal)** — Martins, I., Pereira, H. (2022). *Global trends in biodiversity (BES-SIM cSAR-iDiv)* (Version 1) [Dataset]. iDiv. <https://doi.org/10.25829/5zmy41>
+- **Getting help** — GitHub issues, GitHub Discussions, portal contact

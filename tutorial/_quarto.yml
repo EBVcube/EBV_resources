@@ -1,0 +1,60 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Creating an EBV NetCDF and Publishing to the EBV Data Portal"
+  subtitle: "A NaturaConnect tutorial"
+  author:
+    - name: "The EBV Data Portal team"
+      affiliation: "German Centre for Integrative Biodiversity Research (iDiv) Halle–Jena–Leipzig"
+  date: today
+  description: |
+    A step-by-step tutorial on creating an EBV-compliant netCDF with the
+    ebvcube R package and publishing it to the EBV Data Portal.
+  repo-url: https://github.com/EBVcube/EBV_resources
+  repo-branch: main
+  repo-actions: [edit, issue]
+  site-url: https://EBVcube.github.io/EBV_resources/
+  search: true
+  page-navigation: true
+  sidebar:
+    style: docked
+    background: light
+  chapters:
+    - index.qmd
+    - 01-introduction.qmd
+    - 02-installation.qmd
+    - 03-preparing-data.qmd
+    - 04-creating-the-cube.qmd
+    - 05-validating.qmd
+    - 06-uploading.qmd
+    - 07-troubleshooting.qmd
+    - 08-resources.qmd
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    code-link: true
+    code-copy: true
+    code-overflow: wrap
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    fig-align: center
+    fig-cap-location: bottom
+
+execute:
+  echo: true
+  warning: false
+  message: false
+  freeze: auto
+
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: "#>"
+    fig.retina: 2
+    fig.align: "center"
