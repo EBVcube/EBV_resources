@@ -20,12 +20,13 @@ We'll use [dataset 30](https://portal.geobon.org/ebv-detail?id=30), *"Global tre
 
 <!-- TODO: screenshots of Discover page, dataset 30 detail page, class filters -->
 
-::: {.callout-note}
+::: callout-note
 ## A note on datasets
+
 This tutorial uses **two** related datasets by the same research group:
 
-- **Dataset 30** (above) — our real-world example whenever we talk about the *portal itself*.
-- The small file bundled with the `ebvcube` package — a subset of a *different* dataset (portal ID 1, "Local bird diversity") — which we use for hands-on R code so nothing needs downloading.
+-   **Dataset 30** (above) — our real-world example whenever we talk about the *portal itself*.
+-   The small file bundled with the `ebvcube` package — a subset of a *different* dataset (portal ID 1, "Local bird diversity") — which we use for hands-on R code so nothing needs downloading.
 
 Unit 3 shows how to download dataset 30's actual file if you want full end-to-end fidelity.
 :::
