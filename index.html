@@ -6,11 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="The EBV Data Portal team">
-<meta name="dcterms.date" content="2026-07-14">
-<meta name="description" content="A step-by-step tutorial on creating an EBV-compliant netCDF with the ebvcube R package and publishing it to the EBV Data Portal.">
+<meta name="author" content="Emmanuel Oceguera-Conchas">
+<meta name="dcterms.date" content="2026-07-17">
+<meta name="description" content="A step-by-step tutorial on turning your data into an EBVCube with the ebvcube R package, then validating and publishing it as a citable, FAIR dataset on the EBV Data Portal.">
 
-<title>Creating an EBV NetCDF and Publishing to the EBV Data Portal</title>
+<title>From Raster to Portal: Creating and Publishing an EBVCube</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,40 +22,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -122,7 +88,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">From Raster to Portal: Publishing Biodiversity Data as an EBV NetCDF</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Overview</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -137,7 +103,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Creating an EBV NetCDF and Publishing to the EBV Data Portal</a> 
+      <a href="./">From Raster to Portal: Creating and Publishing an EBVCube</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/EBVcube/EBV_resources" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
@@ -154,13 +120,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">From Raster to Portal: Publishing Biodiversity Data as an EBV NetCDF</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Overview</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01-introduction.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to EBVs and the EBV Data Portal</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -215,13 +181,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#why-this-tutorial-exists" id="toc-why-this-tutorial-exists" class="nav-link active" data-scroll-target="#why-this-tutorial-exists"><span class="header-section-number">0.1</span> Why this tutorial exists</a></li>
-  <li><a href="#what-is-an-ebv-in-one-paragraph" id="toc-what-is-an-ebv-in-one-paragraph" class="nav-link" data-scroll-target="#what-is-an-ebv-in-one-paragraph"><span class="header-section-number">0.2</span> What is an EBV, in one paragraph</a></li>
-  <li><a href="#the-dataset-well-use" id="toc-the-dataset-well-use" class="nav-link" data-scroll-target="#the-dataset-well-use"><span class="header-section-number">0.3</span> The dataset we’ll use</a></li>
-  <li><a href="#the-workflow-at-a-glance" id="toc-the-workflow-at-a-glance" class="nav-link" data-scroll-target="#the-workflow-at-a-glance"><span class="header-section-number">0.4</span> The workflow at a glance</a></li>
-  <li><a href="#how-this-tutorial-is-organized" id="toc-how-this-tutorial-is-organized" class="nav-link" data-scroll-target="#how-this-tutorial-is-organized"><span class="header-section-number">0.5</span> How this tutorial is organized</a></li>
-  <li><a href="#before-you-start" id="toc-before-you-start" class="nav-link" data-scroll-target="#before-you-start"><span class="header-section-number">0.6</span> Before you start</a></li>
-  <li><a href="#key-resources" id="toc-key-resources" class="nav-link" data-scroll-target="#key-resources"><span class="header-section-number">0.7</span> Key resources</a></li>
+  <li><a href="#getting-your-data-onto-the-ebv-data-portal" id="toc-getting-your-data-onto-the-ebv-data-portal" class="nav-link active" data-scroll-target="#getting-your-data-onto-the-ebv-data-portal">Getting your data onto the EBV Data Portal</a></li>
+  <li><a href="#what-is-an-ebv" id="toc-what-is-an-ebv" class="nav-link" data-scroll-target="#what-is-an-ebv">What is an EBV</a></li>
+  <li><a href="#the-dataset-we-will-use" id="toc-the-dataset-we-will-use" class="nav-link" data-scroll-target="#the-dataset-we-will-use">The dataset we will use</a></li>
+  <li><a href="#workflow-overview" id="toc-workflow-overview" class="nav-link" data-scroll-target="#workflow-overview">Workflow overview</a></li>
+  <li><a href="#how-this-tutorial-is-organized" id="toc-how-this-tutorial-is-organized" class="nav-link" data-scroll-target="#how-this-tutorial-is-organized">How this tutorial is organized</a></li>
+  <li><a href="#before-you-start" id="toc-before-you-start" class="nav-link" data-scroll-target="#before-you-start">Before you start</a></li>
+  <li><a href="#key-resources" id="toc-key-resources" class="nav-link" data-scroll-target="#key-resources">Key resources</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -230,13 +196,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Creating an EBV NetCDF and Publishing to the EBV Data Portal</h1>
-<p class="subtitle lead">A NaturaConnect tutorial on the ebvcube R package and the EBV Data Portal</p>
+<h1 class="title">From Raster to Portal: Creating and Publishing an EBVCube</h1>
+<p class="subtitle lead">Tutorial on the ebvcube R package and the EBV Data Portal</p>
 </div>
 
 <div>
   <div class="description">
-    <p>A step-by-step tutorial on creating an EBV-compliant netCDF with the ebvcube R package and publishing it to the EBV Data Portal.</p>
+    <p>A step-by-step tutorial on turning your data into an EBVCube with the ebvcube R package, then validating and publishing it as a citable, FAIR dataset on the EBV Data Portal.</p>
   </div>
 </div>
 
@@ -245,11 +211,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="quarto-title-meta-heading">Affiliation</div>
   
     <div class="quarto-title-meta-contents">
-    <p class="author">The EBV Data Portal team </p>
+    <p class="author">Emmanuel Oceguera-Conchas </p>
   </div>
   <div class="quarto-title-meta-contents">
         <p class="affiliation">
-            German Centre for Integrative Biodiversity Research (iDiv) Halle–Jena–Leipzig
+            German Centre for Integrative Biodiversity Research (iDiv)
           </p>
       </div>
   </div>
@@ -260,7 +226,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 14, 2026</p>
+      <p class="date">July 17, 2026</p>
     </div>
   </div>
   
@@ -272,55 +238,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="why-this-tutorial-exists" class="level2" data-number="0.1">
-<h2 data-number="0.1" class="anchored" data-anchor-id="why-this-tutorial-exists"><span class="header-section-number">0.1</span> Why this tutorial exists</h2>
-<p>Biodiversity data is only useful to decision-makers if it can be found, trusted, and compared across studies. That is the problem <strong>Essential Biodiversity Variables (EBVs)</strong> were designed to solve: a common language and file format so that a species-distribution model from one team and a community-composition model from another can sit side by side on the same map.</p>
-<p>This tutorial walks you through the full path from “I have some raster outputs on my laptop” to “my dataset is live on the EBV Data Portal” — using a real, published dataset as the running example, so every step produces something you can check against the real thing.</p>
-<p>By the end, you will be able to:</p>
+<section id="getting-your-data-onto-the-ebv-data-portal" class="level2">
+<h2 class="anchored" data-anchor-id="getting-your-data-onto-the-ebv-data-portal">Getting your data onto the EBV Data Portal</h2>
+<p>The <strong>EBV Data Portal</strong> allows biodiversity datasets to be published, discovered, cited, and reused. By following the <strong>Essential Biodiversity Variables (EBVs)</strong> framework and the standardized <strong>EBVCube format</strong>, datasets from different projects can be compared and analyzed consistently.</p>
+<p>Publishing an EBV dataset involves two steps. First, you create a valid <strong>EBVCube</strong> (a netCDF file) in <strong>R</strong> with the <code>ebvcube</code> package. Then, you upload the file through the <strong>EBV Data Portal</strong>, complete the metadata, submit it for review, and receive a DOI.</p>
+<p>This tutorial guides you through the complete workflow, from raw raster to a published, citable dataset on the EBV Data Portal.</p>
+<p>By the end of this tutorial, you will be able to:</p>
 <ul>
-<li>explain what an EBV is and why the EBV netCDF format looks the way it does;</li>
-<li>install and configure the <code>ebvcube</code> R package;</li>
-<li>prepare your own raster/species data for conversion;</li>
-<li>build a valid EBV netCDF with <code>ebv_create()</code> and <code>ebv_add_data()</code>;</li>
-<li>validate the file before submitting it;</li>
-<li>upload and publish the dataset on the <a href="https://portal.geobon.org/">EBV Data Portal</a>;</li>
-<li>troubleshoot the errors you are most likely to hit along the way.</li>
+<li>understand the EBV framework and the EBVCube format;</li>
+<li>create an EBVCube with the <code>ebvcube</code> package;</li>
+<li>validate your dataset before submission;</li>
+<li>upload and publish your dataset on the EBV Data Portal; and</li>
+<li>troubleshoot common issues during the process.</li>
 </ul>
 </section>
-<section id="what-is-an-ebv-in-one-paragraph" class="level2" data-number="0.2">
-<h2 data-number="0.2" class="anchored" data-anchor-id="what-is-an-ebv-in-one-paragraph"><span class="header-section-number">0.2</span> What is an EBV, in one paragraph</h2>
-<p>An <strong>Essential Biodiversity Variable</strong> is a measurement standardized well enough to be tracked consistently over time, across regions, and across research groups — the biodiversity equivalent of an Essential Climate Variable. GEO BON groups them into six classes (genetic composition, species populations, species traits, community composition, ecosystem structure, ecosystem function), and every EBV dataset shares the same underlying file format: a CF- and ACDD-compliant <strong>netCDF</strong> with up to four dimensions — longitude, latitude, time, and entity (species, group, or ecosystem type). That shared format is what lets the <a href="https://portal.geobon.org/">EBV Data Portal</a> host, filter, and compare hundreds of otherwise very different datasets.</p>
+<section id="what-is-an-ebv" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-an-ebv">What is an EBV</h2>
+<p><em>Essential Biodiversity Variables (EBVs)</em> are a set of standardized biological measurements that help scientists study, report and manage changes in biodiversity across time, space, and biological level. EBVs are group into six classes: genetic composition, species populations, species traits, community composition, ecosystem structure, and ecosystem function. EBV datasets are stored in the EBVCube format a CF and ACDD compliant <em>netCDF</em> file with four dimensions: longitude, latitude, time, and entity. This standardized format allows datasets from different sources to be interpreted and visualized consistently in the EBV Data Portal.</p>
 </section>
-<section id="the-dataset-well-use" class="level2" data-number="0.3">
-<h2 data-number="0.3" class="anchored" data-anchor-id="the-dataset-well-use"><span class="header-section-number">0.3</span> The dataset we’ll use</h2>
-<p>Rather than a toy example, this tutorial anchors its portal-facing sections to a real, already-published dataset:</p>
+<section id="the-dataset-we-will-use" class="level2">
+<h2 class="anchored" data-anchor-id="the-dataset-we-will-use">The dataset we will use</h2>
+<p>This tutorial uses a single real, published dataset throughout.</p>
 <blockquote class="blockquote">
-<p><strong>Global trends in biodiversity (BES-SIM cSAR-iDiv)</strong> — Inês Martins &amp; Henrique Pereira (2022). Community-composition projections from 1900–2050 under multiple SSP/RCP scenarios, produced for the BES-SIM inter-model comparison for IPBES. <a href="https://portal.geobon.org/ebv-detail?id=30">Dataset page</a> · DOI: <a href="https://doi.org/10.25829/5zmy41">10.25829/5zmy41</a> · netCDF download: 3.27 MB</p>
+<p><strong>Local bird diversity (cSAR/BES-SIM)</strong> — Martins, I., Pereira, H., Navarro, L. (2022).A community-composition EBV reporting the relative and absolute change in the number of bird species at decadal time steps from 1900 to 2010, for three entities: forest, non-forest, and all bird species.</p>
 </blockquote>
-<p>We use this dataset (portal ID 30) whenever we’re exploring the <em>portal</em> — its metadata form, entity list, DOI, citation, and versioning — so everything you see corresponds to something you can open yourself, right now, on the live portal.</p>
-<p>For the <em>hands-on R code</em>, we mostly use the small example file bundled with the <code>ebvcube</code> package (<code>martins_comcom_subset.nc</code>), so every chunk runs instantly with no download. That file is a related but <strong>different</strong> dataset by the same author and model family — <a href="https://portal.geobon.org/ebv-detail?id=1">portal ID 1, “Local bird diversity (cSAR/BES-SIM)”</a>, a spatial (African) subset of a 1900–2015 land-use-driven bird diversity product. Unit 3 shows how to download the actual dataset‑30 netCDF (small enough, at 3.27 MB, to work with directly) if you want to run the full workflow against it end-to-end instead.</p>
+<blockquote class="blockquote">
+<p><a href="https://portal.geobon.org/ebv-detail?id=1">Dataset page</a> · DOI: <a href="https://doi.org/10.25829/8grx36">10.25829/8grx36</a> · EBV Portal id = 1 · netCDF ≈ 4 MB</p>
+</blockquote>
+<p>We use this dataset (id = 1) throughout the tutorial: both when we explore the <em>portal</em> itself, its metadata form, entity list, DOI, citation, and versioning, and for the <em>hands-on R code</em>. Everything you see corresponds to something you can open yourself, right now, on the live portal.</p>
+<p>To call the dataset, <code>ebvcube</code> fetches it directly from the portal using its numeric ID with <code>ebv_download(id = 1, outputdir = "data/ebv", overwrite = FALSE)</code> and caches it locally, so it only needs to be downloaded once. Every later code chunk starts from that file path; to run the workflow against your <em>own</em> data instead, just point it at your own <code>.nc</code> file and the rest of the tutorial runs unchanged.</p>
 </section>
-<section id="the-workflow-at-a-glance" class="level2" data-number="0.4">
-<h2 data-number="0.4" class="anchored" data-anchor-id="the-workflow-at-a-glance"><span class="header-section-number">0.4</span> The workflow at a glance</h2>
+<section id="workflow-overview" class="level2">
+<h2 class="anchored" data-anchor-id="workflow-overview">Workflow overview</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    A["1. Prepare your data\n(rasters + metadata)"] --&gt; B["2. Generate the metadata JSON\n(portal form or ebv_metadata())"]</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    B --&gt; C["3. ebv_create()\nempty, valid netCDF skeleton"]</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    C --&gt; D["4. ebv_add_data()\nfill in each entity / time step"]</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    D --&gt; E["5. Validate\nebv_properties(), Panoply, portal validator"]</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    E --&gt; F["6. Upload to the\nEBV Data Portal"]</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    F --&gt; G["7. Review &amp; publish\n(DOI assigned)"]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">flowchart LR
-    A["1. Prepare your data\n(rasters + metadata)"] --&gt; B["2. Generate the metadata JSON\n(portal form or ebv_metadata())"]
-    B --&gt; C["3. ebv_create()\nempty, valid netCDF skeleton"]
-    C --&gt; D["4. ebv_add_data()\nfill in each entity / time step"]
-    D --&gt; E["5. Validate\nebv_properties(), Panoply, portal validator"]
-    E --&gt; F["6. Upload to the\nEBV Data Portal"]
-    F --&gt; G["7. Review &amp; publish\n(DOI assigned)"]
+A["Prepare data&lt;br/&gt;rasters &amp; metadata"]
+B["Generate&lt;br/&gt;metadata JSON"]
+C["ebv_create()&lt;br/&gt;create EBVCube"]
+D["ebv_add_data()&lt;br/&gt;add data"]
+E["Validate&lt;br/&gt;file"]
+F["Upload&lt;br/&gt;to portal"]
+G["Review &amp; publish&lt;br/&gt;DOI"]
+
+A --&gt; B --&gt; C --&gt; D --&gt; E --&gt; F --&gt; G
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -328,8 +292,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="how-this-tutorial-is-organized" class="level2" data-number="0.5">
-<h2 data-number="0.5" class="anchored" data-anchor-id="how-this-tutorial-is-organized"><span class="header-section-number">0.5</span> How this tutorial is organized</h2>
+<section id="how-this-tutorial-is-organized" class="level2">
+<h2 class="anchored" data-anchor-id="how-this-tutorial-is-organized">How this tutorial is organized</h2>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -352,7 +316,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td style="text-align: left;">4</td>
-<td style="text-align: left;">Creating an EBV netCDF with <code>ebvcube</code></td>
+<td style="text-align: left;">Creating an EBVCube with <code>ebvcube</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">5</td>
@@ -372,24 +336,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>Each unit opens with its learning objectives, works through the step with runnable code and screenshots, and closes with a short checkpoint so you know you’re ready to move on.</p>
+<p>Each unit opens with its learning objectives, works through the step with runnable code and screenshots, and closes with a short checkpoint so you know you are ready to move on.</p>
 </section>
-<section id="before-you-start" class="level2" data-number="0.6">
-<h2 data-number="0.6" class="anchored" data-anchor-id="before-you-start"><span class="header-section-number">0.6</span> Before you start</h2>
-<p>You don’t need prior netCDF experience — Unit 1 covers the concepts you need. You should be comfortable with:</p>
+<section id="before-you-start" class="level2">
+<h2 class="anchored" data-anchor-id="before-you-start">Before you start</h2>
+<p>You do not need prior netCDF experience; Unit 1 covers the concepts you need. It helps to be comfortable with:</p>
 <ul>
 <li>basic R (installing packages, running scripts);</li>
 <li>basic geospatial data in R (<code>terra</code>/raster basics);</li>
 <li>having your own species or biodiversity raster data ready, or being happy to follow along with the example dataset.</li>
 </ul>
 </section>
-<section id="key-resources" class="level2" data-number="0.7">
-<h2 data-number="0.7" class="anchored" data-anchor-id="key-resources"><span class="header-section-number">0.7</span> Key resources</h2>
+<section id="key-resources" class="level2">
+<h2 class="anchored" data-anchor-id="key-resources">Key resources</h2>
 <ul>
 <li><strong>EBV Data Portal</strong> — <a href="https://portal.geobon.org/" class="uri">https://portal.geobon.org/</a> — discover, download, and publish EBV datasets.</li>
-<li><strong><code>ebvcube</code> R package</strong> — <a href="https://github.com/EBVcube/ebvcube" class="uri">https://github.com/EBVcube/ebvcube</a> — read, visualize, and create EBV netCDFs. Also on <a href="https://cran.r-project.org/package=ebvcube">CRAN</a> and the <a href="https://b-cubed-eu.r-universe.dev/ebvcube">b-cubed r-universe</a>.</li>
+<li><strong><code>ebvcube</code> R package</strong> — <a href="https://github.com/EBVcube/ebvcube" class="uri">https://github.com/EBVcube/ebvcube</a> — read, visualize, and create EBVCubes. Also on <a href="https://cran.r-project.org/package=ebvcube">CRAN</a> and the <a href="https://b-cubed-eu.r-universe.dev/ebvcube">b-cubed r-universe</a>.</li>
 <li><strong><code>ebvcube</code> documentation book</strong> — <a href="https://EBVcube.github.io/ebvcube/" class="uri">https://EBVcube.github.io/ebvcube/</a> — the full function reference this tutorial builds on.</li>
-<li><strong>EBV netCDF format specification</strong> — <a href="https://github.com/EBVcube/EBVCube-format" class="uri">https://github.com/EBVcube/EBVCube-format</a> — the structural rules behind the format.</li>
+<li><strong>EBVCube format specification</strong> — <a href="https://github.com/EBVcube/EBVCube-format" class="uri">https://github.com/EBVcube/EBVCube-format</a> — the structural rules behind the format.</li>
 <li><strong>GEO BON — What are EBVs?</strong> — <a href="https://geobon.org/ebvs/what-are-ebvs/" class="uri">https://geobon.org/ebvs/what-are-ebvs/</a> — the canonical definition and the six EBV classes.</li>
 <li><strong>Methods paper</strong> — Quoss et al.&nbsp;(2022), describing the package and the netCDF structure it implements.</li>
 </ul>
@@ -399,7 +363,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>Working alongside this tutorial.</strong> Every code chunk is runnable as-is against the bundled example dataset. If you’re preparing your <em>own</em> dataset for the portal, follow the same steps but substitute your rasters and metadata where indicated in Units 3–4.</p>
+<p><strong>Working alongside this tutorial.</strong> Every code chunk runs as-is against the bundled example dataset. If you are preparing your <em>own</em> dataset for the portal, follow the same steps but swap in your rasters and metadata where Units 3 and 4 point it out.</p>
 </div>
 </div>
 </div>
@@ -977,8 +941,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./01-introduction.html" class="pagination-link" aria-label="Introduction to EBVs and the EBV Data Portal">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to EBVs and the EBV Data Portal</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./01-introduction.html" class="pagination-link" aria-label="Introduction">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
