@@ -3,15 +3,15 @@ project:
   output-dir: _book
 
 book:
-  title: "Creating an EBV NetCDF and Publishing to the EBV Data Portal"
-  subtitle: "A NaturaConnect tutorial"
+  title: "From Raster to Portal: Creating and Publishing an EBVCube"
   author:
-    - name: "The EBV Data Portal team"
-      affiliation: "German Centre for Integrative Biodiversity Research (iDiv) Halle–Jena–Leipzig"
+    - name: "Emmanuel Oceguera-Conchas"
+      affiliation: "German Centre for Integrative Biodiversity Research (iDiv)"
   date: today
   description: |
-    A step-by-step tutorial on creating an EBV-compliant netCDF with the
-    ebvcube R package and publishing it to the EBV Data Portal.
+      A step-by-step tutorial on turning your data into an
+      EBVCube with the ebvcube R package, then validating and publishing it as a
+      citable, FAIR dataset on the EBV Data Portal.
   repo-url: https://github.com/EBVcube/EBV_resources
   repo-branch: main
   repo-actions: [edit, issue]
@@ -37,6 +37,7 @@ format:
     theme:
       light: cosmo
       dark: darkly
+    lightbox: true
     code-link: true
     code-copy: true
     code-overflow: wrap

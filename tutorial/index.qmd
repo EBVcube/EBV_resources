@@ -1,85 +1,91 @@
 ---
-title: "From Raster to Portal: Publishing Biodiversity Data as an EBV NetCDF"
-subtitle: "A NaturaConnect tutorial on the ebvcube R package and the EBV Data Portal"
+title: "Overview"
+subtitle: "Tutorial on the ebvcube R package and the EBV Data Portal"
+number-sections: false
 ---
 
-## Why this tutorial exists
+## Getting your data onto the EBV Data Portal
 
-Biodiversity data is only useful to decision-makers if it can be found, trusted, and compared across studies. That is the problem **Essential Biodiversity Variables (EBVs)** were designed to solve: a common language and file format so that a species-distribution model from one team and a community-composition model from another can sit side by side on the same map.
+The **EBV Data Portal** allows biodiversity datasets to be published, discovered, cited, and reused. By following the **Essential Biodiversity Variables (EBVs)** framework and the standardized **EBVCube format**, datasets from different projects can be compared and analyzed consistently.
 
-This tutorial walks you through the full path from "I have some raster outputs on my laptop" to "my dataset is live on the EBV Data Portal" — using a real, published dataset as the running example, so every step produces something you can check against the real thing.
+Publishing an EBV dataset involves two steps. First, you create a valid **EBVCube** (a netCDF file) in **R** with the `ebvcube` package. Then, you upload the file through the **EBV Data Portal**, complete the metadata, submit it for review, and receive a DOI.
 
-By the end, you will be able to:
+This tutorial guides you through the complete workflow, from raw raster to a published, citable dataset on the EBV Data Portal.
 
-- explain what an EBV is and why the EBV netCDF format looks the way it does;
-- install and configure the `ebvcube` R package;
-- prepare your own raster/species data for conversion;
-- build a valid EBV netCDF with `ebv_create()` and `ebv_add_data()`;
-- validate the file before submitting it;
-- upload and publish the dataset on the [EBV Data Portal](https://portal.geobon.org/);
-- troubleshoot the errors you are most likely to hit along the way.
+By the end of this tutorial, you will be able to:
 
-## What is an EBV, in one paragraph
+-   understand the EBV framework and the EBVCube format;
+-   create an EBVCube with the `ebvcube` package;
+-   validate your dataset before submission;
+-   upload and publish your dataset on the EBV Data Portal; and
+-   troubleshoot common issues during the process.
 
-An **Essential Biodiversity Variable** is a measurement standardized well enough to be tracked consistently over time, across regions, and across research groups — the biodiversity equivalent of an Essential Climate Variable. GEO BON groups them into six classes (genetic composition, species populations, species traits, community composition, ecosystem structure, ecosystem function), and every EBV dataset shares the same underlying file format: a CF- and ACDD-compliant **netCDF** with up to four dimensions — longitude, latitude, time, and entity (species, group, or ecosystem type). That shared format is what lets the [EBV Data Portal](https://portal.geobon.org/) host, filter, and compare hundreds of otherwise very different datasets.
+## What is an EBV
 
-## The dataset we'll use
+*Essential Biodiversity Variables (EBVs)* are a set of standardized biological measurements that help scientists study, report and manage changes in biodiversity across time, space, and biological level. EBVs are group into six classes: genetic composition, species populations, species traits, community composition, ecosystem structure, and ecosystem function. EBV datasets are stored in the EBVCube format a CF and ACDD compliant *netCDF* file with four dimensions: longitude, latitude, time, and entity. This standardized format allows datasets from different sources to be interpreted and visualized consistently in the EBV Data Portal.
 
-Rather than a toy example, this tutorial anchors its portal-facing sections to a real, already-published dataset:
+## The dataset we will use
 
-> **Global trends in biodiversity (BES-SIM cSAR-iDiv)** — Inês Martins & Henrique Pereira (2022). Community-composition projections from 1900–2050 under multiple SSP/RCP scenarios, produced for the BES-SIM inter-model comparison for IPBES.
-> [Dataset page](https://portal.geobon.org/ebv-detail?id=30) · DOI: [10.25829/5zmy41](https://doi.org/10.25829/5zmy41) · netCDF download: 3.27 MB
+This tutorial uses a single real, published dataset throughout.
 
-We use this dataset (portal ID 30) whenever we're exploring the *portal* — its metadata form, entity list, DOI, citation, and versioning — so everything you see corresponds to something you can open yourself, right now, on the live portal.
+> **Local bird diversity (cSAR/BES-SIM)** — Martins, I., Pereira, H., Navarro, L. (2022).A community-composition EBV reporting the relative and absolute change in the number of bird species at decadal time steps from 1900 to 2010, for three entities: forest, non-forest, and all bird species.
 
-For the *hands-on R code*, we mostly use the small example file bundled with the `ebvcube` package (`martins_comcom_subset.nc`), so every chunk runs instantly with no download. That file is a related but **different** dataset by the same author and model family — [portal ID 1, "Local bird diversity (cSAR/BES-SIM)"](https://portal.geobon.org/ebv-detail?id=1), a spatial (African) subset of a 1900–2015 land-use-driven bird diversity product. Unit 3 shows how to download the actual dataset‑30 netCDF (small enough, at 3.27 MB, to work with directly) if you want to run the full workflow against it end-to-end instead.
+> [Dataset page](https://portal.geobon.org/ebv-detail?id=1) · DOI: [10.25829/8grx36](https://doi.org/10.25829/8grx36) · EBV Portal id = 1 · netCDF ≈ 4 MB
 
-## The workflow at a glance
+We use this dataset (id = 1) throughout the tutorial: both when we explore the *portal* itself, its metadata form, entity list, DOI, citation, and versioning, and for the *hands-on R code*. Everything you see corresponds to something you can open yourself, right now, on the live portal.
+
+To call the dataset, `ebvcube` fetches it directly from the portal using its numeric ID with `ebv_download(id = 1, outputdir = "data/ebv", overwrite = FALSE)` and caches it locally, so it only needs to be downloaded once. Every later code chunk starts from that file path; to run the workflow against your *own* data instead, just point it at your own `.nc` file and the rest of the tutorial runs unchanged.
+
+## Workflow overview
 
 ```{mermaid}
+%%| echo: false
 flowchart LR
-    A["1. Prepare your data\n(rasters + metadata)"] --> B["2. Generate the metadata JSON\n(portal form or ebv_metadata())"]
-    B --> C["3. ebv_create()\nempty, valid netCDF skeleton"]
-    C --> D["4. ebv_add_data()\nfill in each entity / time step"]
-    D --> E["5. Validate\nebv_properties(), Panoply, portal validator"]
-    E --> F["6. Upload to the\nEBV Data Portal"]
-    F --> G["7. Review & publish\n(DOI assigned)"]
+A["Prepare data<br/>rasters & metadata"]
+B["Generate<br/>metadata JSON"]
+C["ebv_create()<br/>create EBVCube"]
+D["ebv_add_data()<br/>add data"]
+E["Validate<br/>file"]
+F["Upload<br/>to portal"]
+G["Review & publish<br/>DOI"]
+
+A --> B --> C --> D --> E --> F --> G
 ```
 
 ## How this tutorial is organized
 
-| Unit | Topic |
-|:---|:---|
-| 1 | Introduction to EBVs and the EBV Data Portal |
-| 2 | Installing R, RStudio, and the `ebvcube` package |
-| 3 | Preparing your biodiversity data for conversion |
-| 4 | Creating an EBV netCDF with `ebvcube` |
-| 5 | Validating the generated file |
-| 6 | Uploading your dataset to the EBV Data Portal |
-| 7 | Troubleshooting common issues and best practices |
-| 8 | Further resources, repositories, and references |
+| Unit | Topic                                            |
+|:-----|:-------------------------------------------------|
+| 1    | Introduction to EBVs and the EBV Data Portal     |
+| 2    | Installing R, RStudio, and the `ebvcube` package |
+| 3    | Preparing your biodiversity data for conversion  |
+| 4    | Creating an EBVCube with `ebvcube`               |
+| 5    | Validating the generated file                    |
+| 6    | Uploading your dataset to the EBV Data Portal    |
+| 7    | Troubleshooting common issues and best practices |
+| 8    | Further resources, repositories, and references  |
 
-Each unit opens with its learning objectives, works through the step with runnable code and screenshots, and closes with a short checkpoint so you know you're ready to move on.
+Each unit opens with its learning objectives, works through the step with runnable code and screenshots, and closes with a short checkpoint so you know you are ready to move on.
 
 ## Before you start
 
-You don't need prior netCDF experience — Unit 1 covers the concepts you need. You should be comfortable with:
+You do not need prior netCDF experience; Unit 1 covers the concepts you need. It helps to be comfortable with:
 
-- basic R (installing packages, running scripts);
-- basic geospatial data in R (`terra`/raster basics);
-- having your own species or biodiversity raster data ready, or being happy to follow along with the example dataset.
+-   basic R (installing packages, running scripts);
+-   basic geospatial data in R (`terra`/raster basics);
+-   having your own species or biodiversity raster data ready, or being happy to follow along with the example dataset.
 
 ## Key resources
 
-- **EBV Data Portal** — <https://portal.geobon.org/> — discover, download, and publish EBV datasets.
-- **`ebvcube` R package** — <https://github.com/EBVcube/ebvcube> — read, visualize, and create EBV netCDFs. Also on [CRAN](https://cran.r-project.org/package=ebvcube) and the [b-cubed r-universe](https://b-cubed-eu.r-universe.dev/ebvcube).
-- **`ebvcube` documentation book** — <https://EBVcube.github.io/ebvcube/> — the full function reference this tutorial builds on.
-- **EBV netCDF format specification** — <https://github.com/EBVcube/EBVCube-format> — the structural rules behind the format.
-- **GEO BON — What are EBVs?** — <https://geobon.org/ebvs/what-are-ebvs/> — the canonical definition and the six EBV classes.
-- **Methods paper** — Quoss et al. (2022), describing the package and the netCDF structure it implements.
+-   **EBV Data Portal** — <https://portal.geobon.org/> — discover, download, and publish EBV datasets.
+-   **`ebvcube` R package** — <https://github.com/EBVcube/ebvcube> — read, visualize, and create EBVCubes. Also on [CRAN](https://cran.r-project.org/package=ebvcube) and the [b-cubed r-universe](https://b-cubed-eu.r-universe.dev/ebvcube).
+-   **`ebvcube` documentation book** — <https://EBVcube.github.io/ebvcube/> — the full function reference this tutorial builds on.
+-   **EBVCube format specification** — <https://github.com/EBVcube/EBVCube-format> — the structural rules behind the format.
+-   **GEO BON — What are EBVs?** — <https://geobon.org/ebvs/what-are-ebvs/> — the canonical definition and the six EBV classes.
+-   **Methods paper** — Quoss et al. (2022), describing the package and the netCDF structure it implements.
 
 ::: {.callout-tip appearance="simple"}
-**Working alongside this tutorial.** Every code chunk is runnable as-is against the bundled example dataset. If you're preparing your *own* dataset for the portal, follow the same steps but substitute your rasters and metadata where indicated in Units 3–4.
+**Working alongside this tutorial.** Every code chunk runs as-is against the bundled example dataset. If you are preparing your *own* dataset for the portal, follow the same steps but swap in your rasters and metadata where Units 3 and 4 point it out.
 :::
 
 Ready? Start with [Unit 1 — Introduction to EBVs and the EBV Data Portal](01-introduction.qmd).
