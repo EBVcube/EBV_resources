@@ -1,21 +1,101 @@
-# Installing the required software and the `ebvcube` package {#sec-installation}
+# Installing software and the `ebvcube` package {#sec-installation}
 
-*Learning objectives: install R, RStudio, and `ebvcube` with all dependencies; verify the install.*
+By the end of this unit, you will be able to:
 
-## Prerequisites
+-   confirm that your R installation meets the requirements for `ebvcube`;
+-   install the `ebvcube` package and its dependencies;
+-   verify your setup by loading the package and opening an example dataset.
 
-<!-- TODO: adapt installation.qmd "Prerequisites" -->
+This unit prepares your machine for the rest of the tutorial. You will install `ebvcube` and its dependencies, then test the installation by opening an example dataset. Once that's done, you are ready to prepare your own data in Unit 3.
 
-## Installing from CRAN
+## What you need first
 
-<!-- TODO: adapt installation.qmd "Installing the released version" -->
+Before installing `ebvcube`, make sure you have:
 
-## Bioconductor dependencies
+-   **R ≥ 4.2.0**: The minimum version supported by `ebvcube`. Check yours in any R session:
 
-<!-- TODO: adapt installation.qmd "Bioconductor dependencies" -->
+```r
+    R.version.string
+```
+
+    If it is older, update R first, or CRAN will refuse to install the package.
+
+-   **RStudio** (recommended):  a free, widely used editor for R. It is not strictly required, but every code example in this tutorial assumes you are working in it.
+
+The lower-level libraries `ebvcube` relies on, **HDF5** (for reading netCDF-4 files) and **GDAL** (for spatial data), are installed for you automatically on Windows and macOS: HDF5 comes with the Bioconductor package `rhdf5`, and GDAL comes with the CRAN build of `terra`. There is nothing extra to set up.
+
+
+## Installing `ebvcube` from CRAN
+
+For most users, the released version on CRAN is all you need:
+
+```{r}
+#| eval: false
+install.packages("ebvcube")
+```
+
+CRAN resolves all of the *CRAN* dependencies automatically. Three dependencies, however, live on **Bioconductor** rather than CRAN, so on a fresh machine you will usually need the one-time step in the next section as well.
+
+::: {.callout-note}
+## Other ways to install
+Most people should use CRAN. If you need a newer feature, you can install the development version with `devtools::install_github("EBVcube/ebvcube", ref = "dev")`, or get the binary builds from the [b-cubed r-universe](https://b-cubed-eu.r-universe.dev/). These are covered in the package's [installation guide](https://github.com/EBVcube/ebvcube).
+:::
+
+## Adding the Bioconductor dependencies {#sec-bioc}
+
+Three of `ebvcube`'s dependencies come from [Bioconductor](https://bioconductor.org/), because reading EBVCube files means reading HDF5 under the hood:
+
+| Package        | Why it is needed                                            |
+|:---------------|:------------------------------------------------------------|
+| `rhdf5`        | Low-level HDF5 read/write (netCDF-4 is HDF5 underneath)      |
+| `DelayedArray` | Lazy, on-disk arrays so large cubes do not exhaust your RAM  |
+| `HDF5Array`    | Connects `DelayedArray` to HDF5 files                        |
+
+If installing `ebvcube` reports that one of these is missing, install them with `BiocManager`:
+
+```{r}
+#| eval: false
+install.packages("BiocManager")
+BiocManager::install(c("rhdf5", "DelayedArray", "HDF5Array"))
+```
+
+You only need to do this once per R installation.
+
+::: {.callout-note}
+## Which Bioconductor version?
+`BiocManager` automatically picks the Bioconductor release that matches your version of R, which is what you want. You can pin a specific release with `BiocManager::install(version = "3.22")`, but only do so if you have a reason to, each Bioconductor release requires a matching R version (3.22 needs R 4.5.x), so leaving it out is also a safe choice.
+:::
 
 ## Verifying your installation
 
-<!-- TODO: adapt installation.qmd "Verifying your installation", using martins_comcom_subset.nc -->
+First, load the package and confirm the version:
 
-**Checkpoint:** `library(ebvcube)` loads without error and `ebv_properties()` prints a dataset title.
+```{r}
+#| eval: false
+library(ebvcube)
+packageVersion("ebvcube")
+```
+
+Then open the small example dataset that ships with the package, a subset of the *Local bird diversity (cSAR/BES-SIM)* dataset. Because it is bundled, this needs no download and works offline:
+
+```{r}
+#| eval: false
+file <- system.file("extdata", "martins_comcom_subset.nc", package = "ebvcube")
+
+prop <- ebv_properties(file, verbose = FALSE)
+prop@general$title
+#> [1] "Local bird diversity (cSAR/BES-SIM)"
+```
+
+If the title prints, your installation is working. When you are ready to pull the *full* dataset from the portal (≈ 4 MB), the same two lines work with a download instead of the bundled file. We do exactly that in the next unit:
+
+```{r}
+#| eval: false
+file <- ebv_download(id = 1, outputdir = tempdir(), overwrite = FALSE)
+prop <- ebv_properties(file, verbose = FALSE)
+prop@general$title
+```
+
+::: {.callout-tip appearance="simple"}
+**Checkpoint.** `library(ebvcube)` loads with no error, and `ebv_properties()` prints the dataset title. If both work, your setup is complete and you are ready to prepare biodiversity data in Unit 3.
+:::

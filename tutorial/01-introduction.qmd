@@ -91,6 +91,7 @@ The three views you will use most are the *Discover* page (@fig-portal-discover)
 <iframe src="https://portal.geobon.org/map/?id=1" width="100%" height="600" style="border:1px solid #ddd; border-radius:6px;" loading="lazy">
 
 </iframe>
+
 :::
 
 ::: {.callout-note appearance="simple"}

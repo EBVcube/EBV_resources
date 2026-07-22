@@ -1,25 +1,186 @@
-# Preparing biodiversity data for conversion {#sec-preparing}
+# Preparing biodiversity data and metadata {#sec-preparing}
 
-*Learning objectives: structure raster outputs and metadata so they're ready for `ebv_create()`/`ebv_add_data()`.*
+By the end of this unit, you will be able to:
+
+-   identify the inputs `ebv_create()` needs to build an EBVCube;
+-   prepare your biodiversity data for conversion to an EBVCube;
+-   explain how the EBV dimensions, metrics, and scenarios are represented in an EBVCube;
+-   create a metadata JSON using either the EBV Data Portal or `ebv_metadata()`;
+-   verify that your data and metadata are ready to build an EBVCube.
+
+Reading an EBVCube is straightforward. Creating one means preparing both the biodiversity data and the metadata that describe them. This unit covers what `ebv_create()` expects, how to organize your data, and how to produce a metadata JSON. By the end you will have everything you need to build an EBVCube in the next unit.
 
 ## What `ebv_create()` needs
 
-<!-- TODO -->
+`ebv_create()` does not read your rasters and guess what belongs in the file. It reads a metadata file you prepare first, builds an empty netCDF with exactly the structure that metadata describes, then leaves it for you to fill. Almost all the work happens before you call the function.
 
-## Revisiting the four dimensions, as a producer
+Three things have to be ready:
 
-<!-- TODO: adapt core-concepts.qmd "Scenarios, metrics and the group hierarchy", from the producer's point of view -->
+| Input | What it is | Where it comes from |
+|:----------------|:-------------------|:----------------------------------|
+| A metadata JSON | The file's identity and structure as text: title, EBV class, license, spatial and temporal coverage, and one entry per metric. | Fill in the metadata form on the **EBV Data Portal** and download it (recommended), or build the same file in R with `ebv_metadata()`. |
+| Your data | One 2-D layer (`lon` × `lat`) for every entity, time step, and metric, usually a stack of GeoTIFFs or in-memory rasters. | The output of your modelling or analysis. |
+| An entity list | The names of the biological units the file describes, in the exact order the layers are stacked. | You decide it. For dataset id = 1 it is three entities: *forest*, *non-forest*, and *all bird species*. |
+
+The metadata defines the structure of the EBVCube, while the data layers provide the values stored within that structure. The entity list provides the link between biological units and their corresponding layers.
+
+
+::: {.callout-note}
+## Metadata first, structure second
+
+Whether you generate the metadata JSON from the EBV Data Portal or with `ebv_metadata()`, review it before running `ebv_create()`. If you are using the portal, you can return to the form at any time, update the metadata, and download a new JSON file. Once the metadata accurately represents your dataset, use this final JSON file to build the EBVCube.
+:::
+
+## Dimensions, metrics, and scenarios {#sec-dimensions}
+
+An EBVCube organizes biodiversity data along four core dimensions: `lon`, `lat`, `time`, and `entity`. As the data producer, you define each of them when creating your cube.
+
+`lon` and `lat` set the spatial grid. All layers must share the same extent, resolution, and CRS, which are provided to `ebv_create()` through the arguments `extent`, `resolution`, and `epsg`.
+
+`time` defines the temporal dimension of your dataset, from a single observation date to a time series. The temporal range and interval are specified in the metadata and must match the layers added to the cube.
+
+`entity` represents the biological unit described by each layer, such as a species, a group of species, or an ecosystem type. In the example dataset (id=1), the entities are *forest*, *non-forest*, and *all bird species*. The order of the entity list must match the order of your layers, because this is how the cube knows which biological unit each layer represents.
+
+**Metric** and **scenario** are not dimensions but define how the cube is organized within the netCDF file. A metric describes the variable being measured or calculated (e.g., relative change in species richness), and every dataset contains at least one metric. A scenario is optional and groups the same metric under different projected pathways (e.g., SSP1 or SSP5).
+
+For datasets without scenarios, the cube is stored as: `metric_1/ebv_cube`\
+With scenarios, the structure becomes: `scenario_1/metric_1/ebv_cube`
 
 ## Pre-flight checklist
 
-<!-- TODO: aligned rasters, naming scheme, fill value/units decisions, entity/taxonomy CSV -->
+Before building the EBVCube, verify that your data and metadata describe the same structure. These checks can be performed while preparing the metadata, either through the portal form or with `ebv_metadata()`. Since the metadata defines the EBVCube structure, resolving inconsistencies at this stage avoids problems during data insertion with `ebv_add_data()`.
 
-## Downloading dataset 30 for a full worked example
+- **All layers share one grid.** Same extent, resolution, and CRS across every GeoTIFF. Check with `terra::rast()` and compare.
+- **Layer count is deliberate.** The number of layers equals entities × time steps × metrics (× scenarios, if you have them). If that product does not match your stack, something is missing or duplicated.
+- **Entity names are final and ordered.** One name per entity, in the same order as your layers.
+- **A fill value is chosen.** Decide what marks "no data" (the format default is `-3.4e+38`) and confirm your rasters actually use it for gaps.
+- **You know your coverage exactly.** Start year, end year, temporal spacing, bounding box, EPSG code. These are the values you enter into the metadata form, or pass to `ebv_metadata()`.
+- **File format is consistent**. Confirm that all input layers can be read correctly by `terra` and have the expected data type and missing-value representation
 
-<!-- TODO: ebv_download() or manual download from https://portal.geobon.org/ebv-detail?id=30 (3.27 MB), then ebv_properties()/ebv_datacubepaths() to inspect its scenario/metric/entity structure -->
+::: {.callout-tip}
+## Confirm the grid in one step
 
-## Building the metadata JSON
+```{r}
+#| eval: false
+library(terra)
+layers <- rast(list.files("data/tifs", pattern = "\\.tif$",
+                          full.names = TRUE))
+layers            # inspect extent, resolution, CRS, and nlyr()
+```
 
-<!-- TODO: adapt advanced-usage.qmd "Step 1 — the metadata JSON" -->
+If every layer prints the same extent and resolution, and `nlyr()` matches your expected count, the grid is consistent.
 
-**Checkpoint:** aligned rasters (or bundled example tifs), an entities list, and a metadata JSON in hand.
+:::
+
+## Getting the metadata JSON
+
+Every EBVCube starts from a metadata JSON, and there are two ways to produce one. Which you pick depends on whether you are publishing through the portal or scripting a pipeline.
+
+### Path A — the portal metadata form (recommended)
+
+The simplest way to create a valid metadata JSON is by using the **Uploads → New Upload** form in the EBV Data Portal. The form is organized into three tabs. Complete the required fields in the first two tabs, then use the third tab to generate and download the metadata JSON file.
+
+Each tab contains more fields than fit on a single screen, so the images below show only the top portion of each tab. Be sure to scroll through the entire form and complete all fields marked with a red asterisk (`*`).
+
+::: {.panel-tabset}
+## General information
+
+Title, creation date, a summary, methods, and any related DOIs, among other general fields.
+
+![New upload — General information.](images/portal-upload-general.png){#fig-upload-general fig-alt="EBV Data Portal new upload, General information tab"}
+
+## EBV attributes
+
+The controlled vocabulary fields: EBV class, EBV name, and entity type, chosen from fixed lists so they can't be mistyped. Below them you add one or more metrics (each with a name, description, and units) and, if your data has them, one or more scenarios, among other EBV attribute fields further down.
+
+![New upload — EBV attributes.](images/portal-upload-attributes.png){#fig-upload-attributes fig-alt="EBV Data Portal new upload, EBV attributes tab"}
+
+## Data upload
+
+The portal generates the **metadata JSON** here. Click **Download Metadata** to save the `.json`; that file is the input to `ebv_create()`. This same tab is where you return later to upload the finished netCDF (option 2, "using the R package ebvcube").
+
+![New upload — Data upload, with the Download Metadata link.](images/portal-upload-data.png){#fig-upload-data fig-alt="EBV Data Portal new upload, Data upload tab"}
+:::
+
+::: {.callout-note}
+## You need a GEO BON account
+
+The form sits behind a login. Create a free account at [portal.geobon.org](https://portal.geobon.org/) before you start.
+:::
+
+### Path B — from R with `ebv_metadata()`
+
+You can also build the same JSON entirely in R. This fits an automated or reproducible pipeline, where generating the metadata from a script beats filling a form by hand. `ebv_metadata()` takes one argument per field the form would ask for, writes the `.json` to disk, and returns its path. The controlled-vocabulary fields still have to match the portal's accepted terms, so `?ebv_metadata` stays the authoritative reference for what each one takes.
+
+```{r}
+#| eval: false
+json <- ebv_metadata(
+  outputpath               = "data/my_ebv_metadata.json",
+  title                    = "Local bird diversity (worked example)",
+  creator_name             = "Jane Doe",
+  creator_institution      = "Example University",
+  coverage_content_type    = "Model result",
+  ebv_class                = "Community composition",
+  ebv_name                 = "Taxonomic and phylogenetic diversity",
+  ebv_spatial_scope        = "Global",
+  ebv_domain               = "Terrestrial",
+  ebv_entity_type          = "Communities",
+  ebv_entity_scope         = "Bird communities",
+  time_coverage_start      = "1900-01-01",
+  time_coverage_end        = "2010-01-01",
+  metric = list(
+    standard_name = "Relative change in the number of species",
+    long_name     = "Relative change in the number of bird species relative to 1900",
+    units         = "percent"
+  ),
+  overwrite = TRUE,
+  verbose   = FALSE
+)
+```
+
+A few fields to watch:
+
+-   `ebv_class` must match one of the classes the portal lists (the canonical six plus *Ecosystem services* and *Cross-cutting*), spelled exactly as shown.
+-   `coverage_content_type` records how the data were produced: `modelResult` for modelled data, `image` for direct observation, and a handful of other CF values.
+-   `metric` is a list. For several metrics, pass a list of lists and the file gains `metric_2`, `metric_3`, and so on. To add scenarios, pass a `scenario` argument the same way; leave it out, as here, and the file stays flat.
+
+Both paths end in the same place: a `.json` on disk that describes the file you are about to build. Whichever you use, open it in a text editor and read it once before moving on. Editing a line by hand is fine, and often quicker than regenerating the whole file for a one-word fix.
+
+::: {.callout-note}
+## Match the JSON to your data, not the other way around
+
+The metadata declares a shape: so many metrics, so many time steps, this grid. `ebv_create()` builds exactly that shape, and `ebv_add_data()` refuses anything that does not fit. If the two disagree, correct whichever one is wrong now, while it is still a line in a JSON file.
+:::
+
+## Downloading dataset 1 for a working reference
+
+The example dataset from Unit 1 is used here because it represents a complete EBVCube and allows you to compare your own metadata and file structure against an existing example: the **Local bird diversity (cSAR/BES-SIM)** dataset (id = 1)
+
+```{r}
+#| eval: false
+library(ebvcube)
+
+dir.create("data/ebv", recursive = TRUE, showWarnings = FALSE)
+file <- ebv_download(id = 1, outputdir = "data/ebv",
+                     overwrite = FALSE)
+
+ebv_datacubepaths(file, verbose = FALSE)
+```
+
+The paths come back as `metric_*/ebv_cube` with no scenario segment, which confirms what @sec-dimensions covered. This is a file without a scenario layer. Read its metadata the same way you did as a consumer, and treat each field as a slot you will need to fill for your own dataset:
+
+```{r}
+#| eval: false
+prop <- ebv_properties(file, verbose = FALSE)
+prop@general$title
+prop@general$ebv_class
+prop@spatial$srs
+prop@temporal$resolution
+```
+
+Whatever this file declares, yours will declare too. The difference is that here the values are already filled in, and for your dataset you are the one supplying them.
+
+::: {.callout-tip appearance="simple"}
+**Checkpoint.** Your data share one grid, and the number of layers matches entities × time steps × metrics (× scenarios, if any). Your entity list is final and ordered, and you have a metadata JSON on disk, from the portal form or `ebv_metadata()`, that you have read through. If that all holds, and your metric and scenario structure matches your dataset, you are ready to build the netCDF in [@sec-creating].
+:::
+

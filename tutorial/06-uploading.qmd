@@ -1,25 +1,45 @@
 # Uploading the dataset to the EBV Data Portal {#sec-uploading}
 
-*Learning objectives: submit a dataset through the portal UI and understand its review lifecycle.*
+By the end of this unit, you will be able to:
 
-## Account & login
+-   return to the portal upload form you started in [@sec-preparing];
+-   upload your validated netCDF and a preview image;
+-   submit the dataset for review and follow it through to publication;
+-   find your dataset's DOI and citation, and publish later versions.
 
-<!-- TODO: register at members.geobon.org, sign in -->
+By this point the hard part is done. In [@sec-preparing] you filled the portal upload form and downloaded the preliminary metadata, and in [@sec-creating] and [@sec-validating] you built the netCDF and checked it. This unit closes the loop: go back to the portal, upload the file, and submit it for review. It is mostly clicking, so it is short.
 
-## Filling in the metadata form
+## Back to the upload form
 
-<!-- TODO: general info / EBV attributes / entities tabs, mirroring dataset 30's page structure -->
+The submission uses the same New Upload form you met in [@sec-preparing]. Sign in with your GEO BON account and reopen your draft under **Uploads**. The *General information* and *EBV attributes* tabs are already filled from earlier, so the only tab left to finish is *Data upload*.
 
-## Uploading the netCDF and preview image
+## Uploading your netCDF
 
-<!-- TODO -->
+On the *Data upload* tab the portal offers two ways to submit: a ZIP of GeoTIFFs, or a netCDF built with the `ebvcube` package. You built the netCDF, so choose that option and upload your `.nc` file.
 
-## Draft, submit for review, and versioning
+If the form asks for a preview image, add one. A small map of a single slice, exported from `ebv_map()`, is enough and makes your dataset easier to recognize in the catalogue. The portal runs its own validation when you upload; if it flags anything, work back through the checks in [@sec-validating], fix the file, and upload it again.
 
-<!-- TODO: portal status states observed: Draft -> Submit for review -> published; dataset 30 shows "Initial Version", 1 version available -->
+## Submitting for review
 
-## After publication: DOI and citation
+Once the file is in, submit the dataset for review. It moves out of *Draft* into a review state, where the portal team checks the metadata and the file against the EBV standard before it goes public. Expect a wait, and possibly a request for small changes. When it is approved, the dataset is published: it appears in the public catalogue and becomes downloadable with `ebv_download()`.
 
-<!-- TODO -->
+## After publication: DOI, citation, and versions
 
-**Checkpoint:** you've completed a real (or walked-through) submission using dataset 30 as reference.
+On publication the portal assigns your dataset a DOI and generates its citation, both shown on the dataset page. You can see this on the live page for the running example, [dataset id = 1](https://portal.geobon.org/ebv-detail?id=1), where its version history, DOI, and citation all appear. Point people to those when they cite your data, not to the `ebvcube` package citation, which credits the software rather than the dataset.
+
+If you later revise the data, upload it as a new version instead of editing the published one. The portal keeps versions distinct, so anyone who already cited the earlier DOI still lands on the exact data they used.
+
+Here is that page, embedded live (in the HTML version of the book):
+
+<iframe src="https://portal.geobon.org/ebv-detail?id=1"
+        title="EBV Data Portal page for dataset id = 1 (Local bird diversity, cSAR/BES-SIM)"
+        width="100%" height="600"
+        style="border:1px solid #ddd; border-radius:6px;"
+        loading="lazy">
+</iframe>
+
+<p>If the page does not load, <a href="https://portal.geobon.org/ebv-detail?id=1">open dataset id = 1 on the EBV Data Portal</a>.</p>
+
+::: {.callout-tip appearance="simple"}
+**Checkpoint.** Your netCDF is uploaded, submitted, and, once approved, live on the EBV Data Portal with its own DOI. If anything snagged along the way, [@sec-troubleshooting] collects the fixes for the problems that come up most often.
+:::

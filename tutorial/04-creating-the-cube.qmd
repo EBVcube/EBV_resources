@@ -1,25 +1,194 @@
-# Creating an EBVCube NetCDF using the R package {#sec-creating}
+# Creating an EBVCube with the `ebvcube` package {#sec-creating}
 
-*Learning objectives: run the four-step creation pipeline end-to-end and produce a valid netCDF.*
+By the end of this unit, you will be able to:
 
-## Step 2 — `ebv_create()`
+-   write an empty EBVCube netCDF from your metadata JSON with `ebv_create()`;
+-   fill the empty cubes with your raster data using `ebv_add_data()`;
+-   correct an attribute after the fact with `ebv_attribute()`;
+-   build species-level cubes that carry a taxonomy with `ebv_create_taxonomy()`;
+-   confirm the finished file is valid before moving on.
 
-<!-- TODO: adapt advanced-usage.qmd, full runnable code block -->
+In [@sec-preparing] you prepared two things: a metadata JSON that describes your dataset, and the biodiversity rasters that hold the numbers. This unit joins them into a finished EBVCube. The work happens entirely in R with the `ebvcube` package, and it follows the same four functions every time, in the same order.
 
-## Step 3 — `ebv_add_data()`
+The pipeline has four steps:
 
-<!-- TODO: adapt advanced-usage.qmd -->
+1.  `ebv_create()` writes an empty netCDF whose structure matches your metadata JSON.
+2.  `ebv_add_data()` fills the cubes with your raster values, one entity at a time.
+3.  `ebv_attribute()` corrects any attribute that turns out to be wrong.
+4.  `ebv_properties()` and `ebv_datacubepaths()` confirm the result.
 
-## Step 4 — `ebv_attribute()`
+To keep this chapter self-contained, we generate the metadata JSON here with `ebv_metadata()` (Path B from [@sec-preparing]) and synthesize the raster data, so everything below runs without files you have to supply. If you already downloaded a metadata file from the portal (Path A), point `json` at that file and skip the `ebv_metadata()` call.
 
-<!-- TODO: adapt advanced-usage.qmd -->
+```{r}
+#| eval: false
+library(ebvcube)
 
-## Taxonomic / species-level datasets
+json   <- ebv_metadata(
+  outputpath               = file.path(tempdir(), "metadata.json"),
+  title                    = "Local bird diversity (worked example)",
+  summary                  = "Example dataset for the ebvcube documentation: change in bird species richness over the 20th century.",
+  source                   = "Modelled with the cSAR model (example data only).",
+  date_created             = as.character(Sys.Date()),
+  creator_name             = "Jane Doe",
+  creator_institution      = "Example University",
+  license                  = "CC BY",
+  ebv_class                = "Community composition",
+  ebv_name                 = "Taxonomic and phylogenetic diversity",
+  ebv_spatial_scope        = "Global",
+  ebv_domain               = "Terrestrial",
+  coverage_content_type    = "modelResult",
+  ebv_entity_type          = "Communities",
+  ebv_entity_scope         = "Birds",
+  time_coverage_start      = "1900-01-01",
+  time_coverage_end        = "2010-01-01",
+  time_coverage_resolution = "P0010-00-00",
+  metric = list(
+    standard_name = "Relative change in the number of species",
+    long_name     = "Relative change in the number of bird species relative to 1900",
+    units         = "percent"
+  ),
+  overwrite = TRUE,
+  verbose   = FALSE
+)
 
-<!-- TODO: adapt advanced-usage.qmd "Taxonomic datasets" — relevant since dataset 30 is community composition -->
+new_nc <- file.path(tempdir(), "bird_diversity.nc")
+```
 
-## Sanity-checking the result
+## Writing the empty netCDF with `ebv_create()`
 
-<!-- TODO: ebv_properties(), ebv_datacubepaths(); optional Panoply callout -->
+`ebv_create()` reads the metadata JSON and writes a netCDF that has the right shape but no data yet. You supply the entity names here, along with the grid the cubes sit on: the projection (`epsg`), the geographic `extent`, and the `resolution` in degrees. The running example has three entities and a 1° global grid.
 
-**Checkpoint:** you have produced your own `.nc` file and can list its datacube paths.
+```{r}
+#| eval: false
+entities <- c("forest bird species",
+              "non-forest bird species",
+              "all bird species")
+
+ebv_create(
+  jsonpath   = json,
+  outputpath = new_nc,
+  entities   = entities,
+  epsg       = 4326,
+  extent     = c(-180, 180, -90, 90),
+  resolution = c(1, 1),
+  fillvalue  = -3.4e+38,
+  overwrite  = TRUE,
+  verbose    = FALSE
+)
+```
+
+At this point the file is fully structured but every cell still holds the fill value. Check the skeleton before you add anything to it:
+
+```{r}
+#| eval: false
+ebv_properties(new_nc, verbose = FALSE)@general$entity_names
+
+ebv_datacubepaths(new_nc, verbose = FALSE)
+```
+
+The entity names should match what you passed in, and the datacube paths tell you where the data will live. For the running example there is no scenario layer, so the cubes sit at `metric_1/ebv_cube`.
+
+## Adding your data with `ebv_add_data()`
+
+Each entity's data lives in its own GeoTIFF (or in-memory raster), and you add them one at a time. In a real workflow these files are the output of your analysis. Here we synthesize three rasters on the same 1° grid as the netCDF, so the example runs without any bundled files.
+
+```{r}
+#| eval: false
+# Three 3-band rasters, one per entity, on the netCDF's grid.
+template <- terra::rast(terra::ext(-180, 180, -90, 90),
+                        resolution = 1, crs = "EPSG:4326")
+tifs <- file.path(tempdir(), c("entity1.tif", "entity2.tif", "entity3.tif"))
+for (i in seq_along(tifs)) {
+  r3 <- terra::rast(template, nlyrs = 3)
+  terra::values(r3) <- matrix(runif(terra::ncell(r3) * 3), ncol = 3)
+  terra::writeRaster(r3, tifs[i], overwrite = TRUE)
+}
+
+for (i in seq_along(tifs)) {
+  ebv_add_data(
+    filepath_nc = new_nc,
+    metric      = 1,       # add to metric_1
+    entity      = i,
+    timestep    = 1:3,     # first three time steps
+    data        = tifs[i],
+    band        = 1:3,     # bands 1-3 of the tif
+    verbose     = FALSE
+  )
+}
+```
+
+You can call `ebv_add_data()` again on the same cube to fill in more time steps later. It appends rather than overwrites, as long as each call keeps the `(metric, entity, timestep)` combination unique.
+
+## Correcting an attribute with `ebv_attribute()`
+
+If you later spot a wrong unit, a typo in a description, or any other attribute that needs fixing, you can edit it in place without rebuilding the file:
+
+```{r}
+#| eval: false
+ebv_attribute(new_nc,
+              attribute_name = "units",
+              value          = "Percentage",
+              levelpath      = "metric_1/ebv_cube")
+
+ebv_properties(new_nc, "metric_1/ebv_cube",
+               verbose = FALSE)@ebv_cube$units
+#> [1] "Percentage"
+```
+
+The `levelpath` argument points at the layer you want to change. Pass `"metric_1/ebv_cube"` for the cube itself, `"metric_1"` for the metric, or `"/"` for a global attribute.
+
+## Species-level datasets with `ebv_create_taxonomy()`
+
+When your entities are individual species rather than aggregated groups, use `ebv_create_taxonomy()` in place of `ebv_create()`. Instead of a plain vector of entity names, you supply a table with one row per species and one column per taxonomic rank. The function writes an extra `taxonomy` variable into the netCDF that the EBV Data Portal and downstream tools can use to filter and group species.
+
+```{r}
+#| eval: false
+# The column names you choose become the taxonomic ranks stored in the file.
+# In practice this table usually comes from a GBIF or Catalogue of Life export.
+taxonomy <- data.frame(
+  species = c("Hirundo rustica", "Apus apus",   "Falco peregrinus"),
+  genus   = c("Hirundo",         "Apus",        "Falco"),
+  family  = c("Hirundinidae",    "Apodidae",    "Falconidae"),
+  order   = c("Passeriformes",   "Apodiformes", "Falconiformes"),
+  class   = c("Aves",            "Aves",        "Aves")
+)
+taxonomy_csv <- file.path(tempdir(), "taxonomy.csv")
+write.csv(taxonomy, taxonomy_csv, row.names = FALSE)
+
+new_nc_tax <- file.path(tempdir(), "bird_diversity_taxonomy.nc")
+
+ebv_create_taxonomy(
+  jsonpath   = json,
+  outputpath = new_nc_tax,
+  taxonomy   = taxonomy_csv,
+  sep        = ",",
+  epsg       = 4326,
+  extent     = c(-180, 180, -90, 90),
+  resolution = c(1, 1),
+  fillvalue  = -3.4e+38,
+  overwrite  = TRUE,
+  verbose    = FALSE
+)
+```
+
+From here `ebv_add_data()` works exactly as it did above. The taxonomy is read-only metadata and does not change how you fill the cubes. See `?ebv_create_taxonomy` for the accepted column names and separator options.
+
+## Checking the finished file
+
+Once the cubes are filled, confirm the file one more time before you validate it. `ebv_properties()` reports the general metadata and structure, and `ebv_datacubepaths()` lists every cube in the file:
+
+```{r}
+#| eval: false
+ebv_properties(new_nc, verbose = FALSE)
+
+ebv_datacubepaths(new_nc, verbose = FALSE)
+```
+
+::: {.callout-tip}
+## A visual check with Panoply
+[Panoply](https://www.giss.nasa.gov/tools/panoply/) is a free NASA viewer for netCDF and HDF5 files. Drag your new `.nc` into it and it shows the group hierarchy, dimensions, and attributes side by side, and it can draw a quick map of any cube. It is a fast way to see whether the file looks the way you expect while you are still learning the format.
+:::
+
+::: {.callout-tip appearance="simple"}
+**Checkpoint.** You have written an empty netCDF from your metadata, filled its cubes with `ebv_add_data()`, and confirmed the structure with `ebv_properties()` and `ebv_datacubepaths()`. If the datacube paths list the entities you expect and the values read back, your EBVCube is ready to validate in [@sec-validating].
+:::

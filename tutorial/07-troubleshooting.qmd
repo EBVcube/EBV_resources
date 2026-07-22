@@ -1,25 +1,155 @@
-# Troubleshooting common issues and best practices {#sec-troubleshooting}
+# Troubleshooting and getting help {#sec-troubleshooting}
+
+By the end of this unit, you will be able to:
+
+-   diagnose the installation errors that come up most often;
+-   fix the errors `ebv_create()` and `ebv_add_data()` raise when inputs do not line up;
+-   resolve the common problems you meet when reading a file back;
+-   know what to do when a portal upload or review stalls;
+-   write a useful bug report and find the right place to ask for help.
+
+This unit is a reference, not a walkthrough. It is organized by stage, in the same order as the earlier units, so you can jump to wherever you got stuck. Each entry gives the symptom and the shortest fix that has worked in practice.
 
 ## Installation
 
-<!-- TODO: adapt faq.qmd "Installation" section wholesale -->
+These are the problems that stop `library(ebvcube)` from loading. The full setup is in [@sec-installation].
 
-## Creating data
+### The Bioconductor packages are not found
 
-<!-- TODO: adapt faq.qmd "Creating data" section -->
+`there is no package called 'rhdf5'` (or `DelayedArray`, or `HDF5Array`). These live on Bioconductor, not CRAN, so `install.packages("ebvcube")` cannot pull them in on its own:
 
-## Validating
+```{r}
+#| eval: false
+install.packages("BiocManager")
+BiocManager::install(c("rhdf5", "DelayedArray", "HDF5Array"))
+```
 
-<!-- TODO: adapt faq.qmd "Reading data" section, reframed -->
+Then retry `library(ebvcube)`.
 
-## Uploading / portal-specific
+### `package 'ebvcube' is not available for this version of R`
 
-<!-- TODO: new content — file size limits, unsupported CRS/class combos, stuck-in-review, who to contact -->
+You are on an older R, and Bioconductor releases are tied to specific R versions. Either update R to the current release, which is the cleaner fix, or install an older `ebvcube` that supports your R version:
 
-## Performance
+```{r}
+#| eval: false
+devtools::install_github("EBVcube/ebvcube@v0.5.0")   # adjust the tag
+```
 
-<!-- TODO: adapt faq.qmd "Performance" section -->
+### Compilation fails on Linux with HDF5 or GDAL errors
 
-## Best practices
+You are missing the system libraries the R packages compile against. On Debian or Ubuntu:
 
-<!-- TODO: adapt faq.qmd "Citation, licensing and contribution" -->
+```bash
+sudo apt-get install libhdf5-dev libgdal-dev libproj-dev libgeos-dev libudunits2-dev
+```
+
+Then reinstall the dependency that failed (`rhdf5`, `terra`, and so on), not `ebvcube` itself, since the failure is in the dependency.
+
+### `HDF5 library version mismatched`
+
+Your installed `rhdf5` was built against a different HDF5 library than the one loaded at runtime. Reinstall it from a clean R session:
+
+```{r}
+#| eval: false
+remove.packages("rhdf5")
+BiocManager::install("rhdf5", force = TRUE)
+```
+
+## Preparing data and metadata
+
+Most metadata trouble comes from the controlled vocabularies. See [@sec-preparing] for the full form.
+
+### A metadata value is rejected
+
+Fields such as `ebv_class`, `ebv_name`, and `ebv_entity_type` accept only the terms the portal knows. If `ebv_metadata()` or the upload form refuses a value, it almost always does not match one of those terms. Copy the wording from the portal form's pick lists, or check `?ebv_metadata` for the accepted list, rather than typing your own phrasing.
+
+## Creating the cube
+
+Errors here usually mean the metadata and the data disagree about shape. The build itself is in [@sec-creating].
+
+### `entities length does not match metadata`
+
+The `entities` vector you passed to `ebv_create()` has a different length than the entity count declared in the JSON. Fix one so the two agree.
+
+### `ebv_add_data()` fails with a dimension mismatch
+
+The GeoTIFF you are adding does not sit on the same grid as the netCDF, so its resolution, extent, or CRS is off. Reproject it onto the netCDF's grid before adding it:
+
+```{r}
+#| eval: false
+target_r <- ebv_read(new_nc, "metric_1/ebv_cube",
+                     entity = 1, timestep = 1, type = "r")
+
+r  <- terra::rast("your_data.tif")
+r2 <- terra::project(r, target_r)          # match CRS, resolution, extent
+terra::writeRaster(r2, "your_data_aligned.tif", overwrite = TRUE)
+```
+
+Add `your_data_aligned.tif` instead of the original.
+
+### Units, titles, or descriptions look wrong after `ebv_create()`
+
+You do not need to rebuild the file. Fix the attribute in place with `ebv_attribute()`, as shown in [@sec-creating].
+
+## Reading the file back
+
+These come up when you validate your file or read a published one. The checks are in [@sec-validating].
+
+### `ebv_read()` says "Not enough RAM"
+
+The cube you asked for is larger than the package thinks your machine can hold. Two ways out: subset it spatially first with `ebv_read_bb()` or `ebv_read_shp()`, or read it lazily with `type = "da"` to get a `DelayedArray`. Note that `ignore_RAM = TRUE` only switches off the safety check; it does not make the read lazy.
+
+### `ebv_read_shp()` returns an array full of `NA`
+
+Two usual causes. Either the shapefile is in a different projection from the netCDF, so reproject it to match:
+
+```{r}
+#| eval: false
+shp_p <- sf::st_transform(sf::st_read(shp), 4326)
+sf::st_write(shp_p, "shp_wgs84.shp")
+```
+
+Or the shapefile and the file's extent do not overlap at all. Compare them before reading:
+
+```{r}
+#| eval: false
+ebv_properties(nc, verbose = FALSE)@spatial$extent   # c(xmin, xmax, ymin, ymax)
+sf::st_bbox(sf::st_read(shp))
+```
+
+### The map looks shifted by 180°
+
+The file uses the `[0, 360]` longitude convention while your basemap expects `[-180, 180]`. Read the slice and wrap it with `terra::rotate()`, as described in [@sec-validating].
+
+## Uploading to the portal
+
+The submission steps are in [@sec-uploading]; here are the snags that interrupt them.
+
+### The upload is rejected
+
+The portal validates your file when you upload it. If it pushes the file back, the fault is almost always something the pre-flight checks in [@sec-validating] would have caught, so re-run those, fix the file, and upload again. A very large file can also be slow or time out; before you assume the portal is at fault, make sure the file is not larger than it needs to be.
+
+### A value you need is not in a pick list
+
+The form's controlled vocabularies are deliberate. Choose the closest listed term rather than forcing your own, and if nothing fits, ask the portal team through the contact route on the dataset page rather than working around it.
+
+### The dataset is stuck in review
+
+Review is done by people, so it takes time, and a request for small changes is normal. If a long stretch passes with no word, follow up through the dataset page contact or GEO BON.
+
+## Getting help and reporting bugs
+
+If none of the above fixes it, a good bug report is the fastest way forward. Package bugs go to the [GitHub issue tracker](https://github.com/EBVcube/ebvcube/issues), and a report the maintainers can act on includes:
+
+- the output of `sessionInfo()`,
+- a minimal reproducible example, ideally on a dataset that ships with the package,
+- the full error message, and
+- what you expected to happen.
+
+For open questions rather than bugs, use the [GitHub Discussions](https://github.com/EBVcube/ebvcube/discussions) board. Before posting either, check you are on the latest release with `packageVersion("ebvcube")`, since the fix may already be out.
+
+Two more things worth knowing. To cite the package, run `citation("ebvcube")`, which prints both a plain-text and a BibTeX entry; to cite a dataset, use its own DOI from the portal page rather than the package citation (see [@sec-uploading]). And the package is open source under [GPL-3](https://www.gnu.org/licenses/gpl-3.0.en.html), with the source on [GitHub](https://github.com/EBVcube/ebvcube), so pull requests are welcome.
+
+::: {.callout-tip appearance="simple"}
+**Checkpoint.** You can find the stage where you got stuck, apply the fix, and, if it turns out to be a genuine bug, file a report the maintainers can act on. That closes the whole arc, from a raster on your disk to a published dataset with a DOI. For further reading and references, see [@sec-resources].
+:::

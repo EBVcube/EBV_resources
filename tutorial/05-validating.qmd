@@ -1,25 +1,96 @@
-# Validating the generated file {#sec-validating}
+# Validating your EBVCube before uploading {#sec-validating}
 
-*Learning objectives: confirm the file is portal-ready before attempting upload.*
+By the end of this unit, you will be able to:
 
-## Structural self-checks
+-   inspect the structure of your netCDF with `ebv_properties()` and `ebv_datacubepaths()`;
+-   check that the cube values fall in a sensible range with `ebv_analyse()`;
+-   confirm the data maps correctly with `ebv_map()`;
+-   compare the finished file against the metadata you declared;
+-   run a short pre-flight checklist before you upload.
 
-<!-- TODO: ebv_properties() slot by slot -->
+In [@sec-creating] you built an EBVCube and gave it a first structural look. This unit goes one step further and checks that the file is right before you upload it to the EBV Data Portal in [@sec-uploading]. Every problem you catch here is cheaper to fix now than after a reviewer finds it.
 
-## Visual check with `ebv_map()`
+The checks below use the file you created in the previous unit. Set `nc` to its path, and use the cube path for the running example, which has no scenario layer:
 
-<!-- TODO: adapt faq.qmd "The map looks shifted by 180°" -->
+```{r}
+#| eval: false
+library(ebvcube)
 
-## Cross-checking against the metadata JSON
+nc <- file.path(tempdir(), "bird_diversity.nc")   # the file from @sec-creating
+dc <- "metric_1/ebv_cube"
+```
 
-<!-- TODO -->
+## Check the structure
 
-## External validation (Panoply, portal validator)
+Start with the two functions you already met. `ebv_datacubepaths()` lists every cube in the file, and `ebv_properties()` reports the metadata slot by slot. Read them against what you meant to build:
 
-<!-- TODO -->
+```{r}
+#| eval: false
+ebv_datacubepaths(nc, verbose = FALSE)
 
-## Pre-flight checklist
+props <- ebv_properties(nc, verbose = FALSE)
+props@general$entity_names     # the entities you declared
+props@spatial$extent           # c(xmin, xmax, ymin, ymax)
+props@temporal$dates           # the time axis
+```
 
-<!-- TODO: tick-box summary -->
+The datacube paths should list every metric and entity you expect, the entity names should read correctly, and the extent and dates should match your data. A missing entity or an empty time axis points to a step that went wrong in creation.
 
-**Checkpoint:** you can explain why each check matters and have run all of them on your file.
+## Check the values
+
+Structure can be right while the numbers are wrong, so read a slice and look at its range. `ebv_analyse()` returns summary statistics for a cube or a subset:
+
+```{r}
+#| eval: false
+stats <- ebv_analyse(nc, dc, entity = 1, timestep = 1, verbose = FALSE)
+stats[c("min", "max", "mean", "n", "NAs")]
+```
+
+`n` is the number of valid pixels. If it is zero, or `NAs` covers the whole grid, the cube never received its data. A `min` or `max` far outside what your variable should hold usually means a unit problem or a stray fill value that leaked into the data.
+
+## Check it visually
+
+Numbers only tell you so much. `ebv_map()` draws a single slice, and one look often catches problems a summary hides, such as data in the wrong hemisphere or an all-empty ocean:
+
+```{r}
+#| eval: false
+ebv_map(nc, dc, entity = 1, timestep = 1, verbose = FALSE)
+```
+
+::: {.callout-note}
+## If the map looks shifted by 180°
+The file is using the `[0, 360]` longitude convention while the basemap expects `[-180, 180]`. Read the slice and wrap it before plotting:
+
+```r
+r <- ebv_read(nc, dc, entity = 1, timestep = 1, type = "r")
+r <- terra::rotate(r)
+```
+:::
+
+## Compare against your metadata
+
+Finally, confirm the file says what you told it to say. Read the attributes back and check them against the metadata form (or the `ebv_metadata()` call) you used to create it:
+
+```{r}
+#| eval: false
+props@general$title
+ebv_properties(nc, dc, verbose = FALSE)@ebv_cube$units
+```
+
+The title, units, entity count, and time coverage should all match your metadata. If a unit or description is wrong, fix it in place with `ebv_attribute()` from [@sec-creating] rather than rebuilding the file.
+
+## A pre-flight checklist
+
+Before you move to the portal, walk through this list. If every box ticks, the file is ready to upload:
+
+- [ ] The datacube paths list every metric and entity you expect.
+- [ ] Entity names, dates, extent, and resolution match your metadata.
+- [ ] Units and the cube description read correctly.
+- [ ] A map of at least one slice looks right, with no 180° shift.
+- [ ] Value ranges are plausible and the valid-pixel count (`n`) is not zero.
+
+The portal runs its own validation when you submit, but clearing these first saves a round trip. Panoply, introduced in [@sec-creating], is a quick way to eyeball the structure outside R if you want a second opinion.
+
+::: {.callout-tip appearance="simple"}
+**Checkpoint.** Your file's structure, values, and map all match the dataset you meant to create, and every box in the pre-flight checklist is ticked. If so, you are ready to upload it to the EBV Data Portal in [@sec-uploading].
+:::
