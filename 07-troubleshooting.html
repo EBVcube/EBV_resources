@@ -8,7 +8,7 @@
 
 <meta name="description" content="A step-by-step tutorial on turning your data into an EBVCube with the ebvcube R package, then validating and publishing it as a citable, FAIR dataset on the EBV Data Portal.">
 
-<title>8&nbsp; Troubleshooting common issues and best practices – From Raster to Portal: Creating and Publishing an EBVCube</title>
+<title>8&nbsp; Troubleshooting and getting help – From Raster to Portal: Creating and Publishing an EBVCube</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -84,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./07-troubleshooting.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Troubleshooting common issues and best practices</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./07-troubleshooting.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Troubleshooting and getting help</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -128,25 +162,25 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02-installation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Installing the required software and the <code>ebvcube</code> package</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> package</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03-preparing-data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data for conversion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04-creating-the-cube.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube NetCDF using the R package</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> package</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05-validating.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validating the generated file</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -158,13 +192,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./07-troubleshooting.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Troubleshooting common issues and best practices</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Troubleshooting and getting help</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08-resources.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Additional resources, documentation, repositories, and references</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Further reading and references</span></span></a>
   </div>
 </li>
     </ul>
@@ -177,12 +211,36 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation"><span class="header-section-number">8.1</span> Installation</a></li>
-  <li><a href="#creating-data" id="toc-creating-data" class="nav-link" data-scroll-target="#creating-data"><span class="header-section-number">8.2</span> Creating data</a></li>
-  <li><a href="#validating" id="toc-validating" class="nav-link" data-scroll-target="#validating"><span class="header-section-number">8.3</span> Validating</a></li>
-  <li><a href="#uploading-portal-specific" id="toc-uploading-portal-specific" class="nav-link" data-scroll-target="#uploading-portal-specific"><span class="header-section-number">8.4</span> Uploading / portal-specific</a></li>
-  <li><a href="#performance" id="toc-performance" class="nav-link" data-scroll-target="#performance"><span class="header-section-number">8.5</span> Performance</a></li>
-  <li><a href="#best-practices" id="toc-best-practices" class="nav-link" data-scroll-target="#best-practices"><span class="header-section-number">8.6</span> Best practices</a></li>
+  <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation"><span class="header-section-number">8.1</span> Installation</a>
+  <ul class="collapse">
+  <li><a href="#the-bioconductor-packages-are-not-found" id="toc-the-bioconductor-packages-are-not-found" class="nav-link" data-scroll-target="#the-bioconductor-packages-are-not-found"><span class="header-section-number">8.1.1</span> The Bioconductor packages are not found</a></li>
+  <li><a href="#package-ebvcube-is-not-available-for-this-version-of-r" id="toc-package-ebvcube-is-not-available-for-this-version-of-r" class="nav-link" data-scroll-target="#package-ebvcube-is-not-available-for-this-version-of-r"><span class="header-section-number">8.1.2</span> <code>package 'ebvcube' is not available for this version of R</code></a></li>
+  <li><a href="#compilation-fails-on-linux-with-hdf5-or-gdal-errors" id="toc-compilation-fails-on-linux-with-hdf5-or-gdal-errors" class="nav-link" data-scroll-target="#compilation-fails-on-linux-with-hdf5-or-gdal-errors"><span class="header-section-number">8.1.3</span> Compilation fails on Linux with HDF5 or GDAL errors</a></li>
+  <li><a href="#hdf5-library-version-mismatched" id="toc-hdf5-library-version-mismatched" class="nav-link" data-scroll-target="#hdf5-library-version-mismatched"><span class="header-section-number">8.1.4</span> <code>HDF5 library version mismatched</code></a></li>
+  </ul></li>
+  <li><a href="#preparing-data-and-metadata" id="toc-preparing-data-and-metadata" class="nav-link" data-scroll-target="#preparing-data-and-metadata"><span class="header-section-number">8.2</span> Preparing data and metadata</a>
+  <ul class="collapse">
+  <li><a href="#a-metadata-value-is-rejected" id="toc-a-metadata-value-is-rejected" class="nav-link" data-scroll-target="#a-metadata-value-is-rejected"><span class="header-section-number">8.2.1</span> A metadata value is rejected</a></li>
+  </ul></li>
+  <li><a href="#creating-the-cube" id="toc-creating-the-cube" class="nav-link" data-scroll-target="#creating-the-cube"><span class="header-section-number">8.3</span> Creating the cube</a>
+  <ul class="collapse">
+  <li><a href="#entities-length-does-not-match-metadata" id="toc-entities-length-does-not-match-metadata" class="nav-link" data-scroll-target="#entities-length-does-not-match-metadata"><span class="header-section-number">8.3.1</span> <code>entities length does not match metadata</code></a></li>
+  <li><a href="#ebv_add_data-fails-with-a-dimension-mismatch" id="toc-ebv_add_data-fails-with-a-dimension-mismatch" class="nav-link" data-scroll-target="#ebv_add_data-fails-with-a-dimension-mismatch"><span class="header-section-number">8.3.2</span> <code>ebv_add_data()</code> fails with a dimension mismatch</a></li>
+  <li><a href="#units-titles-or-descriptions-look-wrong-after-ebv_create" id="toc-units-titles-or-descriptions-look-wrong-after-ebv_create" class="nav-link" data-scroll-target="#units-titles-or-descriptions-look-wrong-after-ebv_create"><span class="header-section-number">8.3.3</span> Units, titles, or descriptions look wrong after <code>ebv_create()</code></a></li>
+  </ul></li>
+  <li><a href="#reading-the-file-back" id="toc-reading-the-file-back" class="nav-link" data-scroll-target="#reading-the-file-back"><span class="header-section-number">8.4</span> Reading the file back</a>
+  <ul class="collapse">
+  <li><a href="#ebv_read-says-not-enough-ram" id="toc-ebv_read-says-not-enough-ram" class="nav-link" data-scroll-target="#ebv_read-says-not-enough-ram"><span class="header-section-number">8.4.1</span> <code>ebv_read()</code> says “Not enough RAM”</a></li>
+  <li><a href="#ebv_read_shp-returns-an-array-full-of-na" id="toc-ebv_read_shp-returns-an-array-full-of-na" class="nav-link" data-scroll-target="#ebv_read_shp-returns-an-array-full-of-na"><span class="header-section-number">8.4.2</span> <code>ebv_read_shp()</code> returns an array full of <code>NA</code></a></li>
+  <li><a href="#the-map-looks-shifted-by-180" id="toc-the-map-looks-shifted-by-180" class="nav-link" data-scroll-target="#the-map-looks-shifted-by-180"><span class="header-section-number">8.4.3</span> The map looks shifted by 180°</a></li>
+  </ul></li>
+  <li><a href="#uploading-to-the-portal" id="toc-uploading-to-the-portal" class="nav-link" data-scroll-target="#uploading-to-the-portal"><span class="header-section-number">8.5</span> Uploading to the portal</a>
+  <ul class="collapse">
+  <li><a href="#the-upload-is-rejected" id="toc-the-upload-is-rejected" class="nav-link" data-scroll-target="#the-upload-is-rejected"><span class="header-section-number">8.5.1</span> The upload is rejected</a></li>
+  <li><a href="#a-value-you-need-is-not-in-a-pick-list" id="toc-a-value-you-need-is-not-in-a-pick-list" class="nav-link" data-scroll-target="#a-value-you-need-is-not-in-a-pick-list"><span class="header-section-number">8.5.2</span> A value you need is not in a pick list</a></li>
+  <li><a href="#the-dataset-is-stuck-in-review" id="toc-the-dataset-is-stuck-in-review" class="nav-link" data-scroll-target="#the-dataset-is-stuck-in-review"><span class="header-section-number">8.5.3</span> The dataset is stuck in review</a></li>
+  </ul></li>
+  <li><a href="#getting-help-and-reporting-bugs" id="toc-getting-help-and-reporting-bugs" class="nav-link" data-scroll-target="#getting-help-and-reporting-bugs"><span class="header-section-number">8.6</span> Getting help and reporting bugs</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/07-troubleshooting.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -191,7 +249,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-troubleshooting" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Troubleshooting common issues and best practices</span></span></h1>
+<h1 class="title"><span id="sec-troubleshooting" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Troubleshooting and getting help</span></span></h1>
 </div>
 
 
@@ -208,29 +266,144 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>By the end of this unit, you will be able to:</p>
+<ul>
+<li>diagnose the installation errors that come up most often;</li>
+<li>fix the errors <code>ebv_create()</code> and <code>ebv_add_data()</code> raise when inputs do not line up;</li>
+<li>resolve the common problems you meet when reading a file back;</li>
+<li>know what to do when a portal upload or review stalls;</li>
+<li>write a useful bug report and find the right place to ask for help.</li>
+</ul>
+<p>This unit is a reference, not a walkthrough. It is organized by stage, in the same order as the earlier units, so you can jump to wherever you got stuck. Each entry gives the symptom and the shortest fix that has worked in practice.</p>
 <section id="installation" class="level2" data-number="8.1">
 <h2 data-number="8.1" class="anchored" data-anchor-id="installation"><span class="header-section-number">8.1</span> Installation</h2>
-<!-- TODO: adapt faq.qmd "Installation" section wholesale -->
+<p>These are the problems that stop <code>library(ebvcube)</code> from loading. The full setup is in <a href="02-installation.html" class="quarto-xref"><span>Chapter 3</span></a>.</p>
+<section id="the-bioconductor-packages-are-not-found" class="level3" data-number="8.1.1">
+<h3 data-number="8.1.1" class="anchored" data-anchor-id="the-bioconductor-packages-are-not-found"><span class="header-section-number">8.1.1</span> The Bioconductor packages are not found</h3>
+<p><code>there is no package called 'rhdf5'</code> (or <code>DelayedArray</code>, or <code>HDF5Array</code>). These live on Bioconductor, not CRAN, so <code>install.packages("ebvcube")</code> cannot pull them in on its own:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">"rhdf5"</span>, <span class="st">"DelayedArray"</span>, <span class="st">"HDF5Array"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then retry <code>library(ebvcube)</code>.</p>
 </section>
-<section id="creating-data" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="creating-data"><span class="header-section-number">8.2</span> Creating data</h2>
-<!-- TODO: adapt faq.qmd "Creating data" section -->
+<section id="package-ebvcube-is-not-available-for-this-version-of-r" class="level3" data-number="8.1.2">
+<h3 data-number="8.1.2" class="anchored" data-anchor-id="package-ebvcube-is-not-available-for-this-version-of-r"><span class="header-section-number">8.1.2</span> <code>package 'ebvcube' is not available for this version of R</code></h3>
+<p>You are on an older R, and Bioconductor releases are tied to specific R versions. Either update R to the current release, which is the cleaner fix, or install an older <code>ebvcube</code> that supports your R version:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"EBVcube/ebvcube@v0.5.0"</span>)   <span class="co"># adjust the tag</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="validating" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="validating"><span class="header-section-number">8.3</span> Validating</h2>
-<!-- TODO: adapt faq.qmd "Reading data" section, reframed -->
+<section id="compilation-fails-on-linux-with-hdf5-or-gdal-errors" class="level3" data-number="8.1.3">
+<h3 data-number="8.1.3" class="anchored" data-anchor-id="compilation-fails-on-linux-with-hdf5-or-gdal-errors"><span class="header-section-number">8.1.3</span> Compilation fails on Linux with HDF5 or GDAL errors</h3>
+<p>You are missing the system libraries the R packages compile against. On Debian or Ubuntu:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install libhdf5-dev libgdal-dev libproj-dev libgeos-dev libudunits2-dev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then reinstall the dependency that failed (<code>rhdf5</code>, <code>terra</code>, and so on), not <code>ebvcube</code> itself, since the failure is in the dependency.</p>
 </section>
-<section id="uploading-portal-specific" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="uploading-portal-specific"><span class="header-section-number">8.4</span> Uploading / portal-specific</h2>
-<!-- TODO: new content — file size limits, unsupported CRS/class combos, stuck-in-review, who to contact -->
+<section id="hdf5-library-version-mismatched" class="level3" data-number="8.1.4">
+<h3 data-number="8.1.4" class="anchored" data-anchor-id="hdf5-library-version-mismatched"><span class="header-section-number">8.1.4</span> <code>HDF5 library version mismatched</code></h3>
+<p>Your installed <code>rhdf5</code> was built against a different HDF5 library than the one loaded at runtime. Reinstall it from a clean R session:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">remove.packages</span>(<span class="st">"rhdf5"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"rhdf5"</span>, <span class="at">force =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="performance" class="level2" data-number="8.5">
-<h2 data-number="8.5" class="anchored" data-anchor-id="performance"><span class="header-section-number">8.5</span> Performance</h2>
-<!-- TODO: adapt faq.qmd "Performance" section -->
 </section>
-<section id="best-practices" class="level2" data-number="8.6">
-<h2 data-number="8.6" class="anchored" data-anchor-id="best-practices"><span class="header-section-number">8.6</span> Best practices</h2>
-<!-- TODO: adapt faq.qmd "Citation, licensing and contribution" -->
+<section id="preparing-data-and-metadata" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="preparing-data-and-metadata"><span class="header-section-number">8.2</span> Preparing data and metadata</h2>
+<p>Most metadata trouble comes from the controlled vocabularies. See <a href="03-preparing-data.html" class="quarto-xref"><span>Chapter 4</span></a> for the full form.</p>
+<section id="a-metadata-value-is-rejected" class="level3" data-number="8.2.1">
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="a-metadata-value-is-rejected"><span class="header-section-number">8.2.1</span> A metadata value is rejected</h3>
+<p>Fields such as <code>ebv_class</code>, <code>ebv_name</code>, and <code>ebv_entity_type</code> accept only the terms the portal knows. If <code>ebv_metadata()</code> or the upload form refuses a value, it almost always does not match one of those terms. Copy the wording from the portal form’s pick lists, or check <code>?ebv_metadata</code> for the accepted list, rather than typing your own phrasing.</p>
+</section>
+</section>
+<section id="creating-the-cube" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="creating-the-cube"><span class="header-section-number">8.3</span> Creating the cube</h2>
+<p>Errors here usually mean the metadata and the data disagree about shape. The build itself is in <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 5</span></a>.</p>
+<section id="entities-length-does-not-match-metadata" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="entities-length-does-not-match-metadata"><span class="header-section-number">8.3.1</span> <code>entities length does not match metadata</code></h3>
+<p>The <code>entities</code> vector you passed to <code>ebv_create()</code> has a different length than the entity count declared in the JSON. Fix one so the two agree.</p>
+</section>
+<section id="ebv_add_data-fails-with-a-dimension-mismatch" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="ebv_add_data-fails-with-a-dimension-mismatch"><span class="header-section-number">8.3.2</span> <code>ebv_add_data()</code> fails with a dimension mismatch</h3>
+<p>The GeoTIFF you are adding does not sit on the same grid as the netCDF, so its resolution, extent, or CRS is off. Reproject it onto the netCDF’s grid before adding it:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>target_r <span class="ot">&lt;-</span> <span class="fu">ebv_read</span>(new_nc, <span class="st">"metric_1/ebv_cube"</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">entity =</span> <span class="dv">1</span>, <span class="at">timestep =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"r"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>r  <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="st">"your_data.tif"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">project</span>(r, target_r)          <span class="co"># match CRS, resolution, extent</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">writeRaster</span>(r2, <span class="st">"your_data_aligned.tif"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Add <code>your_data_aligned.tif</code> instead of the original.</p>
+</section>
+<section id="units-titles-or-descriptions-look-wrong-after-ebv_create" class="level3" data-number="8.3.3">
+<h3 data-number="8.3.3" class="anchored" data-anchor-id="units-titles-or-descriptions-look-wrong-after-ebv_create"><span class="header-section-number">8.3.3</span> Units, titles, or descriptions look wrong after <code>ebv_create()</code></h3>
+<p>You do not need to rebuild the file. Fix the attribute in place with <code>ebv_attribute()</code>, as shown in <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 5</span></a>.</p>
+</section>
+</section>
+<section id="reading-the-file-back" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="reading-the-file-back"><span class="header-section-number">8.4</span> Reading the file back</h2>
+<p>These come up when you validate your file or read a published one. The checks are in <a href="05-validating.html" class="quarto-xref"><span>Chapter 6</span></a>.</p>
+<section id="ebv_read-says-not-enough-ram" class="level3" data-number="8.4.1">
+<h3 data-number="8.4.1" class="anchored" data-anchor-id="ebv_read-says-not-enough-ram"><span class="header-section-number">8.4.1</span> <code>ebv_read()</code> says “Not enough RAM”</h3>
+<p>The cube you asked for is larger than the package thinks your machine can hold. Two ways out: subset it spatially first with <code>ebv_read_bb()</code> or <code>ebv_read_shp()</code>, or read it lazily with <code>type = "da"</code> to get a <code>DelayedArray</code>. Note that <code>ignore_RAM = TRUE</code> only switches off the safety check; it does not make the read lazy.</p>
+</section>
+<section id="ebv_read_shp-returns-an-array-full-of-na" class="level3" data-number="8.4.2">
+<h3 data-number="8.4.2" class="anchored" data-anchor-id="ebv_read_shp-returns-an-array-full-of-na"><span class="header-section-number">8.4.2</span> <code>ebv_read_shp()</code> returns an array full of <code>NA</code></h3>
+<p>Two usual causes. Either the shapefile is in a different projection from the netCDF, so reproject it to match:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>shp_p <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_transform</span>(sf<span class="sc">::</span><span class="fu">st_read</span>(shp), <span class="dv">4326</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_write</span>(shp_p, <span class="st">"shp_wgs84.shp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Or the shapefile and the file’s extent do not overlap at all. Compare them before reading:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_properties</span>(nc, <span class="at">verbose =</span> <span class="cn">FALSE</span>)<span class="sc">@</span>spatial<span class="sc">$</span>extent   <span class="co"># c(xmin, xmax, ymin, ymax)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_bbox</span>(sf<span class="sc">::</span><span class="fu">st_read</span>(shp))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="the-map-looks-shifted-by-180" class="level3" data-number="8.4.3">
+<h3 data-number="8.4.3" class="anchored" data-anchor-id="the-map-looks-shifted-by-180"><span class="header-section-number">8.4.3</span> The map looks shifted by 180°</h3>
+<p>The file uses the <code>[0, 360]</code> longitude convention while your basemap expects <code>[-180, 180]</code>. Read the slice and wrap it with <code>terra::rotate()</code>, as described in <a href="05-validating.html" class="quarto-xref"><span>Chapter 6</span></a>.</p>
+</section>
+</section>
+<section id="uploading-to-the-portal" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="uploading-to-the-portal"><span class="header-section-number">8.5</span> Uploading to the portal</h2>
+<p>The submission steps are in <a href="06-uploading.html" class="quarto-xref"><span>Chapter 7</span></a>; here are the snags that interrupt them.</p>
+<section id="the-upload-is-rejected" class="level3" data-number="8.5.1">
+<h3 data-number="8.5.1" class="anchored" data-anchor-id="the-upload-is-rejected"><span class="header-section-number">8.5.1</span> The upload is rejected</h3>
+<p>The portal validates your file when you upload it. If it pushes the file back, the fault is almost always something the pre-flight checks in <a href="05-validating.html" class="quarto-xref"><span>Chapter 6</span></a> would have caught, so re-run those, fix the file, and upload again. A very large file can also be slow or time out; before you assume the portal is at fault, make sure the file is not larger than it needs to be.</p>
+</section>
+<section id="a-value-you-need-is-not-in-a-pick-list" class="level3" data-number="8.5.2">
+<h3 data-number="8.5.2" class="anchored" data-anchor-id="a-value-you-need-is-not-in-a-pick-list"><span class="header-section-number">8.5.2</span> A value you need is not in a pick list</h3>
+<p>The form’s controlled vocabularies are deliberate. Choose the closest listed term rather than forcing your own, and if nothing fits, ask the portal team through the contact route on the dataset page rather than working around it.</p>
+</section>
+<section id="the-dataset-is-stuck-in-review" class="level3" data-number="8.5.3">
+<h3 data-number="8.5.3" class="anchored" data-anchor-id="the-dataset-is-stuck-in-review"><span class="header-section-number">8.5.3</span> The dataset is stuck in review</h3>
+<p>Review is done by people, so it takes time, and a request for small changes is normal. If a long stretch passes with no word, follow up through the dataset page contact or GEO BON.</p>
+</section>
+</section>
+<section id="getting-help-and-reporting-bugs" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="getting-help-and-reporting-bugs"><span class="header-section-number">8.6</span> Getting help and reporting bugs</h2>
+<p>If none of the above fixes it, a good bug report is the fastest way forward. Package bugs go to the <a href="https://github.com/EBVcube/ebvcube/issues">GitHub issue tracker</a>, and a report the maintainers can act on includes:</p>
+<ul>
+<li>the output of <code>sessionInfo()</code>,</li>
+<li>a minimal reproducible example, ideally on a dataset that ships with the package,</li>
+<li>the full error message, and</li>
+<li>what you expected to happen.</li>
+</ul>
+<p>For open questions rather than bugs, use the <a href="https://github.com/EBVcube/ebvcube/discussions">GitHub Discussions</a> board. Before posting either, check you are on the latest release with <code>packageVersion("ebvcube")</code>, since the fix may already be out.</p>
+<p>Two more things worth knowing. To cite the package, run <code>citation("ebvcube")</code>, which prints both a plain-text and a BibTeX entry; to cite a dataset, use its own DOI from the portal page rather than the package citation (see <a href="06-uploading.html" class="quarto-xref"><span>Chapter 7</span></a>). And the package is open source under <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GPL-3</a>, with the source on <a href="https://github.com/EBVcube/ebvcube">GitHub</a>, so pull requests are welcome.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Checkpoint.</strong> You can find the stage where you got stuck, apply the fix, and, if it turns out to be a genuine bug, file a report the maintainers can act on. That closes the whole arc, from a raster on your disk to a published dataset with a DOI. For further reading and references, see <a href="08-resources.html" class="quarto-xref"><span>Chapter 9</span></a>.</p>
+</div>
+</div>
+</div>
 
 
 </section>
@@ -807,8 +980,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./08-resources.html" class="pagination-link" aria-label="Additional resources, documentation, repositories, and references">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Additional resources, documentation, repositories, and references</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./08-resources.html" class="pagination-link" aria-label="Further reading and references">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Further reading and references</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -8,7 +8,7 @@
 
 <meta name="description" content="A step-by-step tutorial on turning your data into an EBVCube with the ebvcube R package, then validating and publishing it as a citable, FAIR dataset on the EBV Data Portal.">
 
-<title>4&nbsp; Preparing biodiversity data for conversion – From Raster to Portal: Creating and Publishing an EBVCube</title>
+<title>4&nbsp; Preparing biodiversity data and metadata – From Raster to Portal: Creating and Publishing an EBVCube</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -44,6 +78,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -84,7 +121,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./03-preparing-data.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data for conversion</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./03-preparing-data.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -128,25 +165,25 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02-installation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Installing the required software and the <code>ebvcube</code> package</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> package</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03-preparing-data.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data for conversion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04-creating-the-cube.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube NetCDF using the R package</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> package</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05-validating.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validating the generated file</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -158,13 +195,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./07-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Troubleshooting common issues and best practices</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Troubleshooting and getting help</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08-resources.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Additional resources, documentation, repositories, and references</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Further reading and references</span></span></a>
   </div>
 </li>
     </ul>
@@ -178,10 +215,14 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#what-ebv_create-needs" id="toc-what-ebv_create-needs" class="nav-link active" data-scroll-target="#what-ebv_create-needs"><span class="header-section-number">4.1</span> What <code>ebv_create()</code> needs</a></li>
-  <li><a href="#revisiting-the-four-dimensions-as-a-producer" id="toc-revisiting-the-four-dimensions-as-a-producer" class="nav-link" data-scroll-target="#revisiting-the-four-dimensions-as-a-producer"><span class="header-section-number">4.2</span> Revisiting the four dimensions, as a producer</a></li>
+  <li><a href="#sec-dimensions" id="toc-sec-dimensions" class="nav-link" data-scroll-target="#sec-dimensions"><span class="header-section-number">4.2</span> Dimensions, metrics, and scenarios</a></li>
   <li><a href="#pre-flight-checklist" id="toc-pre-flight-checklist" class="nav-link" data-scroll-target="#pre-flight-checklist"><span class="header-section-number">4.3</span> Pre-flight checklist</a></li>
-  <li><a href="#downloading-dataset-30-for-a-full-worked-example" id="toc-downloading-dataset-30-for-a-full-worked-example" class="nav-link" data-scroll-target="#downloading-dataset-30-for-a-full-worked-example"><span class="header-section-number">4.4</span> Downloading dataset 30 for a full worked example</a></li>
-  <li><a href="#building-the-metadata-json" id="toc-building-the-metadata-json" class="nav-link" data-scroll-target="#building-the-metadata-json"><span class="header-section-number">4.5</span> Building the metadata JSON</a></li>
+  <li><a href="#getting-the-metadata-json" id="toc-getting-the-metadata-json" class="nav-link" data-scroll-target="#getting-the-metadata-json"><span class="header-section-number">4.4</span> Getting the metadata JSON</a>
+  <ul class="collapse">
+  <li><a href="#path-a-the-portal-metadata-form-recommended" id="toc-path-a-the-portal-metadata-form-recommended" class="nav-link" data-scroll-target="#path-a-the-portal-metadata-form-recommended"><span class="header-section-number">4.4.1</span> Path A — the portal metadata form (recommended)</a></li>
+  <li><a href="#path-b-from-r-with-ebv_metadata" id="toc-path-b-from-r-with-ebv_metadata" class="nav-link" data-scroll-target="#path-b-from-r-with-ebv_metadata"><span class="header-section-number">4.4.2</span> Path B — from R with <code>ebv_metadata()</code></a></li>
+  </ul></li>
+  <li><a href="#downloading-dataset-1-for-a-working-reference" id="toc-downloading-dataset-1-for-a-working-reference" class="nav-link" data-scroll-target="#downloading-dataset-1-for-a-working-reference"><span class="header-section-number">4.5</span> Downloading dataset 1 for a working reference</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/03-preparing-data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -190,7 +231,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-preparing" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data for conversion</span></span></h1>
+<h1 class="title"><span id="sec-preparing" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></span></h1>
 </div>
 
 
@@ -207,27 +248,251 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><em>Learning objectives: structure raster outputs and metadata so they’re ready for <code>ebv_create()</code>/<code>ebv_add_data()</code>.</em></p>
+<p>By the end of this unit, you will be able to:</p>
+<ul>
+<li>identify the inputs <code>ebv_create()</code> needs to build an EBVCube;</li>
+<li>prepare your biodiversity data for conversion to an EBVCube;</li>
+<li>explain how the EBV dimensions, metrics, and scenarios are represented in an EBVCube;</li>
+<li>create a metadata JSON using either the EBV Data Portal or <code>ebv_metadata()</code>;</li>
+<li>verify that your data and metadata are ready to build an EBVCube.</li>
+</ul>
+<p>Reading an EBVCube is straightforward. Creating one means preparing both the biodiversity data and the metadata that describe them. This unit covers what <code>ebv_create()</code> expects, how to organize your data, and how to produce a metadata JSON. By the end you will have everything you need to build an EBVCube in the next unit.</p>
 <section id="what-ebv_create-needs" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="what-ebv_create-needs"><span class="header-section-number">4.1</span> What <code>ebv_create()</code> needs</h2>
-<!-- TODO -->
+<p><code>ebv_create()</code> does not read your rasters and guess what belongs in the file. It reads a metadata file you prepare first, builds an empty netCDF with exactly the structure that metadata describes, then leaves it for you to fill. Almost all the work happens before you call the function.</p>
+<p>Three things have to be ready:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 27%">
+<col style="width: 48%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Input</th>
+<th style="text-align: left;">What it is</th>
+<th style="text-align: left;">Where it comes from</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A metadata JSON</td>
+<td style="text-align: left;">The file’s identity and structure as text: title, EBV class, license, spatial and temporal coverage, and one entry per metric.</td>
+<td style="text-align: left;">Fill in the metadata form on the <strong>EBV Data Portal</strong> and download it (recommended), or build the same file in R with <code>ebv_metadata()</code>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Your data</td>
+<td style="text-align: left;">One 2-D layer (<code>lon</code> × <code>lat</code>) for every entity, time step, and metric, usually a stack of GeoTIFFs or in-memory rasters.</td>
+<td style="text-align: left;">The output of your modelling or analysis.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">An entity list</td>
+<td style="text-align: left;">The names of the biological units the file describes, in the exact order the layers are stacked.</td>
+<td style="text-align: left;">You decide it. For dataset id = 1 it is three entities: <em>forest</em>, <em>non-forest</em>, and <em>all bird species</em>.</td>
+</tr>
+</tbody>
+</table>
+<p>The metadata defines the structure of the EBVCube, while the data layers provide the values stored within that structure. The entity list provides the link between biological units and their corresponding layers.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Metadata first, structure second
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Whether you generate the metadata JSON from the EBV Data Portal or with <code>ebv_metadata()</code>, review it before running <code>ebv_create()</code>. If you are using the portal, you can return to the form at any time, update the metadata, and download a new JSON file. Once the metadata accurately represents your dataset, use this final JSON file to build the EBVCube.</p>
+</div>
+</div>
 </section>
-<section id="revisiting-the-four-dimensions-as-a-producer" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="revisiting-the-four-dimensions-as-a-producer"><span class="header-section-number">4.2</span> Revisiting the four dimensions, as a producer</h2>
-<!-- TODO: adapt core-concepts.qmd "Scenarios, metrics and the group hierarchy", from the producer's point of view -->
+<section id="sec-dimensions" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="sec-dimensions"><span class="header-section-number">4.2</span> Dimensions, metrics, and scenarios</h2>
+<p>An EBVCube organizes biodiversity data along four core dimensions: <code>lon</code>, <code>lat</code>, <code>time</code>, and <code>entity</code>. As the data producer, you define each of them when creating your cube.</p>
+<p><code>lon</code> and <code>lat</code> set the spatial grid. All layers must share the same extent, resolution, and CRS, which are provided to <code>ebv_create()</code> through the arguments <code>extent</code>, <code>resolution</code>, and <code>epsg</code>.</p>
+<p><code>time</code> defines the temporal dimension of your dataset, from a single observation date to a time series. The temporal range and interval are specified in the metadata and must match the layers added to the cube.</p>
+<p><code>entity</code> represents the biological unit described by each layer, such as a species, a group of species, or an ecosystem type. In the example dataset (id=1), the entities are <em>forest</em>, <em>non-forest</em>, and <em>all bird species</em>. The order of the entity list must match the order of your layers, because this is how the cube knows which biological unit each layer represents.</p>
+<p><strong>Metric</strong> and <strong>scenario</strong> are not dimensions but define how the cube is organized within the netCDF file. A metric describes the variable being measured or calculated (e.g., relative change in species richness), and every dataset contains at least one metric. A scenario is optional and groups the same metric under different projected pathways (e.g., SSP1 or SSP5).</p>
+<p>For datasets without scenarios, the cube is stored as: <code>metric_1/ebv_cube</code><br>
+With scenarios, the structure becomes: <code>scenario_1/metric_1/ebv_cube</code></p>
 </section>
 <section id="pre-flight-checklist" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="pre-flight-checklist"><span class="header-section-number">4.3</span> Pre-flight checklist</h2>
-<!-- TODO: aligned rasters, naming scheme, fill value/units decisions, entity/taxonomy CSV -->
+<p>Before building the EBVCube, verify that your data and metadata describe the same structure. These checks can be performed while preparing the metadata, either through the portal form or with <code>ebv_metadata()</code>. Since the metadata defines the EBVCube structure, resolving inconsistencies at this stage avoids problems during data insertion with <code>ebv_add_data()</code>.</p>
+<ul>
+<li><strong>All layers share one grid.</strong> Same extent, resolution, and CRS across every GeoTIFF. Check with <code>terra::rast()</code> and compare.</li>
+<li><strong>Layer count is deliberate.</strong> The number of layers equals entities × time steps × metrics (× scenarios, if you have them). If that product does not match your stack, something is missing or duplicated.</li>
+<li><strong>Entity names are final and ordered.</strong> One name per entity, in the same order as your layers.</li>
+<li><strong>A fill value is chosen.</strong> Decide what marks “no data” (the format default is <code>-3.4e+38</code>) and confirm your rasters actually use it for gaps.</li>
+<li><strong>You know your coverage exactly.</strong> Start year, end year, temporal spacing, bounding box, EPSG code. These are the values you enter into the metadata form, or pass to <code>ebv_metadata()</code>.</li>
+<li><strong>File format is consistent</strong>. Confirm that all input layers can be read correctly by <code>terra</code> and have the expected data type and missing-value representation</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Confirm the grid in one step
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>layers <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="fu">list.files</span>(<span class="st">"data/tifs"</span>, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.tif$"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">full.names =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>layers            <span class="co"># inspect extent, resolution, CRS, and nlyr()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If every layer prints the same extent and resolution, and <code>nlyr()</code> matches your expected count, the grid is consistent.</p>
+</div>
+</div>
 </section>
-<section id="downloading-dataset-30-for-a-full-worked-example" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="downloading-dataset-30-for-a-full-worked-example"><span class="header-section-number">4.4</span> Downloading dataset 30 for a full worked example</h2>
-<!-- TODO: ebv_download() or manual download from https://portal.geobon.org/ebv-detail?id=30 (3.27 MB), then ebv_properties()/ebv_datacubepaths() to inspect its scenario/metric/entity structure -->
+<section id="getting-the-metadata-json" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="getting-the-metadata-json"><span class="header-section-number">4.4</span> Getting the metadata JSON</h2>
+<p>Every EBVCube starts from a metadata JSON, and there are two ways to produce one. Which you pick depends on whether you are publishing through the portal or scripting a pipeline.</p>
+<section id="path-a-the-portal-metadata-form-recommended" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="path-a-the-portal-metadata-form-recommended"><span class="header-section-number">4.4.1</span> Path A — the portal metadata form (recommended)</h3>
+<p>The simplest way to create a valid metadata JSON is by using the <strong>Uploads → New Upload</strong> form in the EBV Data Portal. The form is organized into three tabs. Complete the required fields in the first two tabs, then use the third tab to generate and download the metadata JSON file.</p>
+<p>Each tab contains more fields than fit on a single screen, so the images below show only the top portion of each tab. Be sure to scroll through the entire form and complete all fields marked with a red asterisk (<code>*</code>).</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">General information</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">EBV attributes</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Data upload</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>Title, creation date, a summary, methods, and any related DOIs, among other general fields.</p>
+<div id="fig-upload-general" class="quarto-float quarto-figure quarto-figure-center anchored" alt="EBV Data Portal new upload, General information tab">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-upload-general-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/portal-upload-general.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;4.1: New upload — General information."><img src="images/portal-upload-general.png" class="img-fluid figure-img" alt="EBV Data Portal new upload, General information tab"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-upload-general-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.1: New upload — General information.
+</figcaption>
+</figure>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>The controlled vocabulary fields: EBV class, EBV name, and entity type, chosen from fixed lists so they can’t be mistyped. Below them you add one or more metrics (each with a name, description, and units) and, if your data has them, one or more scenarios, among other EBV attribute fields further down.</p>
+<div id="fig-upload-attributes" class="quarto-float quarto-figure quarto-figure-center anchored" alt="EBV Data Portal new upload, EBV attributes tab">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-upload-attributes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/portal-upload-attributes.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;4.2: New upload — EBV attributes."><img src="images/portal-upload-attributes.png" class="img-fluid figure-img" alt="EBV Data Portal new upload, EBV attributes tab"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-upload-attributes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.2: New upload — EBV attributes.
+</figcaption>
+</figure>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p>The portal generates the <strong>metadata JSON</strong> here. Click <strong>Download Metadata</strong> to save the <code>.json</code>; that file is the input to <code>ebv_create()</code>. This same tab is where you return later to upload the finished netCDF (option 2, “using the R package ebvcube”).</p>
+<div id="fig-upload-data" class="quarto-float quarto-figure quarto-figure-center anchored" alt="EBV Data Portal new upload, Data upload tab">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-upload-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/portal-upload-data.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;4.3: New upload — Data upload, with the Download Metadata link."><img src="images/portal-upload-data.png" class="img-fluid figure-img" alt="EBV Data Portal new upload, Data upload tab"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-upload-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.3: New upload — Data upload, with the Download Metadata link.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+You need a GEO BON account
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The form sits behind a login. Create a free account at <a href="https://portal.geobon.org/">portal.geobon.org</a> before you start.</p>
+</div>
+</div>
 </section>
-<section id="building-the-metadata-json" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="building-the-metadata-json"><span class="header-section-number">4.5</span> Building the metadata JSON</h2>
-<!-- TODO: adapt advanced-usage.qmd "Step 1 — the metadata JSON" -->
-<p><strong>Checkpoint:</strong> aligned rasters (or bundled example tifs), an entities list, and a metadata JSON in hand.</p>
+<section id="path-b-from-r-with-ebv_metadata" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="path-b-from-r-with-ebv_metadata"><span class="header-section-number">4.4.2</span> Path B — from R with <code>ebv_metadata()</code></h3>
+<p>You can also build the same JSON entirely in R. This fits an automated or reproducible pipeline, where generating the metadata from a script beats filling a form by hand. <code>ebv_metadata()</code> takes one argument per field the form would ask for, writes the <code>.json</code> to disk, and returns its path. The controlled-vocabulary fields still have to match the portal’s accepted terms, so <code>?ebv_metadata</code> stays the authoritative reference for what each one takes.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>json <span class="ot">&lt;-</span> <span class="fu">ebv_metadata</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">outputpath               =</span> <span class="st">"data/my_ebv_metadata.json"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">title                    =</span> <span class="st">"Local bird diversity (worked example)"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">creator_name             =</span> <span class="st">"Jane Doe"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">creator_institution      =</span> <span class="st">"Example University"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">coverage_content_type    =</span> <span class="st">"Model result"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">ebv_class                =</span> <span class="st">"Community composition"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">ebv_name                 =</span> <span class="st">"Taxonomic and phylogenetic diversity"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">ebv_spatial_scope        =</span> <span class="st">"Global"</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">ebv_domain               =</span> <span class="st">"Terrestrial"</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">ebv_entity_type          =</span> <span class="st">"Communities"</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">ebv_entity_scope         =</span> <span class="st">"Bird communities"</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_coverage_start      =</span> <span class="st">"1900-01-01"</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_coverage_end        =</span> <span class="st">"2010-01-01"</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric =</span> <span class="fu">list</span>(</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">standard_name =</span> <span class="st">"Relative change in the number of species"</span>,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">long_name     =</span> <span class="st">"Relative change in the number of bird species relative to 1900"</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">units         =</span> <span class="st">"percent"</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose   =</span> <span class="cn">FALSE</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A few fields to watch:</p>
+<ul>
+<li><code>ebv_class</code> must match one of the classes the portal lists (the canonical six plus <em>Ecosystem services</em> and <em>Cross-cutting</em>), spelled exactly as shown.</li>
+<li><code>coverage_content_type</code> records how the data were produced: <code>modelResult</code> for modelled data, <code>image</code> for direct observation, and a handful of other CF values.</li>
+<li><code>metric</code> is a list. For several metrics, pass a list of lists and the file gains <code>metric_2</code>, <code>metric_3</code>, and so on. To add scenarios, pass a <code>scenario</code> argument the same way; leave it out, as here, and the file stays flat.</li>
+</ul>
+<p>Both paths end in the same place: a <code>.json</code> on disk that describes the file you are about to build. Whichever you use, open it in a text editor and read it once before moving on. Editing a line by hand is fine, and often quicker than regenerating the whole file for a one-word fix.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Match the JSON to your data, not the other way around
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The metadata declares a shape: so many metrics, so many time steps, this grid. <code>ebv_create()</code> builds exactly that shape, and <code>ebv_add_data()</code> refuses anything that does not fit. If the two disagree, correct whichever one is wrong now, while it is still a line in a JSON file.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="downloading-dataset-1-for-a-working-reference" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="downloading-dataset-1-for-a-working-reference"><span class="header-section-number">4.5</span> Downloading dataset 1 for a working reference</h2>
+<p>The example dataset from Unit 1 is used here because it represents a complete EBVCube and allows you to compare your own metadata and file structure against an existing example: the <strong>Local bird diversity (cSAR/BES-SIM)</strong> dataset (id = 1)</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ebvcube)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"data/ebv"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">ebv_download</span>(<span class="at">id =</span> <span class="dv">1</span>, <span class="at">outputdir =</span> <span class="st">"data/ebv"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">overwrite =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_datacubepaths</span>(file, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The paths come back as <code>metric_*/ebv_cube</code> with no scenario segment, which confirms what <a href="#sec-dimensions" class="quarto-xref"><span>Section 4.2</span></a> covered. This is a file without a scenario layer. Read its metadata the same way you did as a consumer, and treat each field as a slot you will need to fill for your own dataset:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>prop <span class="ot">&lt;-</span> <span class="fu">ebv_properties</span>(file, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>prop<span class="sc">@</span>general<span class="sc">$</span>title</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>prop<span class="sc">@</span>general<span class="sc">$</span>ebv_class</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>prop<span class="sc">@</span>spatial<span class="sc">$</span>srs</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>prop<span class="sc">@</span>temporal<span class="sc">$</span>resolution</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Whatever this file declares, yours will declare too. The difference is that here the values are already filled in, and for your dataset you are the one supplying them.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Checkpoint.</strong> Your data share one grid, and the number of layers matches entities × time steps × metrics (× scenarios, if any). Your entity list is final and ordered, and you have a metadata JSON on disk, from the portal form or <code>ebv_metadata()</code>, that you have read through. If that all holds, and your metric and scenario structure matches your dataset, you are ready to build the netCDF in <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 5</span></a>.</p>
+</div>
+</div>
+</div>
 
 
 </section>
@@ -799,19 +1064,51 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./02-installation.html" class="pagination-link" aria-label="Installing the required software and the `ebvcube` package">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Installing the required software and the <code>ebvcube</code> package</span></span>
+      <a href="./02-installation.html" class="pagination-link" aria-label="Installing software and the `ebvcube` package">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> package</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./04-creating-the-cube.html" class="pagination-link" aria-label="Creating an EBVCube NetCDF using the R package">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube NetCDF using the R package</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./04-creating-the-cube.html" class="pagination-link" aria-label="Creating an EBVCube with the `ebvcube` package">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> package</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/03-preparing-data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","loop":false,"descPosition":"bottom","openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/03-preparing-data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+</body></html>

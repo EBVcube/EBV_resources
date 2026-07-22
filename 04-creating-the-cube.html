@@ -8,7 +8,7 @@
 
 <meta name="description" content="A step-by-step tutorial on turning your data into an EBVCube with the ebvcube R package, then validating and publishing it as a citable, FAIR dataset on the EBV Data Portal.">
 
-<title>5&nbsp; Creating an EBVCube NetCDF using the R package – From Raster to Portal: Creating and Publishing an EBVCube</title>
+<title>5&nbsp; Creating an EBVCube with the ebvcube package – From Raster to Portal: Creating and Publishing an EBVCube</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -84,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./04-creating-the-cube.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube NetCDF using the R package</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./04-creating-the-cube.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> package</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -128,25 +162,25 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02-installation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Installing the required software and the <code>ebvcube</code> package</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> package</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03-preparing-data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data for conversion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04-creating-the-cube.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube NetCDF using the R package</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> package</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05-validating.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validating the generated file</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -158,13 +192,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./07-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Troubleshooting common issues and best practices</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Troubleshooting and getting help</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08-resources.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Additional resources, documentation, repositories, and references</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Further reading and references</span></span></a>
   </div>
 </li>
     </ul>
@@ -177,11 +211,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#step-2-ebv_create" id="toc-step-2-ebv_create" class="nav-link active" data-scroll-target="#step-2-ebv_create"><span class="header-section-number">5.1</span> Step 2 — <code>ebv_create()</code></a></li>
-  <li><a href="#step-3-ebv_add_data" id="toc-step-3-ebv_add_data" class="nav-link" data-scroll-target="#step-3-ebv_add_data"><span class="header-section-number">5.2</span> Step 3 — <code>ebv_add_data()</code></a></li>
-  <li><a href="#step-4-ebv_attribute" id="toc-step-4-ebv_attribute" class="nav-link" data-scroll-target="#step-4-ebv_attribute"><span class="header-section-number">5.3</span> Step 4 — <code>ebv_attribute()</code></a></li>
-  <li><a href="#taxonomic-species-level-datasets" id="toc-taxonomic-species-level-datasets" class="nav-link" data-scroll-target="#taxonomic-species-level-datasets"><span class="header-section-number">5.4</span> Taxonomic / species-level datasets</a></li>
-  <li><a href="#sanity-checking-the-result" id="toc-sanity-checking-the-result" class="nav-link" data-scroll-target="#sanity-checking-the-result"><span class="header-section-number">5.5</span> Sanity-checking the result</a></li>
+  <li><a href="#writing-the-empty-netcdf-with-ebv_create" id="toc-writing-the-empty-netcdf-with-ebv_create" class="nav-link active" data-scroll-target="#writing-the-empty-netcdf-with-ebv_create"><span class="header-section-number">5.1</span> Writing the empty netCDF with <code>ebv_create()</code></a></li>
+  <li><a href="#adding-your-data-with-ebv_add_data" id="toc-adding-your-data-with-ebv_add_data" class="nav-link" data-scroll-target="#adding-your-data-with-ebv_add_data"><span class="header-section-number">5.2</span> Adding your data with <code>ebv_add_data()</code></a></li>
+  <li><a href="#correcting-an-attribute-with-ebv_attribute" id="toc-correcting-an-attribute-with-ebv_attribute" class="nav-link" data-scroll-target="#correcting-an-attribute-with-ebv_attribute"><span class="header-section-number">5.3</span> Correcting an attribute with <code>ebv_attribute()</code></a></li>
+  <li><a href="#species-level-datasets-with-ebv_create_taxonomy" id="toc-species-level-datasets-with-ebv_create_taxonomy" class="nav-link" data-scroll-target="#species-level-datasets-with-ebv_create_taxonomy"><span class="header-section-number">5.4</span> Species-level datasets with <code>ebv_create_taxonomy()</code></a></li>
+  <li><a href="#checking-the-finished-file" id="toc-checking-the-finished-file" class="nav-link" data-scroll-target="#checking-the-finished-file"><span class="header-section-number">5.5</span> Checking the finished file</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/04-creating-the-cube.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -190,7 +224,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-creating" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube NetCDF using the R package</span></span></h1>
+<h1 class="title"><span id="sec-creating" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> package</span></span></h1>
 </div>
 
 
@@ -207,27 +241,191 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><em>Learning objectives: run the four-step creation pipeline end-to-end and produce a valid netCDF.</em></p>
-<section id="step-2-ebv_create" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="step-2-ebv_create"><span class="header-section-number">5.1</span> Step 2 — <code>ebv_create()</code></h2>
-<!-- TODO: adapt advanced-usage.qmd, full runnable code block -->
+<p>By the end of this unit, you will be able to:</p>
+<ul>
+<li>write an empty EBVCube netCDF from your metadata JSON with <code>ebv_create()</code>;</li>
+<li>fill the empty cubes with your raster data using <code>ebv_add_data()</code>;</li>
+<li>correct an attribute after the fact with <code>ebv_attribute()</code>;</li>
+<li>build species-level cubes that carry a taxonomy with <code>ebv_create_taxonomy()</code>;</li>
+<li>confirm the finished file is valid before moving on.</li>
+</ul>
+<p>In <a href="03-preparing-data.html" class="quarto-xref"><span>Chapter 4</span></a> you prepared two things: a metadata JSON that describes your dataset, and the biodiversity rasters that hold the numbers. This unit joins them into a finished EBVCube. The work happens entirely in R with the <code>ebvcube</code> package, and it follows the same four functions every time, in the same order.</p>
+<p>The pipeline has four steps:</p>
+<ol type="1">
+<li><code>ebv_create()</code> writes an empty netCDF whose structure matches your metadata JSON.</li>
+<li><code>ebv_add_data()</code> fills the cubes with your raster values, one entity at a time.</li>
+<li><code>ebv_attribute()</code> corrects any attribute that turns out to be wrong.</li>
+<li><code>ebv_properties()</code> and <code>ebv_datacubepaths()</code> confirm the result.</li>
+</ol>
+<p>To keep this chapter self-contained, we generate the metadata JSON here with <code>ebv_metadata()</code> (Path B from <a href="03-preparing-data.html" class="quarto-xref"><span>Chapter 4</span></a>) and synthesize the raster data, so everything below runs without files you have to supply. If you already downloaded a metadata file from the portal (Path A), point <code>json</code> at that file and skip the <code>ebv_metadata()</code> call.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ebvcube)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>json   <span class="ot">&lt;-</span> <span class="fu">ebv_metadata</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">outputpath               =</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">"metadata.json"</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">title                    =</span> <span class="st">"Local bird diversity (worked example)"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">summary                  =</span> <span class="st">"Example dataset for the ebvcube documentation: change in bird species richness over the 20th century."</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">source                   =</span> <span class="st">"Modelled with the cSAR model (example data only)."</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">date_created             =</span> <span class="fu">as.character</span>(<span class="fu">Sys.Date</span>()),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">creator_name             =</span> <span class="st">"Jane Doe"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">creator_institution      =</span> <span class="st">"Example University"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">license                  =</span> <span class="st">"CC BY"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">ebv_class                =</span> <span class="st">"Community composition"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">ebv_name                 =</span> <span class="st">"Taxonomic and phylogenetic diversity"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">ebv_spatial_scope        =</span> <span class="st">"Global"</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">ebv_domain               =</span> <span class="st">"Terrestrial"</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">coverage_content_type    =</span> <span class="st">"modelResult"</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">ebv_entity_type          =</span> <span class="st">"Communities"</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">ebv_entity_scope         =</span> <span class="st">"Birds"</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_coverage_start      =</span> <span class="st">"1900-01-01"</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_coverage_end        =</span> <span class="st">"2010-01-01"</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_coverage_resolution =</span> <span class="st">"P0010-00-00"</span>,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric =</span> <span class="fu">list</span>(</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">standard_name =</span> <span class="st">"Relative change in the number of species"</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">long_name     =</span> <span class="st">"Relative change in the number of bird species relative to 1900"</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">units         =</span> <span class="st">"percent"</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose   =</span> <span class="cn">FALSE</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>new_nc <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">"bird_diversity.nc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="writing-the-empty-netcdf-with-ebv_create" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="writing-the-empty-netcdf-with-ebv_create"><span class="header-section-number">5.1</span> Writing the empty netCDF with <code>ebv_create()</code></h2>
+<p><code>ebv_create()</code> reads the metadata JSON and writes a netCDF that has the right shape but no data yet. You supply the entity names here, along with the grid the cubes sit on: the projection (<code>epsg</code>), the geographic <code>extent</code>, and the <code>resolution</code> in degrees. The running example has three entities and a 1° global grid.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>entities <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"forest bird species"</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>              <span class="st">"non-forest bird species"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>              <span class="st">"all bird species"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_create</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">jsonpath   =</span> json,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">outputpath =</span> new_nc,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">entities   =</span> entities,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">epsg       =</span> <span class="dv">4326</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">extent     =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">resolution =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">fillvalue  =</span> <span class="sc">-</span><span class="fl">3.4e+38</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">overwrite  =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose    =</span> <span class="cn">FALSE</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>At this point the file is fully structured but every cell still holds the fill value. Check the skeleton before you add anything to it:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_properties</span>(new_nc, <span class="at">verbose =</span> <span class="cn">FALSE</span>)<span class="sc">@</span>general<span class="sc">$</span>entity_names</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_datacubepaths</span>(new_nc, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The entity names should match what you passed in, and the datacube paths tell you where the data will live. For the running example there is no scenario layer, so the cubes sit at <code>metric_1/ebv_cube</code>.</p>
 </section>
-<section id="step-3-ebv_add_data" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="step-3-ebv_add_data"><span class="header-section-number">5.2</span> Step 3 — <code>ebv_add_data()</code></h2>
-<!-- TODO: adapt advanced-usage.qmd -->
+<section id="adding-your-data-with-ebv_add_data" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="adding-your-data-with-ebv_add_data"><span class="header-section-number">5.2</span> Adding your data with <code>ebv_add_data()</code></h2>
+<p>Each entity’s data lives in its own GeoTIFF (or in-memory raster), and you add them one at a time. In a real workflow these files are the output of your analysis. Here we synthesize three rasters on the same 1° grid as the netCDF, so the example runs without any bundled files.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Three 3-band rasters, one per entity, on the netCDF's grid.</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>template <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(terra<span class="sc">::</span><span class="fu">ext</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">resolution =</span> <span class="dv">1</span>, <span class="at">crs =</span> <span class="st">"EPSG:4326"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>tifs <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="fu">c</span>(<span class="st">"entity1.tif"</span>, <span class="st">"entity2.tif"</span>, <span class="st">"entity3.tif"</span>))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(tifs)) {</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  r3 <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(template, <span class="at">nlyrs =</span> <span class="dv">3</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">values</span>(r3) <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">runif</span>(terra<span class="sc">::</span><span class="fu">ncell</span>(r3) <span class="sc">*</span> <span class="dv">3</span>), <span class="at">ncol =</span> <span class="dv">3</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">writeRaster</span>(r3, tifs[i], <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(tifs)) {</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ebv_add_data</span>(</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">filepath_nc =</span> new_nc,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">metric      =</span> <span class="dv">1</span>,       <span class="co"># add to metric_1</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">entity      =</span> i,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">timestep    =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,     <span class="co"># first three time steps</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">data        =</span> tifs[i],</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">band        =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,     <span class="co"># bands 1-3 of the tif</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">verbose     =</span> <span class="cn">FALSE</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can call <code>ebv_add_data()</code> again on the same cube to fill in more time steps later. It appends rather than overwrites, as long as each call keeps the <code>(metric, entity, timestep)</code> combination unique.</p>
 </section>
-<section id="step-4-ebv_attribute" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="step-4-ebv_attribute"><span class="header-section-number">5.3</span> Step 4 — <code>ebv_attribute()</code></h2>
-<!-- TODO: adapt advanced-usage.qmd -->
+<section id="correcting-an-attribute-with-ebv_attribute" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="correcting-an-attribute-with-ebv_attribute"><span class="header-section-number">5.3</span> Correcting an attribute with <code>ebv_attribute()</code></h2>
+<p>If you later spot a wrong unit, a typo in a description, or any other attribute that needs fixing, you can edit it in place without rebuilding the file:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_attribute</span>(new_nc,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">attribute_name =</span> <span class="st">"units"</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">value          =</span> <span class="st">"Percentage"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">levelpath      =</span> <span class="st">"metric_1/ebv_cube"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_properties</span>(new_nc, <span class="st">"metric_1/ebv_cube"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">verbose =</span> <span class="cn">FALSE</span>)<span class="sc">@</span>ebv_cube<span class="sc">$</span>units</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "Percentage"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>levelpath</code> argument points at the layer you want to change. Pass <code>"metric_1/ebv_cube"</code> for the cube itself, <code>"metric_1"</code> for the metric, or <code>"/"</code> for a global attribute.</p>
 </section>
-<section id="taxonomic-species-level-datasets" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="taxonomic-species-level-datasets"><span class="header-section-number">5.4</span> Taxonomic / species-level datasets</h2>
-<!-- TODO: adapt advanced-usage.qmd "Taxonomic datasets" — relevant since dataset 30 is community composition -->
+<section id="species-level-datasets-with-ebv_create_taxonomy" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="species-level-datasets-with-ebv_create_taxonomy"><span class="header-section-number">5.4</span> Species-level datasets with <code>ebv_create_taxonomy()</code></h2>
+<p>When your entities are individual species rather than aggregated groups, use <code>ebv_create_taxonomy()</code> in place of <code>ebv_create()</code>. Instead of a plain vector of entity names, you supply a table with one row per species and one column per taxonomic rank. The function writes an extra <code>taxonomy</code> variable into the netCDF that the EBV Data Portal and downstream tools can use to filter and group species.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The column names you choose become the taxonomic ranks stored in the file.</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># In practice this table usually comes from a GBIF or Catalogue of Life export.</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>taxonomy <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">species =</span> <span class="fu">c</span>(<span class="st">"Hirundo rustica"</span>, <span class="st">"Apus apus"</span>,   <span class="st">"Falco peregrinus"</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">genus   =</span> <span class="fu">c</span>(<span class="st">"Hirundo"</span>,         <span class="st">"Apus"</span>,        <span class="st">"Falco"</span>),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">family  =</span> <span class="fu">c</span>(<span class="st">"Hirundinidae"</span>,    <span class="st">"Apodidae"</span>,    <span class="st">"Falconidae"</span>),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">order   =</span> <span class="fu">c</span>(<span class="st">"Passeriformes"</span>,   <span class="st">"Apodiformes"</span>, <span class="st">"Falconiformes"</span>),</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">class   =</span> <span class="fu">c</span>(<span class="st">"Aves"</span>,            <span class="st">"Aves"</span>,        <span class="st">"Aves"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>taxonomy_csv <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">"taxonomy.csv"</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(taxonomy, taxonomy_csv, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>new_nc_tax <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">"bird_diversity_taxonomy.nc"</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_create_taxonomy</span>(</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">jsonpath   =</span> json,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">outputpath =</span> new_nc_tax,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">taxonomy   =</span> taxonomy_csv,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">sep        =</span> <span class="st">","</span>,</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">epsg       =</span> <span class="dv">4326</span>,</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">extent     =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>),</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">resolution =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">fillvalue  =</span> <span class="sc">-</span><span class="fl">3.4e+38</span>,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">overwrite  =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose    =</span> <span class="cn">FALSE</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>From here <code>ebv_add_data()</code> works exactly as it did above. The taxonomy is read-only metadata and does not change how you fill the cubes. See <code>?ebv_create_taxonomy</code> for the accepted column names and separator options.</p>
 </section>
-<section id="sanity-checking-the-result" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="sanity-checking-the-result"><span class="header-section-number">5.5</span> Sanity-checking the result</h2>
-<!-- TODO: ebv_properties(), ebv_datacubepaths(); optional Panoply callout -->
-<p><strong>Checkpoint:</strong> you have produced your own <code>.nc</code> file and can list its datacube paths.</p>
+<section id="checking-the-finished-file" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="checking-the-finished-file"><span class="header-section-number">5.5</span> Checking the finished file</h2>
+<p>Once the cubes are filled, confirm the file one more time before you validate it. <code>ebv_properties()</code> reports the general metadata and structure, and <code>ebv_datacubepaths()</code> lists every cube in the file:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_properties</span>(new_nc, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_datacubepaths</span>(new_nc, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+A visual check with Panoply
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="https://www.giss.nasa.gov/tools/panoply/">Panoply</a> is a free NASA viewer for netCDF and HDF5 files. Drag your new <code>.nc</code> into it and it shows the group hierarchy, dimensions, and attributes side by side, and it can draw a quick map of any cube. It is a fast way to see whether the file looks the way you expect while you are still learning the format.</p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Checkpoint.</strong> You have written an empty netCDF from your metadata, filled its cubes with <code>ebv_add_data()</code>, and confirmed the structure with <code>ebv_properties()</code> and <code>ebv_datacubepaths()</code>. If the datacube paths list the entities you expect and the values read back, your EBVCube is ready to validate in <a href="05-validating.html" class="quarto-xref"><span>Chapter 6</span></a>.</p>
+</div>
+</div>
+</div>
 
 
 </section>
@@ -799,13 +997,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./03-preparing-data.html" class="pagination-link" aria-label="Preparing biodiversity data for conversion">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data for conversion</span></span>
+      <a href="./03-preparing-data.html" class="pagination-link" aria-label="Preparing biodiversity data and metadata">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./05-validating.html" class="pagination-link" aria-label="Validating the generated file">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validating the generated file</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./05-validating.html" class="pagination-link" aria-label="Validating your EBVCube before uploading">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
