@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="A step-by-step tutorial on turning your data into an EBVCube with the ebvcube R package, then validating and publishing it as a citable, FAIR dataset on the EBV Data Portal.">
 
-<title>7&nbsp; Uploading the dataset to the EBV Data Portal – From Raster to Portal: Creating and Publishing an EBVCube</title>
+<title>6&nbsp; Uploading the dataset to the EBV Data Portal – From Raster to Portal: Creating and Publishing an EBVCube</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -84,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./06-uploading.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./06-uploading.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -97,7 +96,10 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./images/ebv_logo.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">From Raster to Portal: Creating and Publishing an EBVCube</a> 
         <div class="sidebar-tools-main">
@@ -116,55 +118,55 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Overview</span></span></a>
+ <span class="menu-text">Overview</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01-introduction.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02-installation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> package</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> R package</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03-preparing-data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04-creating-the-cube.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> package</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> R package</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05-validating.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./06-uploading.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./07-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Troubleshooting and getting help</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Troubleshooting and getting help</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08-resources.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Further reading and references</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Further reading and references</span></span></a>
   </div>
 </li>
     </ul>
@@ -177,10 +179,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#back-to-the-upload-form" id="toc-back-to-the-upload-form" class="nav-link active" data-scroll-target="#back-to-the-upload-form"><span class="header-section-number">7.1</span> Back to the upload form</a></li>
-  <li><a href="#uploading-your-netcdf" id="toc-uploading-your-netcdf" class="nav-link" data-scroll-target="#uploading-your-netcdf"><span class="header-section-number">7.2</span> Uploading your netCDF</a></li>
-  <li><a href="#submitting-for-review" id="toc-submitting-for-review" class="nav-link" data-scroll-target="#submitting-for-review"><span class="header-section-number">7.3</span> Submitting for review</a></li>
-  <li><a href="#after-publication-doi-citation-and-versions" id="toc-after-publication-doi-citation-and-versions" class="nav-link" data-scroll-target="#after-publication-doi-citation-and-versions"><span class="header-section-number">7.4</span> After publication: DOI, citation, and versions</a></li>
+  <li><a href="#back-to-the-upload-form" id="toc-back-to-the-upload-form" class="nav-link active" data-scroll-target="#back-to-the-upload-form"><span class="header-section-number">6.1</span> Back to the upload form</a></li>
+  <li><a href="#uploading-your-netcdf" id="toc-uploading-your-netcdf" class="nav-link" data-scroll-target="#uploading-your-netcdf"><span class="header-section-number">6.2</span> Uploading your netCDF</a></li>
+  <li><a href="#submitting-for-review" id="toc-submitting-for-review" class="nav-link" data-scroll-target="#submitting-for-review"><span class="header-section-number">6.3</span> Submitting for review</a></li>
+  <li><a href="#after-publication-doi-citation-and-versions" id="toc-after-publication-doi-citation-and-versions" class="nav-link" data-scroll-target="#after-publication-doi-citation-and-versions"><span class="header-section-number">6.4</span> After publication: DOI, citation, and versions</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/06-uploading.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -189,7 +191,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-uploading" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span></h1>
+<h1 class="title"><span id="sec-uploading" class="quarto-section-identifier"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span></h1>
 </div>
 
 
@@ -206,31 +208,84 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>By the end of this unit, you will be able to:</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="In this unit">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In this unit
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>By the end you will be able to:</p>
 <ul>
-<li>return to the portal upload form you started in <a href="03-preparing-data.html" class="quarto-xref"><span>Chapter 4</span></a>;</li>
+<li>return to the portal upload form you started in <a href="03-preparing-data.html" class="quarto-xref"><span>Chapter 3</span></a>;</li>
 <li>upload your validated netCDF and a preview image;</li>
 <li>submit the dataset for review and follow it through to publication;</li>
 <li>find your dataset’s DOI and citation, and publish later versions.</li>
 </ul>
-<p>By this point the hard part is done. In <a href="03-preparing-data.html" class="quarto-xref"><span>Chapter 4</span></a> you filled the portal upload form and downloaded the preliminary metadata, and in <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 5</span></a> and <a href="05-validating.html" class="quarto-xref"><span>Chapter 6</span></a> you built the netCDF and checked it. This unit closes the loop: go back to the portal, upload the file, and submit it for review. It is mostly clicking, so it is short.</p>
-<section id="back-to-the-upload-form" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="back-to-the-upload-form"><span class="header-section-number">7.1</span> Back to the upload form</h2>
-<p>The submission uses the same New Upload form you met in <a href="03-preparing-data.html" class="quarto-xref"><span>Chapter 4</span></a>. Sign in with your GEO BON account and reopen your draft under <strong>Uploads</strong>. The <em>General information</em> and <em>EBV attributes</em> tabs are already filled from earlier, so the only tab left to finish is <em>Data upload</em>.</p>
+</div>
+</div>
+<p>By this point the hard part is done. You filled the upload form in <a href="03-preparing-data.html" class="quarto-xref"><span>Chapter 3</span></a>, then built and checked the netCDF in <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 4</span></a> and <a href="05-validating.html" class="quarto-xref"><span>Chapter 5</span></a>. This unit closes the loop — go back to the portal, upload the file, and submit it for review. It is mostly clicking, so it is short.</p>
+<div class="grid">
+<div class="g-col-12 g-col-md-4 border rounded p-3">
+<p><span class="small text-success">STEP 1</span><br>
+<strong>Reopen the form</strong></p>
+<p><span class="small text-muted">Sign in to the portal and return to your draft under <em>Uploads</em>.</span></p>
+</div>
+<div class="g-col-12 g-col-md-4 border rounded p-3">
+<p><span class="small text-success">STEP 2</span><br>
+<strong>Upload the netCDF</strong></p>
+<p><span class="small text-muted">On the <em>Data upload</em> tab, submit your <code>.nc</code> file and a preview image.</span></p>
+</div>
+<div class="g-col-12 g-col-md-4 border rounded p-3">
+<p><span class="small text-success">STEP 3</span><br>
+<strong>Submit for review</strong></p>
+<p><span class="small text-muted">The portal team checks it against the EBV standard, then publishes it.</span></p>
+</div>
+</div>
+<section id="back-to-the-upload-form" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="back-to-the-upload-form"><span class="header-section-number">6.1</span> Back to the upload form</h2>
+<p>The submission uses the same New Upload form you met in <a href="03-preparing-data.html" class="quarto-xref"><span>Chapter 3</span></a>. Sign in with your GEO BON account and reopen your draft under <strong>Uploads</strong>. The <em>General information</em> and <em>EBV attributes</em> tabs are already filled from earlier, so the only tab left to finish is <em>Data upload</em>.</p>
 </section>
-<section id="uploading-your-netcdf" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="uploading-your-netcdf"><span class="header-section-number">7.2</span> Uploading your netCDF</h2>
-<p>On the <em>Data upload</em> tab the portal offers two ways to submit: a ZIP of GeoTIFFs, or a netCDF built with the <code>ebvcube</code> package. You built the netCDF, so choose that option and upload your <code>.nc</code> file.</p>
-<p>If the form asks for a preview image, add one. A small map of a single slice, exported from <code>ebv_map()</code>, is enough and makes your dataset easier to recognize in the catalogue. The portal runs its own validation when you upload; if it flags anything, work back through the checks in <a href="05-validating.html" class="quarto-xref"><span>Chapter 6</span></a>, fix the file, and upload it again.</p>
+<section id="uploading-your-netcdf" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="uploading-your-netcdf"><span class="header-section-number">6.2</span> Uploading your netCDF</h2>
+<p>The <em>Data upload</em> tab offers two ways to submit: a ZIP of GeoTIFFs, or a netCDF built with the <code>ebvcube</code> package. You built the netCDF, so choose that option and upload your <code>.nc</code> file.</p>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Add a preview image">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Add a preview image
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If the form asks for one, a small map of a single slice exported from <code>ebv_map()</code> is enough — it makes your dataset easier to recognise in the catalogue. The portal runs its own validation on upload; if it flags anything, work back through the checks in <a href="05-validating.html" class="quarto-xref"><span>Chapter 5</span></a>, fix the file, and upload again.</p>
+</div>
+</div>
 </section>
-<section id="submitting-for-review" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="submitting-for-review"><span class="header-section-number">7.3</span> Submitting for review</h2>
+<section id="submitting-for-review" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="submitting-for-review"><span class="header-section-number">6.3</span> Submitting for review</h2>
 <p>Once the file is in, submit the dataset for review. It moves out of <em>Draft</em> into a review state, where the portal team checks the metadata and the file against the EBV standard before it goes public. Expect a wait, and possibly a request for small changes. When it is approved, the dataset is published: it appears in the public catalogue and becomes downloadable with <code>ebv_download()</code>.</p>
 </section>
-<section id="after-publication-doi-citation-and-versions" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="after-publication-doi-citation-and-versions"><span class="header-section-number">7.4</span> After publication: DOI, citation, and versions</h2>
-<p>On publication the portal assigns your dataset a DOI and generates its citation, both shown on the dataset page. You can see this on the live page for the running example, <a href="https://portal.geobon.org/ebv-detail?id=1">dataset id = 1</a>, where its version history, DOI, and citation all appear. Point people to those when they cite your data, not to the <code>ebvcube</code> package citation, which credits the software rather than the dataset.</p>
-<p>If you later revise the data, upload it as a new version instead of editing the published one. The portal keeps versions distinct, so anyone who already cited the earlier DOI still lands on the exact data they used.</p>
+<section id="after-publication-doi-citation-and-versions" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="after-publication-doi-citation-and-versions"><span class="header-section-number">6.4</span> After publication: DOI, citation, and versions</h2>
+<p>On publication the portal assigns your dataset a DOI and generates its citation, both shown on the dataset page. You can see this on the live page for the running example, <a href="https://portal.geobon.org/ebv-detail?id=1">dataset id = 1</a>, where its version history, DOI, and citation all appear.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Cite the dataset, not the package">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Cite the dataset, not the package
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Point people to the dataset DOI when they cite your data — not to the <code>ebvcube</code> package citation, which credits the software rather than the dataset. If you later revise the data, upload it as a <strong>new version</strong> instead of editing the published one. The portal keeps versions distinct, so anyone who already cited the earlier DOI still lands on the exact data they used.</p>
+</div>
+</div>
 <p>Here is that page, embedded live (in the HTML version of the book):</p>
 <iframe src="https://portal.geobon.org/ebv-detail?id=1" title="EBV Data Portal page for dataset id = 1 (Local bird diversity, cSAR/BES-SIM)" width="100%" height="600" style="border:1px solid #ddd; border-radius:6px;" loading="lazy">
 </iframe>
@@ -243,7 +298,7 @@ If the page does not load, <a href="https://portal.geobon.org/ebv-detail?id=1">o
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>Checkpoint.</strong> Your netCDF is uploaded, submitted, and, once approved, live on the EBV Data Portal with its own DOI. If anything snagged along the way, <a href="07-troubleshooting.html" class="quarto-xref"><span>Chapter 8</span></a> collects the fixes for the problems that come up most often.</p>
+<p><strong>Checkpoint.</strong> Your netCDF is uploaded, submitted, and, once approved, live on the EBV Data Portal with its own DOI. If anything snagged along the way, <a href="07-troubleshooting.html" class="quarto-xref"><span>Chapter 7</span></a> collects the fixes for the problems that come up most often.</p>
 </div>
 </div>
 </div>
@@ -819,12 +874,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./05-validating.html" class="pagination-link" aria-label="Validating your EBVCube before uploading">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./07-troubleshooting.html" class="pagination-link" aria-label="Troubleshooting and getting help">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Troubleshooting and getting help</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Troubleshooting and getting help</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -4,59 +4,49 @@
     "href": "index.html",
     "title": "From Raster to Portal: Creating and Publishing an EBVCube",
     "section": "",
-    "text": "Getting your data onto the EBV Data Portal\nThe EBV Data Portal allows biodiversity datasets to be published, discovered, cited, and reused. By following the Essential Biodiversity Variables (EBVs) framework and the standardized EBVCube format, datasets from different projects can be compared and analyzed consistently.\nPublishing an EBV dataset involves two steps. First, you create a valid EBVCube (a netCDF file) in R with the ebvcube package. Then, you upload the file through the EBV Data Portal, complete the metadata, submit it for review, and receive a DOI.\nThis tutorial guides you through the complete workflow, from raw raster to a published, citable dataset on the EBV Data Portal.\nBy the end of this tutorial, you will be able to:",
+    "text": "Overview",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
+      "Overview"
     ]
   },
   {
-    "objectID": "index.html#getting-your-data-onto-the-ebv-data-portal",
-    "href": "index.html#getting-your-data-onto-the-ebv-data-portal",
+    "objectID": "index.html#four-dimensions-one-file",
+    "href": "index.html#four-dimensions-one-file",
     "title": "From Raster to Portal: Creating and Publishing an EBVCube",
-    "section": "",
-    "text": "understand the EBV framework and the EBVCube format;\ncreate an EBVCube with the ebvcube package;\nvalidate your dataset before submission;\nupload and publish your dataset on the EBV Data Portal; and\ntroubleshoot common issues during the process.",
+    "section": "Four dimensions, one file",
+    "text": "Four dimensions, one file\n\n\n\n\n\nAn EBVCube is the standard format for publishing Essential Biodiversity Variables, the standardised measurements the biodiversity community tracks in common. It is a netCDF file organised in a defined way and following the CF and ACDD metadata conventions, so every dataset, whatever produced it, is structured the same way. That is what makes two of them comparable. Unit 1 covers the framework.\nThe figure shows the tutorial’s own example, dataset id = 1: three entities, each a box whose front face is the world grid, with time running back along the depth axis.\n\n\nlon\nThe x axis of the grid. You fix it once, with extent and resolution.\n\n\nlat\nThe y axis. Every layer in the file has to share this exact grid and CRS.\n\n\ntime\nA single date, or a whole series. The dates you declare must match the layers you add.\n\n\nentity\nThe biological unit: a species, a community, an ecosystem.\n\n\n\n\n\n\n\n\n\n\nMetric and scenario are not dimensions, they organise the cubes inside the file. The file as a whole is the EBVCube; inside it, each metric holds one four-dimensional array named ebv_cube, carrying the lon, lat, time and entity dimensions above. A scenario, when a dataset has one, adds a level on top: scenario_1/metric_1/ebv_cube.\nDataset id = 1 has two metrics and no scenarios, so it holds exactly two arrays: metric_1/ebv_cube and metric_2/ebv_cube.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
+      "Overview"
     ]
   },
   {
-    "objectID": "index.html#what-is-an-ebv",
-    "href": "index.html#what-is-an-ebv",
+    "objectID": "index.html#half-in-r-half-on-the-portal",
+    "href": "index.html#half-in-r-half-on-the-portal",
     "title": "From Raster to Portal: Creating and Publishing an EBVCube",
-    "section": "What is an EBV",
-    "text": "What is an EBV\nEssential Biodiversity Variables (EBVs) are a set of standardized biological measurements that help scientists study, report and manage changes in biodiversity across time, space, and biological level. EBVs are group into six classes: genetic composition, species populations, species traits, community composition, ecosystem structure, and ecosystem function. EBV datasets are stored in the EBVCube format a CF and ACDD compliant netCDF file with four dimensions: longitude, latitude, time, and entity. This standardized format allows datasets from different sources to be interpreted and visualized consistently in the EBV Data Portal.",
+    "section": "Half in R, half on the portal",
+    "text": "Half in R, half on the portal\nYou build and check the file locally, then hand it over. Knowing which half you are in tells you which unit to open.\n\n\n\n\n\nflowchart LR\n  subgraph inR[\"In R — units 2 to 5\"]\n    direction LR\n    A[\"Prepare&lt;br/&gt;data\"] --&gt; B[\"ebv_metadata()&lt;br/&gt;write the JSON\"]\n    B --&gt; C[\"ebv_create()&lt;br/&gt;empty netCDF\"]\n    C --&gt; D[\"ebv_add_data()&lt;br/&gt;fill the cubes\"]\n    D --&gt; E[\"Validate and visualise&lt;br/&gt;check before sharing\"]\n  end\n  subgraph onP[\"On the portal — unit 6\"]\n    direction LR\n    F[\"Upload&lt;br/&gt;submit for review\"] --&gt; G[\"Review&lt;br/&gt;by the portal team\"]\n    G --&gt; H[\"Publish&lt;br/&gt;receive a DOI\"]\n  end\n  E --&gt; F\n  classDef rstep fill:#E8F1EA,stroke:#2F6F4E,color:#12211F\n  classDef pstep fill:#FBF0DF,stroke:#B57728,color:#12211F\n  class A,B,C,D,E rstep\n  class F,G,H pstep\n  style inR fill:#FFFFFF,stroke:#2F6F4E,color:#2F6F4E\n  style onP fill:#FFFFFF,stroke:#B57728,color:#B57728",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
+      "Overview"
     ]
   },
   {
-    "objectID": "index.html#the-dataset-we-will-use",
-    "href": "index.html#the-dataset-we-will-use",
+    "objectID": "index.html#one-real-dataset-start-to-finish",
+    "href": "index.html#one-real-dataset-start-to-finish",
     "title": "From Raster to Portal: Creating and Publishing an EBVCube",
-    "section": "The dataset we will use",
-    "text": "The dataset we will use\nThis tutorial uses a single real, published dataset throughout.\n\nLocal bird diversity (cSAR/BES-SIM) — Martins, I., Pereira, H., Navarro, L. (2022).A community-composition EBV reporting the relative and absolute change in the number of bird species at decadal time steps from 1900 to 2010, for three entities: forest, non-forest, and all bird species.\n\n\nDataset page · DOI: 10.25829/8grx36 · EBV Portal id = 1 · netCDF ≈ 4 MB\n\nWe use this dataset (id = 1) throughout the tutorial: both when we explore the portal itself, its metadata form, entity list, DOI, citation, and versioning, and for the hands-on R code. Everything you see corresponds to something you can open yourself, right now, on the live portal.\nTo call the dataset, ebvcube fetches it directly from the portal using its numeric ID with ebv_download(id = 1, outputdir = \"data/ebv\", overwrite = FALSE) and caches it locally, so it only needs to be downloaded once. Every later code chunk starts from that file path; to run the workflow against your own data instead, just point it at your own .nc file and the rest of the tutorial runs unchanged.",
+    "section": "One real dataset, start to finish",
+    "text": "One real dataset, start to finish\nThe tutorial is built around one published dataset, id = 1, that you can open on the live portal. The metadata fields and code chunks work against that file, so what you read here is what you’d get running it yourself.\n\n\n\n\n\n\nLocal bird diversity (cSAR/BES-SIM)\n\n\n\nid = 1 Community composition 3 entities 2 metrics 1900–2015\nRelative and absolute change in the number of bird species at decadal steps, for forest, non-forest and all bird species. Roughly 4 MB, downloaded once and cached locally.\nMartins, I., Pereira, H., Navarro, L. (2022). Dataset page · DOI 10.25829/8grx36\n\nlibrary(ebvcube)\n\nebv_download(id = 1, outputdir = \"data/ebv\", overwrite = FALSE)\n\nEvery later code chunk starts from that file path. To run the workflow against your own data, point it at your own .nc and the rest of the tutorial runs unchanged.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
+      "Overview"
     ]
   },
   {
-    "objectID": "index.html#workflow-overview",
-    "href": "index.html#workflow-overview",
+    "objectID": "index.html#how-this-tutorial-is-organised",
+    "href": "index.html#how-this-tutorial-is-organised",
     "title": "From Raster to Portal: Creating and Publishing an EBVCube",
-    "section": "Workflow overview",
-    "text": "Workflow overview\n\n\n\n\n\nflowchart LR\nA[\"Prepare data&lt;br/&gt;rasters & metadata\"]\nB[\"Generate&lt;br/&gt;metadata JSON\"]\nC[\"ebv_create()&lt;br/&gt;create EBVCube\"]\nD[\"ebv_add_data()&lt;br/&gt;add data\"]\nE[\"Validate&lt;br/&gt;file\"]\nF[\"Upload&lt;br/&gt;to portal\"]\nG[\"Review & publish&lt;br/&gt;DOI\"]\n\nA --&gt; B --&gt; C --&gt; D --&gt; E --&gt; F --&gt; G",
+    "section": "How this tutorial is organised",
+    "text": "How this tutorial is organised\nEach unit opens with its objectives, works through the step with runnable code and screenshots, and closes with a checkpoint so you know you are ready to move on.\n\n\nUNIT 1\nIntroduction\nWhat EBVs are, and what the portal is for.\n\n\nUNIT 2\nInstallation\nGet R, ebvcube and its Bioconductor dependencies running.\n\n\nUNIT 3\nPreparing data\nLine up your rasters, entity list and metadata JSON.\n\n\nUNIT 4\nCreating the EBVCube\nBuild the netCDF, fill it, and confirm it is right.\n\n\nUNIT 5\nValidating and Visualizing\nCheck the file before anyone else sees it.\n\n\nUNIT 6\nUploading\nSubmit through the portal and receive a DOI.\n\n\nUNIT 7\nTroubleshooting\nWhat to do when a step refuses to work.\n\n\nUNIT 8\nFurther reading\nSpecifications, papers, and where to ask.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
-    ]
-  },
-  {
-    "objectID": "index.html#how-this-tutorial-is-organized",
-    "href": "index.html#how-this-tutorial-is-organized",
-    "title": "From Raster to Portal: Creating and Publishing an EBVCube",
-    "section": "How this tutorial is organized",
-    "text": "How this tutorial is organized\n\n\n\nUnit\nTopic\n\n\n\n\n1\nIntroduction to EBVs and the EBV Data Portal\n\n\n2\nInstalling R, RStudio, and the ebvcube package\n\n\n3\nPreparing your biodiversity data for conversion\n\n\n4\nCreating an EBVCube with ebvcube\n\n\n5\nValidating the generated file\n\n\n6\nUploading your dataset to the EBV Data Portal\n\n\n7\nTroubleshooting common issues and best practices\n\n\n8\nFurther resources, repositories, and references\n\n\n\nEach unit opens with its learning objectives, works through the step with runnable code and screenshots, and closes with a short checkpoint so you know you are ready to move on.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
+      "Overview"
     ]
   },
   {
@@ -64,419 +54,429 @@
     "href": "index.html#before-you-start",
     "title": "From Raster to Portal: Creating and Publishing an EBVCube",
     "section": "Before you start",
-    "text": "Before you start\nYou do not need prior netCDF experience; Unit 1 covers the concepts you need. It helps to be comfortable with:\n\nbasic R (installing packages, running scripts);\nbasic geospatial data in R (terra/raster basics);\nhaving your own species or biodiversity raster data ready, or being happy to follow along with the example dataset.",
+    "text": "Before you start\n\n\nYou do not need prior netCDF experience, Unit 1 covers the concepts. It helps to be comfortable with:\n\nbasic R: installing packages and running scripts;\nbasic geospatial data in R, at the level of terra or raster;\nyour own biodiversity rasters, or following along with the example dataset.\n\nThe portal units also need a free GEO BON account.\n\n\nKey resources\n\nEBV Data Portal — discover, download and publish EBV datasets.\nebvcube on GitHub — also on CRAN and the b-cubed r-universe.\nPackage documentation — the full function reference this tutorial builds on.\nFormat specification — the structural rules behind the format.\nGEO BON — what are EBVs? — the canonical definition and the six classes.\nQuoss et al. (2022) — the methods paper describing the package.\n\n\n\n\n\n\n\n\n\nWorking alongside this tutorial. Every code chunk runs as-is against the example dataset. If you are preparing your own dataset, follow the same steps and swap in your rasters and metadata where Units 3 and 4 point it out.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
-    ]
-  },
-  {
-    "objectID": "index.html#key-resources",
-    "href": "index.html#key-resources",
-    "title": "From Raster to Portal: Creating and Publishing an EBVCube",
-    "section": "Key resources",
-    "text": "Key resources\n\nEBV Data Portal — https://portal.geobon.org/ — discover, download, and publish EBV datasets.\nebvcube R package — https://github.com/EBVcube/ebvcube — read, visualize, and create EBVCubes. Also on CRAN and the b-cubed r-universe.\nebvcube documentation book — https://EBVcube.github.io/ebvcube/ — the full function reference this tutorial builds on.\nEBVCube format specification — https://github.com/EBVcube/EBVCube-format — the structural rules behind the format.\nGEO BON — What are EBVs? — https://geobon.org/ebvs/what-are-ebvs/ — the canonical definition and the six EBV classes.\nMethods paper — Quoss et al. (2022), describing the package and the netCDF structure it implements.\n\n\n\n\n\n\n\nWorking alongside this tutorial. Every code chunk runs as-is against the bundled example dataset. If you are preparing your own dataset for the portal, follow the same steps but swap in your rasters and metadata where Units 3 and 4 point it out.\n\n\n\nReady? Start with Unit 1 — Introduction to EBVs and the EBV Data Portal.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
+      "Overview"
     ]
   },
   {
     "objectID": "01-introduction.html",
     "href": "01-introduction.html",
-    "title": "2  Introduction",
+    "title": "1  Introduction",
     "section": "",
-    "text": "2.1 What is an Essential Biodiversity Variable?\nAn Essential Biodiversity Variable (EBV) is a standardized, derived measurement that captures a key dimension of biodiversity and enables consistent monitoring of its status and change over time. The concept was proposed by Pereira et al. (2013) and is maintained by the Group on Earth Observations Biodiversity Observation Network (GEO BON). EBVs are produced by integrating and harmonizing multiple primary data sources, such as field observations, remote-sensing products, and model outputs, into a common, analysis-ready format. As a result, they provide an intermediate layer between raw biodiversity observations and the indicators used for biodiversity assessment, reporting, and decision making.\nThink of an EBV as the biodiversity counterpart to an Essential Climate Variable: a small, agreed-upon set of variables that different research groups can produce, compare, and combine because they follow the same definitions. That shared standardization is what makes biodiversity data from different projects, taxa, and regions consistent enough to track over time.",
+    "text": "1.1 What is an Essential Biodiversity Variable?\nAn Essential Biodiversity Variable (EBV) is a standardised, derived measurement that captures a key dimension of biodiversity and lets us monitor its status and change over time. The concept was proposed by Pereira et al. (2013) and is maintained by the Group on Earth Observations Biodiversity Observation Network (GEO BON) (Group on Earth Observations Biodiversity Observation Network, n.d.). EBVs harmonise many primary sources, field observations, remote sensing, and model outputs, into a common, analysis-ready format. They sit as an intermediate layer between raw observations and the indicators used for assessment, reporting, and decision making.\nThink of an EBV as the biodiversity counterpart to an Essential Climate Variable: a small, agreed-upon set of variables that different groups can produce, compare, and combine because they follow the same definitions. That shared standardisation is what makes data from different projects, taxa, and regions consistent enough to track over time.",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
     ]
   },
   {
     "objectID": "01-introduction.html#the-six-ebv-classes",
     "href": "01-introduction.html#the-six-ebv-classes",
-    "title": "2  Introduction",
-    "section": "2.2 The six EBV classes",
-    "text": "2.2 The six EBV classes\nEBVs are organized into six classes, each capturing a different dimension of biodiversity:\n\nGenetic composition\nSpecies populations\nSpecies traits\nCommunity composition\nEcosystem structure\nEcosystem function\n\n\nThe dataset we use throughout this tutorial, Local bird diversity (cSAR/BES-SIM), belongs to the Community composition class.\n\n\n\n\n\n\n\nCanonical classes vs. what you see on the portal\n\n\n\nThe six EBV classes above are the canonical classification defined by GEO BON. On the EBV Data Portal, you may not see all six listed at once, the portal shows only the classes for which datasets are currently available. You may also come across more specific labels such as Species distribution or Ecosystem disturbance; these are finer sub-categories within the canonical classes.\n\nEcosystem services is not one of the six EBV classes. It relates to a separate, complementary GEO BON framework, the Essential Ecosystem Service Variables (EESVs), which addresses the benefits people obtain from nature rather than biodiversity itself. For the official EBV classification, refer to the GEO BON definitions page.",
+    "title": "1  Introduction",
+    "section": "1.2 The six EBV classes",
+    "text": "1.2 The six EBV classes\nEBVs are organised into six classes, each capturing a different dimension of biodiversity:\n\n\nGenetic composition\nGenetic diversity and differentiation within and among populations.\n\n\nSpecies populations\nWhere species occur and how abundant they are.\n\n\nSpecies traits\nPhysical, physiological and behavioural characteristics of organisms.\n\n\nCommunity composition our example\nThe diversity and mix of species within a community.\n\n\nEcosystem structure\nThe physical build and extent of ecosystems.\n\n\nEcosystem function\nThe processes and productivity that keep ecosystems running.\n\n\nThe dataset we use throughout this tutorial, Local bird diversity (cSAR/BES-SIM), belongs to the Community composition class.\n\n\n\n\n\n\nCanonical classes vs. what you see on the portal\n\n\n\n\n\nThe six classes above are the canonical classification defined by GEO BON. On the EBV Data Portal you may not see all six at once; the portal lists only the classes for which datasets are currently available. You may also meet finer labels such as Species distribution or Ecosystem disturbance, which are sub-categories within the canonical classes.\nEcosystem services is not one of the six EBV classes. It belongs to a separate, complementary GEO BON framework, the Essential Ecosystem Service Variables (EESVs), which covers the benefits people obtain from nature rather than biodiversity itself. For the official classification, see the GEO BON definitions page.",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
     ]
   },
   {
     "objectID": "01-introduction.html#why-netcdf-the-ebvcube-format",
     "href": "01-introduction.html#why-netcdf-the-ebvcube-format",
-    "title": "2  Introduction",
-    "section": "2.3 Why netCDF? The EBVCube format",
-    "text": "2.3 Why netCDF? The EBVCube format\nA single EBV has a value at every location (longitude, latitude), at several points in time, and for each biological entity measured (a species, a group, an ecosystem type). Stored as separate map images, that becomes an unwieldy pile of files with no built-in context. The Network Common Data Form (netCDF), long used in the climate sciences, instead holds it all in one self-describing file: the data and the information that explains it units, dates, entities, projection and travel together.\nThe EBVCube is the standardized, netCDF based data format defined for EBVs. It follows two established conventions: CF v1.8 (how coordinates, units, and time are encoded) and ACDD v1.3 (the attributes portals use to index datasets), plus a few EBV specific rules set out in the EBVCube format specification.\nEvery data cube inside an EBVCube shares the same four dimensions, think of each pixel as carrying four pieces of information: where (longitude, latitude), when (time), and which entity:\n\n\n\n\n\n\n\nDimension\nMeaning\n\n\n\n\nlon\nLongitude (or projected x-coordinate)\n\n\nlat\nLatitude (or projected y-coordinate)\n\n\ntime\nTime steps (annual, decadal, scenario years, irregular)\n\n\nentity\nThe biological unit (e.g. species, group of species, or ecosystem type)\n\n\n\nThe entity dimension allows a single EBVCube to contain data for multiple species or other biological entities. Beyond these four dimensions, metric and scenario groups organize different biodiversity measures or future projections within the same file. We return to that structure in Unit 4.\n\n\n\n\n\n\nFigure 2.1: Overview of the EBVCube data model. An EBV dataset combines a hierarchical structure of scenarios and metrics with four-dimensional data cubes (longitude, latitude, time, and entity), and carries standardized metadata following the CF 1.8, ACDD 1.3, and EBV conventions. Source: Quoß et al. (in preparation).",
+    "title": "1  Introduction",
+    "section": "1.3 Why netCDF? The EBVCube format",
+    "text": "1.3 Why netCDF? The EBVCube format\nA single EBV has a value at every location (longitude, latitude), at several points in time, and for each biological entity measured. Stored as separate map images, that becomes an unwieldy pile of files with no built-in context. The Network Common Data Form (netCDF), long used in the climate sciences, instead holds it all in one self-describing file: the data travels together with the information that explains it, units, dates, entities, and projection.\nThe EBVCube is the standardised, netCDF-based data format defined for EBVs. It follows two established conventions, CF v1.8 (cfconventions?) (how coordinates, units, and time are encoded) and ACDD v1.3 (acdd?) (the attributes portals use to index datasets), plus a few EBV-specific rules set out in the EBVCube format specification.\nEvery data cube inside an EBVCube shares the same four dimensions, so each pixel carries four pieces of information, where, when, and which entity:\n\n\nlon\nLongitude, or the projected x-coordinate.\n\n\nlat\nLatitude, or the projected y-coordinate.\n\n\ntime\nOne date or a whole series: annual, decadal, scenario years, irregular.\n\n\nentity\nThe biological unit: a species, a group of species, or an ecosystem type.\n\n\nThe entity dimension is what lets a single EBVCube hold data for many species or other biological units at once. Above these four dimensions, metric and scenario groups organise different biodiversity measures or future projections within the same file. We return to that structure in Unit 4.\n\n\n\n\n\n\nFigure 1.1: Overview of the EBVCube data model. An EBV dataset combines a hierarchical structure of scenarios and metrics with four-dimensional data cubes (longitude, latitude, time, and entity), and carries standardised metadata following the CF 1.8, ACDD 1.3, and EBV conventions. Source: Quoß et al. (in preparation).",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
     ]
   },
   {
     "objectID": "01-introduction.html#touring-the-ebv-data-portal",
     "href": "01-introduction.html#touring-the-ebv-data-portal",
-    "title": "2  Introduction",
-    "section": "2.4 Touring the EBV Data Portal",
-    "text": "2.4 Touring the EBV Data Portal\nAll published EBV datasets are available through the EBV Data Portal. Throughout this tutorial, we will use a single dataset as our running example:\n\n\n\n\n\n\nWorked example: Local bird diversity (cSAR/BES-SIM)\n\n\n\n\nReference: Martins, I., Pereira, H., Navarro, L. (2022). Local bird diversity (cSAR/BES-SIM) (Version 1) [Dataset]. German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig. (https://doi.org/10.25829/8grx36)\nEBV class: Community composition\nID: 1\nDOI: 10.25829/8grx36\n\n\n\nOpen the dataset page and you will find everything that makes an EBV dataset FAIR (findable, accessible, interoperable, and reusable):\n\na stable dataset ID (1) and a persistent DOI you can cite;\na structured JSON metadata record (title, abstract, EBV class, creators, license, entities);\nthe netCDF file itself, available for direct download (≈ 4 MB);\nan interactive EBV Visualizer for exploring maps and temporal trends without downloading anything.\n\nThe three views you will use most are the Discover page (Figure 2.2), an individual dataset page (Figure 2.3), and the live EBV Visualizer below. Click either screenshot to enlarge it.\n\nDiscover pageDataset pageEBV Visualizer\n\n\n\n\n\n\n\n\nFigure 2.2: The discover page showing the EBV class filters and a list of datasets.\n\n\n\n\n\n\n\n\n\n\n\nFigure 2.3: The dataset page for id = 1, showing its gerneral metadata, and the netCDF download button.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPortal interface as of July 2026. The portal is updated from time to time, so small layout differences are normal, the metadata, DOI, and download are always on the dataset page.\n\n\n\nBrowsing and inspecting datasets like this is how you find data on the portal. Next, we look at how you work with it.",
+    "title": "1  Introduction",
+    "section": "1.4 Touring the EBV Data Portal",
+    "text": "1.4 Touring the EBV Data Portal\nAll published EBV datasets live on the EBV Data Portal. Throughout this tutorial we use one of them as the running example:\n\n\n\n\n\n\nWorked example: Local bird diversity (cSAR/BES-SIM)\nid = 1 Community composition DOI 10.25829/8grx36\nMartins, I., Pereira, H., Navarro, L. (2022). Local bird diversity (cSAR/BES-SIM) (Version 1) [Dataset]. German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig. DOI 10.25829/8grx36\n\n\n\nOpen the dataset page and you will find everything that makes an EBV dataset FAIR (findable, accessible, interoperable, and reusable):\n\na stable dataset ID (1) and a persistent DOI you can cite;\na structured JSON metadata record (title, abstract, EBV class, creators, license, entities);\nthe netCDF file itself, available for direct download (≈ 4 MB);\nan interactive EBV Visualizer for exploring maps and temporal trends without downloading anything.\n\nThe three views you will use most are the Discover page (Figure 1.2), an individual dataset page (Figure 1.3), and the live EBV Visualizer. Click either screenshot to enlarge it.\n\nDiscover pageDataset pageEBV Visualizer\n\n\n\n\n\n\n\n\nFigure 1.2: The Discover page showing the EBV class filters and a list of datasets.\n\n\n\n\n\n\n\n\n\n\n\nFigure 1.3: The dataset page for id = 1, showing its general metadata and the netCDF download button.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPortal interface as of July 2026. The portal is updated from time to time, so small layout differences are normal; the metadata, DOI, and download are always on the dataset page.\n\n\n\nBrowsing and inspecting datasets like this is how you find data on the portal. Next, we look at how you work with it.",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
     ]
   },
   {
     "objectID": "01-introduction.html#where-ebvcube-fits",
     "href": "01-introduction.html#where-ebvcube-fits",
-    "title": "2  Introduction",
-    "section": "2.5 Where ebvcube fits",
-    "text": "2.5 Where ebvcube fits\nThe portal is where EBV data is published and discovered; the ebvcube R package is how you work with it. It sits on both sides of the portal:\n\nReading published data. Give ebvcube a dataset’s numeric ID and it downloads the file, lists the data cubes inside, and reads, subsets, or maps them for you, pulling dataset id = 1 into R takes a couple of lines instead of a manual download and netCDF wrangling.\nProducing new data. Starting from your own rasters or model output, ebvcube assembles them into a valid EBVCube, ready to upload and publish on the portal with its own DOI.\n\nRead on one side, create on the other: that round trip is the workflow in the Overview diagram, and the path the rest of this tutorial follows, one step at a time.\n\n\n\n\n\n\nCheckpoint. You just inspected dataset id = 1 on the portal, its EBV class (Community composition), its DOI, and its file format (netCDF). If those three make sense, you are ready to install the tools in Unit 2.",
+    "title": "1  Introduction",
+    "section": "1.5 Where ebvcube fits",
+    "text": "1.5 Where ebvcube fits\nThe portal is where EBV data is published and discovered; the ebvcube R package (ebvcube2025?; quoss2022?) is how you work with it. It sits on both sides of the portal:\n\n\nREAD\nReading published data\nGive ebvcube a dataset’s numeric ID and it downloads the file, lists the cubes inside, and reads, subsets, or maps them, pulling id = 1 into R in a couple of lines instead of a manual download and netCDF wrangling.\n\n\nCREATE\nProducing new data\nStarting from your own rasters or model output, ebvcube assembles them into a valid EBVCube, ready to upload and publish on the portal with its own DOI.\n\n\nRead on one side, create on the other: that round trip is the workflow in the Overview diagram, and the path the rest of this tutorial follows, one step at a time.\n\n\n\n\n\n\nCheckpoint. You just inspected dataset id = 1 on the portal, its EBV class (Community composition), its DOI, and its file format (netCDF). If those three make sense, you are ready to install the tools in Unit 2.\n\n\n\n\n\n\n\nGroup on Earth Observations Biodiversity Observation Network. (n.d.). GEO BON. https://geobon.org/. Retrieved July 31, 2026, from https://geobon.org/\n\n\nPereira, H. M., Ferrier, S., Walters, M., Geller, G. N., Jongman, R. H., Scholes, R. J., Bruford, M. W., Brummitt, N., Butchart, S. H., Cardoso, A., et al. (2013). Essential biodiversity variables. Science, 339(6117), 277–278.",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
     ]
   },
   {
     "objectID": "02-installation.html",
     "href": "02-installation.html",
-    "title": "3  Installing software and the ebvcube package",
+    "title": "2  Installing software and the ebvcube R package",
     "section": "",
-    "text": "3.1 What you need first\nBefore installing ebvcube, make sure you have:\nThe lower-level libraries ebvcube relies on, HDF5 (for reading netCDF-4 files) and GDAL (for spatial data), are installed for you automatically on Windows and macOS: HDF5 comes with the Bioconductor package rhdf5, and GDAL comes with the CRAN build of terra. There is nothing extra to set up.",
+    "text": "2.1 What you need first\nBefore installing ebvcube, make sure you have:",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Installing software and the `ebvcube` package</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Installing software and the `ebvcube` R package</span>"
     ]
   },
   {
     "objectID": "02-installation.html#what-you-need-first",
     "href": "02-installation.html#what-you-need-first",
-    "title": "3  Installing software and the ebvcube package",
+    "title": "2  Installing software and the ebvcube R package",
     "section": "",
-    "text": "R ≥ 4.2.0: The minimum version supported by ebvcube. Check yours in any R session:\n\n    R.version.string\nIf it is older, update R first, or CRAN will refuse to install the package.\n\nRStudio (recommended): a free, widely used editor for R. It is not strictly required, but every code example in this tutorial assumes you are working in it.",
+    "text": "R ≥ 4.2.0 required\nThe minimum version ebvcube supports. Check yours with R.version.string, and if it is older, update R first, or CRAN will refuse to install the package.\n\n\nRStudio recommended\nA free, widely used editor for R. Not strictly required, but every code example in this tutorial assumes you are working in it. Download it here\n\n\n\n\n\n\n\n\nWhat about HDF5 and GDAL?\n\n\n\n\n\nThe lower-level libraries ebvcube relies on, HDF5 (for reading netCDF-4 files) and GDAL (for spatial data), install automatically on Windows and macOS: HDF5 comes with the Bioconductor package rhdf5, and GDAL comes with the CRAN build of terra. There is nothing extra to set up.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Installing software and the `ebvcube` package</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Installing software and the `ebvcube` R package</span>"
     ]
   },
   {
     "objectID": "02-installation.html#installing-ebvcube-from-cran",
     "href": "02-installation.html#installing-ebvcube-from-cran",
-    "title": "3  Installing software and the ebvcube package",
-    "section": "3.2 Installing ebvcube from CRAN",
-    "text": "3.2 Installing ebvcube from CRAN\nFor most users, the released version on CRAN is all you need:\n\ninstall.packages(\"ebvcube\")\n\nCRAN resolves all of the CRAN dependencies automatically. Three dependencies, however, live on Bioconductor rather than CRAN, so on a fresh machine you will usually need the one-time step in the next section as well.\n\n\n\n\n\n\nOther ways to install\n\n\n\nMost people should use CRAN. If you need a newer feature, you can install the development version with devtools::install_github(\"EBVcube/ebvcube\", ref = \"dev\"), or get the binary builds from the b-cubed r-universe. These are covered in the package’s installation guide.",
+    "title": "2  Installing software and the ebvcube R package",
+    "section": "2.2 Installing ebvcube from CRAN",
+    "text": "2.2 Installing ebvcube from CRAN\nFor most users, the released version on CRAN is all you need:\n\ninstall.packages(\"ebvcube\")\n\nCRAN resolves all of the CRAN dependencies automatically. Three dependencies, however, live on Bioconductor rather than CRAN, so on a fresh machine you will usually need the one-time step in the next section as well.\n\n\n\n\n\n\nOther ways to install\n\n\n\n\n\nMost people should use CRAN. If you need a newer feature, you can install the development version with devtools::install_github(\"EBVcube/ebvcube\", ref = \"dev\"), or get the binary builds from the b-cubed r-universe. These are covered in the package’s installation guide.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Installing software and the `ebvcube` package</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Installing software and the `ebvcube` R package</span>"
     ]
   },
   {
     "objectID": "02-installation.html#sec-bioc",
     "href": "02-installation.html#sec-bioc",
-    "title": "3  Installing software and the ebvcube package",
-    "section": "3.3 Adding the Bioconductor dependencies",
-    "text": "3.3 Adding the Bioconductor dependencies\nThree of ebvcube’s dependencies come from Bioconductor, because reading EBVCube files means reading HDF5 under the hood:\n\n\n\n\n\n\n\nPackage\nWhy it is needed\n\n\n\n\nrhdf5\nLow-level HDF5 read/write (netCDF-4 is HDF5 underneath)\n\n\nDelayedArray\nLazy, on-disk arrays so large cubes do not exhaust your RAM\n\n\nHDF5Array\nConnects DelayedArray to HDF5 files\n\n\n\nIf installing ebvcube reports that one of these is missing, install them with BiocManager:\n\ninstall.packages(\"BiocManager\")\nBiocManager::install(c(\"rhdf5\", \"DelayedArray\", \"HDF5Array\"))\n\nYou only need to do this once per R installation.\n\n\n\n\n\n\nWhich Bioconductor version?\n\n\n\nBiocManager automatically picks the Bioconductor release that matches your version of R, which is what you want. You can pin a specific release with BiocManager::install(version = \"3.22\"), but only do so if you have a reason to, each Bioconductor release requires a matching R version (3.22 needs R 4.5.x), so leaving it out is also a safe choice.",
+    "title": "2  Installing software and the ebvcube R package",
+    "section": "2.3 Adding the Bioconductor dependencies",
+    "text": "2.3 Adding the Bioconductor dependencies\nThree of ebvcube’s dependencies come from Bioconductor rather than CRAN, because reading EBVCube files means reading HDF5 under the hood:\n\n\nrhdf5\nLow-level HDF5 read/write, since netCDF-4 is HDF5 underneath.\n\n\nDelayedArray\nLazy, on-disk arrays so large cubes do not exhaust your RAM.\n\n\nHDF5Array\nConnects DelayedArray to HDF5 files.\n\n\nIf installing ebvcube reports that one of these is missing, install them with BiocManager:\n\ninstall.packages(\"BiocManager\")\nBiocManager::install(c(\"rhdf5\", \"DelayedArray\", \"HDF5Array\"))\n\nYou only need to do this once per R installation.\n\n\n\n\n\n\nWhich Bioconductor version?\n\n\n\n\n\nBiocManager automatically picks the Bioconductor release that matches your version of R, which is what you want. You can pin a specific release with BiocManager::install(version = \"3.22\"), but only do so if you have a reason to, each Bioconductor release requires a matching R version (3.22 needs R 4.5.x), so leaving it out is also a safe choice.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Installing software and the `ebvcube` package</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Installing software and the `ebvcube` R package</span>"
     ]
   },
   {
     "objectID": "02-installation.html#verifying-your-installation",
     "href": "02-installation.html#verifying-your-installation",
-    "title": "3  Installing software and the ebvcube package",
-    "section": "3.4 Verifying your installation",
-    "text": "3.4 Verifying your installation\nFirst, load the package and confirm the version:\n\nlibrary(ebvcube)\npackageVersion(\"ebvcube\")\n\nThen open the small example dataset that ships with the package, a subset of the Local bird diversity (cSAR/BES-SIM) dataset. Because it is bundled, this needs no download and works offline:\n\nfile &lt;- system.file(\"extdata\", \"martins_comcom_subset.nc\", package = \"ebvcube\")\n\nprop &lt;- ebv_properties(file, verbose = FALSE)\nprop@general$title\n#&gt; [1] \"Local bird diversity (cSAR/BES-SIM)\"\n\nIf the title prints, your installation is working. When you are ready to pull the full dataset from the portal (≈ 4 MB), the same two lines work with a download instead of the bundled file. We do exactly that in the next unit:\n\nfile &lt;- ebv_download(id = 1, outputdir = tempdir(), overwrite = FALSE)\nprop &lt;- ebv_properties(file, verbose = FALSE)\nprop@general$title\n\n\n\n\n\n\n\nCheckpoint. library(ebvcube) loads with no error, and ebv_properties() prints the dataset title. If both work, your setup is complete and you are ready to prepare biodiversity data in Unit 3.",
+    "title": "2  Installing software and the ebvcube R package",
+    "section": "2.4 Verifying your installation",
+    "text": "2.4 Verifying your installation\nFirst, load the package and confirm the version:\n\nlibrary(ebvcube)\npackageVersion(\"ebvcube\")\n\nThen open the small example dataset that ships with the package, a subset of the Local bird diversity (cSAR/BES-SIM) dataset. Because it is bundled, this needs no download and works offline:\n\nfile &lt;- system.file(\"extdata\", \"martins_comcom_subset.nc\", package = \"ebvcube\")\n\nprop &lt;- ebv_properties(file, verbose = FALSE)\nprop@general$title\n#&gt; [1] \"Local bird diversity (cSAR/BES-SIM)\"\n\nIf the title prints, your installation is working. When you are ready to pull the full dataset from the portal (≈ 4 MB), the same two lines work with a download instead of the bundled file. We do exactly that in the next unit:\n\nfile &lt;- ebv_download(id = 1, outputdir = tempdir(), overwrite = FALSE)\nprop &lt;- ebv_properties(file, verbose = FALSE)\nprop@general$title\n\n\n\n\n\n\n\nCheckpoint. library(ebvcube) loads with no error, and ebv_properties() prints the dataset title. If both work, your setup is complete and you are ready to prepare biodiversity data in Unit 3.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Installing software and the `ebvcube` package</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Installing software and the `ebvcube` R package</span>"
     ]
   },
   {
     "objectID": "03-preparing-data.html",
     "href": "03-preparing-data.html",
-    "title": "4  Preparing biodiversity data and metadata",
+    "title": "3  Preparing biodiversity data and metadata",
     "section": "",
-    "text": "4.1 What ebv_create() needs\nebv_create() does not read your rasters and guess what belongs in the file. It reads a metadata file you prepare first, builds an empty netCDF with exactly the structure that metadata describes, then leaves it for you to fill. Almost all the work happens before you call the function.\nThree things have to be ready:\nThe metadata defines the structure of the EBVCube, while the data layers provide the values stored within that structure. The entity list provides the link between biological units and their corresponding layers.",
+    "text": "3.1 What ebv_create() needs\nebv_create() does not read your rasters and guess what belongs in the file. It reads a metadata file you prepare first, builds an empty netCDF with exactly the structure that metadata describes, then leaves it for you to fill. Almost all the work happens before you call the function. Three things have to be ready:\nThe metadata defines the structure of the EBVCube, the data layers provide the values stored within it, and the entity list links each biological unit to its layers.",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Preparing biodiversity data and metadata</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Preparing biodiversity data and metadata</span>"
     ]
   },
   {
     "objectID": "03-preparing-data.html#what-ebv_create-needs",
     "href": "03-preparing-data.html#what-ebv_create-needs",
-    "title": "4  Preparing biodiversity data and metadata",
+    "title": "3  Preparing biodiversity data and metadata",
     "section": "",
-    "text": "Input\nWhat it is\nWhere it comes from\n\n\n\n\nA metadata JSON\nThe file’s identity and structure as text: title, EBV class, license, spatial and temporal coverage, and one entry per metric.\nFill in the metadata form on the EBV Data Portal and download it (recommended), or build the same file in R with ebv_metadata().\n\n\nYour data\nOne 2-D layer (lon × lat) for every entity, time step, and metric, usually a stack of GeoTIFFs or in-memory rasters.\nThe output of your modelling or analysis.\n\n\nAn entity list\nThe names of the biological units the file describes, in the exact order the layers are stacked.\nYou decide it. For dataset id = 1 it is three entities: forest, non-forest, and all bird species.\n\n\n\n\n\n\n\n\n\n\nMetadata first, structure second\n\n\n\nWhether you generate the metadata JSON from the EBV Data Portal or with ebv_metadata(), review it before running ebv_create(). If you are using the portal, you can return to the form at any time, update the metadata, and download a new JSON file. Once the metadata accurately represents your dataset, use this final JSON file to build the EBVCube.",
+    "text": "A metadata JSON\nThe file’s identity and structure as text: title, EBV class, license, spatial and temporal coverage, and one entry per metric.\nFrom the EBV Data Portal form (recommended), or built in R with ebv_metadata().\n\n\nYour data\nOne 2-D layer (lon × lat) for every entity, time step, and metric, usually a stack of GeoTIFFs or in-memory rasters.\nThe output of your modelling or analysis.\n\n\nAn entity list\nThe names of the biological units the file describes, in the exact order the layers are stacked.\nYou decide it. For id = 1 it is three entities: All birds, Forest birds, and Non-forest birds.\n\n\n\n\n\n\n\n\n\nMetadata first, structure second\n\n\n\nWhether you generate the metadata JSON from the EBV Data Portal or with ebv_metadata(), review it before running ebv_create(). If you are using the portal, you can return to the form at any time, update the metadata, and download a new JSON file. Once the metadata accurately represents your dataset, use this final JSON file to build the EBVCube.",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Preparing biodiversity data and metadata</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Preparing biodiversity data and metadata</span>"
     ]
   },
   {
     "objectID": "03-preparing-data.html#sec-dimensions",
     "href": "03-preparing-data.html#sec-dimensions",
-    "title": "4  Preparing biodiversity data and metadata",
-    "section": "4.2 Dimensions, metrics, and scenarios",
-    "text": "4.2 Dimensions, metrics, and scenarios\nAn EBVCube organizes biodiversity data along four core dimensions: lon, lat, time, and entity. As the data producer, you define each of them when creating your cube.\nlon and lat set the spatial grid. All layers must share the same extent, resolution, and CRS, which are provided to ebv_create() through the arguments extent, resolution, and epsg.\ntime defines the temporal dimension of your dataset, from a single observation date to a time series. The temporal range and interval are specified in the metadata and must match the layers added to the cube.\nentity represents the biological unit described by each layer, such as a species, a group of species, or an ecosystem type. In the example dataset (id=1), the entities are forest, non-forest, and all bird species. The order of the entity list must match the order of your layers, because this is how the cube knows which biological unit each layer represents.\nMetric and scenario are not dimensions but define how the cube is organized within the netCDF file. A metric describes the variable being measured or calculated (e.g., relative change in species richness), and every dataset contains at least one metric. A scenario is optional and groups the same metric under different projected pathways (e.g., SSP1 or SSP5).\nFor datasets without scenarios, the cube is stored as: metric_1/ebv_cube\nWith scenarios, the structure becomes: scenario_1/metric_1/ebv_cube",
+    "title": "3  Preparing biodiversity data and metadata",
+    "section": "3.2 Dimensions, metrics, and scenarios",
+    "text": "3.2 Dimensions, metrics, and scenarios\nAn EBVCube organises biodiversity data along four core dimensions. As the data producer, you define each of them when you create the cube:\n\n\nlon\nLongitude, or the projected x-coordinate. Part of the shared grid set through extent, resolution, and epsg.\n\n\nlat\nLatitude, or the projected y-coordinate. Every layer shares this exact grid and CRS.\n\n\ntime\nOne observation date or a whole series. The range and interval live in the metadata and must match the layers you add.\n\n\nentity\nThe biological unit each layer describes, a species, a group, an ecosystem type. Its order must match your layer order.\n\n\n\n\n\n\n\n\nMetric and scenario are not dimensions, they set how the cubes are grouped inside the netCDF file. A metric is the variable being measured or calculated (e.g. relative change in species richness); every dataset has at least one. A scenario is optional, grouping the same metric under different projected pathways (e.g. SSP1 or SSP5).\nWithout scenarios the cube sits at metric_1/ebv_cube; with them, at scenario_1/metric_1/ebv_cube.",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Preparing biodiversity data and metadata</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Preparing biodiversity data and metadata</span>"
     ]
   },
   {
     "objectID": "03-preparing-data.html#pre-flight-checklist",
     "href": "03-preparing-data.html#pre-flight-checklist",
-    "title": "4  Preparing biodiversity data and metadata",
-    "section": "4.3 Pre-flight checklist",
-    "text": "4.3 Pre-flight checklist\nBefore building the EBVCube, verify that your data and metadata describe the same structure. These checks can be performed while preparing the metadata, either through the portal form or with ebv_metadata(). Since the metadata defines the EBVCube structure, resolving inconsistencies at this stage avoids problems during data insertion with ebv_add_data().\n\nAll layers share one grid. Same extent, resolution, and CRS across every GeoTIFF. Check with terra::rast() and compare.\nLayer count is deliberate. The number of layers equals entities × time steps × metrics (× scenarios, if you have them). If that product does not match your stack, something is missing or duplicated.\nEntity names are final and ordered. One name per entity, in the same order as your layers.\nA fill value is chosen. Decide what marks “no data” (the format default is -3.4e+38) and confirm your rasters actually use it for gaps.\nYou know your coverage exactly. Start year, end year, temporal spacing, bounding box, EPSG code. These are the values you enter into the metadata form, or pass to ebv_metadata().\nFile format is consistent. Confirm that all input layers can be read correctly by terra and have the expected data type and missing-value representation\n\n\n\n\n\n\n\nConfirm the grid in one step\n\n\n\n\nlibrary(terra)\nlayers &lt;- rast(list.files(\"data/tifs\", pattern = \"\\\\.tif$\",\n                          full.names = TRUE))\nlayers            # inspect extent, resolution, CRS, and nlyr()\n\nIf every layer prints the same extent and resolution, and nlyr() matches your expected count, the grid is consistent.",
+    "title": "3  Preparing biodiversity data and metadata",
+    "section": "3.3 Pre-flight checklist",
+    "text": "3.3 Pre-flight checklist\nBefore building the EBVCube, verify that your data and metadata describe the same structure. You can run these checks while preparing the metadata, through the portal form or with ebv_metadata(). Because the metadata defines the EBVCube structure, resolving inconsistencies now avoids problems later when you insert data with ebv_add_data().\n\n\nOne shared grid\nSame extent, resolution, and CRS across every GeoTIFF. Check with terra::rast() and compare.\n\n\nA deliberate layer count\nentities × time steps × metrics (× scenarios). If the product does not match your stack, something is missing or duplicated.\n\n\nFinal, ordered entities\nOne name per entity, in the same order as your layers.\n\n\nA chosen fill value\nDecide what marks “no data” (the format default is -3.4e+38) and confirm your rasters use it for gaps.\n\n\nExact coverage\nStart year, end year, temporal spacing, bounding box, EPSG code, the values you enter into the metadata.\n\n\nConsistent file format\nEvery layer reads cleanly in terra, with the expected data type and missing-value representation.\n\n\n\n\n\n\n\n\nConfirm the grid in one step\n\n\n\nThis is a template you run against your own exported layers, not the id = 1 example we download elsewhere in the tutorial, so point it at your own folder of GeoTIFFs:\n\nlibrary(terra)\n\n# Point this at your own exported layers.\nlayers &lt;- rast(list.files(\"path/to/your/tifs\", pattern = \"\\\\.tif$\",\n                          full.names = TRUE))\nlayers            # inspect extent, resolution, CRS, and nlyr()\n\nIf every layer prints the same extent and resolution, and nlyr() matches your expected count, the grid is consistent.",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Preparing biodiversity data and metadata</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Preparing biodiversity data and metadata</span>"
     ]
   },
   {
     "objectID": "03-preparing-data.html#getting-the-metadata-json",
     "href": "03-preparing-data.html#getting-the-metadata-json",
-    "title": "4  Preparing biodiversity data and metadata",
-    "section": "4.4 Getting the metadata JSON",
-    "text": "4.4 Getting the metadata JSON\nEvery EBVCube starts from a metadata JSON, and there are two ways to produce one. Which you pick depends on whether you are publishing through the portal or scripting a pipeline.\n\n4.4.1 Path A — the portal metadata form (recommended)\nThe simplest way to create a valid metadata JSON is by using the Uploads → New Upload form in the EBV Data Portal. The form is organized into three tabs. Complete the required fields in the first two tabs, then use the third tab to generate and download the metadata JSON file.\nEach tab contains more fields than fit on a single screen, so the images below show only the top portion of each tab. Be sure to scroll through the entire form and complete all fields marked with a red asterisk (*).\n\nGeneral informationEBV attributesData upload\n\n\nTitle, creation date, a summary, methods, and any related DOIs, among other general fields.\n\n\n\n\n\n\nFigure 4.1: New upload — General information.\n\n\n\n\n\nThe controlled vocabulary fields: EBV class, EBV name, and entity type, chosen from fixed lists so they can’t be mistyped. Below them you add one or more metrics (each with a name, description, and units) and, if your data has them, one or more scenarios, among other EBV attribute fields further down.\n\n\n\n\n\n\nFigure 4.2: New upload — EBV attributes.\n\n\n\n\n\nThe portal generates the metadata JSON here. Click Download Metadata to save the .json; that file is the input to ebv_create(). This same tab is where you return later to upload the finished netCDF (option 2, “using the R package ebvcube”).\n\n\n\n\n\n\nFigure 4.3: New upload — Data upload, with the Download Metadata link.\n\n\n\n\n\n\n\n\n\n\n\n\nYou need a GEO BON account\n\n\n\nThe form sits behind a login. Create a free account at portal.geobon.org before you start.\n\n\n\n\n4.4.2 Path B — from R with ebv_metadata()\nYou can also build the same JSON entirely in R. This fits an automated or reproducible pipeline, where generating the metadata from a script beats filling a form by hand. ebv_metadata() takes one argument per field the form would ask for, writes the .json to disk, and returns its path. The controlled-vocabulary fields still have to match the portal’s accepted terms, so ?ebv_metadata stays the authoritative reference for what each one takes.\n\njson &lt;- ebv_metadata(\n  outputpath               = \"data/my_ebv_metadata.json\",\n  title                    = \"Local bird diversity (worked example)\",\n  creator_name             = \"Jane Doe\",\n  creator_institution      = \"Example University\",\n  coverage_content_type    = \"Model result\",\n  ebv_class                = \"Community composition\",\n  ebv_name                 = \"Taxonomic and phylogenetic diversity\",\n  ebv_spatial_scope        = \"Global\",\n  ebv_domain               = \"Terrestrial\",\n  ebv_entity_type          = \"Communities\",\n  ebv_entity_scope         = \"Bird communities\",\n  time_coverage_start      = \"1900-01-01\",\n  time_coverage_end        = \"2010-01-01\",\n  metric = list(\n    standard_name = \"Relative change in the number of species\",\n    long_name     = \"Relative change in the number of bird species relative to 1900\",\n    units         = \"percent\"\n  ),\n  overwrite = TRUE,\n  verbose   = FALSE\n)\n\nA few fields to watch:\n\nebv_class must match one of the classes the portal lists (the canonical six plus Ecosystem services and Cross-cutting), spelled exactly as shown.\ncoverage_content_type records how the data were produced: modelResult for modelled data, image for direct observation, and a handful of other CF values.\nmetric is a list. For several metrics, pass a list of lists and the file gains metric_2, metric_3, and so on. To add scenarios, pass a scenario argument the same way; leave it out, as here, and the file stays flat.\n\nBoth paths end in the same place: a .json on disk that describes the file you are about to build. Whichever you use, open it in a text editor and read it once before moving on. Editing a line by hand is fine, and often quicker than regenerating the whole file for a one-word fix.\n\n\n\n\n\n\nMatch the JSON to your data, not the other way around\n\n\n\nThe metadata declares a shape: so many metrics, so many time steps, this grid. ebv_create() builds exactly that shape, and ebv_add_data() refuses anything that does not fit. If the two disagree, correct whichever one is wrong now, while it is still a line in a JSON file.",
+    "title": "3  Preparing biodiversity data and metadata",
+    "section": "3.4 Getting the metadata JSON",
+    "text": "3.4 Getting the metadata JSON\nEvery EBVCube starts from a metadata JSON, and there are two ways to produce one. Which you pick depends on whether you are publishing through the portal or scripting a pipeline.\n\n3.4.1 Path A — the portal metadata form (recommended)\nThe simplest way to create a valid metadata JSON is the Uploads → New Upload form in the EBV Data Portal. The form is organised into three tabs. Complete the required fields in the first two tabs, then use the third to generate and download the metadata JSON.\nEach tab holds more fields than fit on one screen, so the images below show only the top portion of each. Be sure to scroll through the whole form and complete every field marked with a red asterisk (*).\n\nGeneral informationEBV attributesData upload\n\n\nTitle, creation date, a summary, methods, and any related DOIs, among other general fields.\n\n\n\n\n\n\nFigure 3.1: New upload — General information.\n\n\n\n\n\nThe controlled-vocabulary fields: EBV class, EBV name, and entity type, chosen from fixed lists so they can’t be mistyped. Below them you add one or more metrics (each with a name, description, and units) and, if your data has them, one or more scenarios.\n\n\n\n\n\n\nFigure 3.2: New upload — EBV attributes.\n\n\n\n\n\nThe portal generates the metadata JSON here. Click Download Metadata to save the .json; that file is the input to ebv_create(). This same tab is where you return later to upload the finished netCDF (option 2, “using the R package ebvcube”).\n\n\n\n\n\n\nFigure 3.3: New upload — Data upload, with the Download Metadata link.\n\n\n\n\n\n\n\n\n\n\n\n\nYou need a GEO BON account\n\n\n\nThe form sits behind a login. Create a free account at portal.geobon.org before you start.\n\n\n\n\n3.4.2 Path B — from R with ebv_metadata()\nYou can also build the same JSON entirely in R. This fits an automated or reproducible pipeline, where generating the metadata from a script beats filling a form by hand. ebv_metadata() takes one argument per field the form would ask for, writes the .json to disk, and returns its path. The call below fills those fields with dataset id = 1’s own published values, so the example uses real terms rather than invented placeholders. The controlled-vocabulary fields still have to match the portal’s accepted terms, so ?ebv_metadata stays the authoritative reference for what each one takes.\n\njson &lt;- ebv_metadata(\n  outputpath            = file.path(tempdir(), \"metadata.json\"),\n  title                 = \"Local bird diversity (cSAR/BES-SIM)\",\n  summary               = \"Changes in bird diversity at 1-degree resolution caused by land use, estimated by the cSAR model for 1900-2015 using LUH2.0 historical reconstruction of land-use.\",\n  source                = \"cSAR model with LUH2.0 land-use projections and PREDICTS-based coefficients.\",\n  date_created          = \"2018-01-01\",\n  creator_name          = \"Ines Martins\",\n  creator_institution   = \"German Centre for Integrative Biodiversity Research (iDiv)\",\n  license               = \"CC BY\",\n  ebv_class             = \"Community composition\",\n  ebv_name              = \"Taxonomic and phylogenetic diversity\",\n  ebv_spatial_scope     = \"Global\",\n  ebv_domain            = \"Terrestrial\",\n  coverage_content_type = \"modelResult\",\n  ebv_entity_type       = \"Communities\",\n  ebv_entity_scope      = \"Bird communities\",\n  time_coverage_start   = \"1900-01-01\",\n  time_coverage_end     = \"2015-01-01\",\n  metric = list(\n    list(standard_name = \"Relative change in the number of species (%)\",\n         long_name     = \"Relative change in the number of species using 1900 as reference\",\n         units         = \"Percentage points\"),\n    list(standard_name = \"Absolute change in the number of species\",\n         long_name     = \"Absolute change in the number of species using 1900 as reference\",\n         units         = \"Number of species\")\n  ),\n  overwrite = TRUE,\n  verbose   = FALSE\n)\n\nA few fields to watch:\n\nebv_class must match one of the classes the portal lists (the canonical six plus Ecosystem services and Cross-cutting), spelled exactly as shown.\ncoverage_content_type records how the data were produced: modelResult for modelled data, image for direct observation, and a handful of other CF values.\nmetric is a list of lists, one entry per metric. The example passes two, so the file gains both metric_1/ebv_cube and metric_2/ebv_cube. To add scenarios, pass a scenario argument the same way; leave it out, as here, and the file stays flat.\n\nBoth paths end in the same place: a .json on disk that describes the file you are about to build. Whichever you use, open it in a text editor and read it once before moving on. Editing a line by hand is fine, and often quicker than regenerating the whole file for a one-word fix.\n\n\n\n\n\n\nMatch the JSON to your data, not the other way around\n\n\n\nThe metadata declares a shape: so many metrics, so many time steps, this grid. ebv_create() builds exactly that shape, and ebv_add_data() refuses anything that does not fit. If the two disagree, correct whichever one is wrong now, while it is still a line in a JSON file.",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Preparing biodiversity data and metadata</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Preparing biodiversity data and metadata</span>"
     ]
   },
   {
     "objectID": "03-preparing-data.html#downloading-dataset-1-for-a-working-reference",
     "href": "03-preparing-data.html#downloading-dataset-1-for-a-working-reference",
-    "title": "4  Preparing biodiversity data and metadata",
-    "section": "4.5 Downloading dataset 1 for a working reference",
-    "text": "4.5 Downloading dataset 1 for a working reference\nThe example dataset from Unit 1 is used here because it represents a complete EBVCube and allows you to compare your own metadata and file structure against an existing example: the Local bird diversity (cSAR/BES-SIM) dataset (id = 1)\n\nlibrary(ebvcube)\n\ndir.create(\"data/ebv\", recursive = TRUE, showWarnings = FALSE)\nfile &lt;- ebv_download(id = 1, outputdir = \"data/ebv\",\n                     overwrite = FALSE)\n\nebv_datacubepaths(file, verbose = FALSE)\n\nThe paths come back as metric_*/ebv_cube with no scenario segment, which confirms what Section 4.2 covered. This is a file without a scenario layer. Read its metadata the same way you did as a consumer, and treat each field as a slot you will need to fill for your own dataset:\n\nprop &lt;- ebv_properties(file, verbose = FALSE)\nprop@general$title\nprop@general$ebv_class\nprop@spatial$srs\nprop@temporal$resolution\n\nWhatever this file declares, yours will declare too. The difference is that here the values are already filled in, and for your dataset you are the one supplying them.\n\n\n\n\n\n\nCheckpoint. Your data share one grid, and the number of layers matches entities × time steps × metrics (× scenarios, if any). Your entity list is final and ordered, and you have a metadata JSON on disk, from the portal form or ebv_metadata(), that you have read through. If that all holds, and your metric and scenario structure matches your dataset, you are ready to build the netCDF in Chapter 5.",
+    "title": "3  Preparing biodiversity data and metadata",
+    "section": "3.5 Downloading dataset 1 for a working reference",
+    "text": "3.5 Downloading dataset 1 for a working reference\nThe example dataset from Unit 1 is worth keeping open here: it is a complete EBVCube, so you can compare your own metadata and file structure against a working example, the Local bird diversity (cSAR/BES-SIM) dataset (id = 1). ebv_download() returns the path to the file it writes, so we point it at tempdir() and the code runs from any working directory, with no project folder to set up first:\n\nlibrary(ebvcube)\n\nfile &lt;- ebv_download(id = 1, outputdir = tempdir(), overwrite = FALSE)\n\nebv_datacubepaths(file, verbose = FALSE)\n\nFor id = 1 the paths come back as metric_1/ebv_cube and metric_2/ebv_cube, two metrics and no scenario segment, which confirms what Section 3.2 covered. Read its metadata the same way you did as a consumer, and treat each field as a slot you will need to fill for your own dataset:\n\nprop &lt;- ebv_properties(file, verbose = FALSE)\nprop@general$title\nprop@general$ebv_class\nprop@general$entity_names        #&gt; \"All birds\" \"Forest birds\" \"Non-forest birds\"\nprop@spatial$srs\nprop@temporal$resolution\n\nWhatever this file declares, yours will declare too. The difference is that here the values are already filled in, and for your dataset you are the one supplying them.\n\n\n\n\n\n\nCheckpoint. Your data share one grid, and the number of layers matches entities × time steps × metrics (× scenarios, if any). Your entity list is final and ordered, and you have a metadata JSON on disk, from the portal form or ebv_metadata(), that you have read through. If that all holds, and your metric and scenario structure matches your dataset, you are ready to build the netCDF in Chapter 4.",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Preparing biodiversity data and metadata</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Preparing biodiversity data and metadata</span>"
     ]
   },
   {
     "objectID": "04-creating-the-cube.html",
     "href": "04-creating-the-cube.html",
-    "title": "5  Creating an EBVCube with the ebvcube package",
+    "title": "4  Creating an EBVCube with the ebvcube R package",
     "section": "",
-    "text": "5.1 Writing the empty netCDF with ebv_create()\nebv_create() reads the metadata JSON and writes a netCDF that has the right shape but no data yet. You supply the entity names here, along with the grid the cubes sit on: the projection (epsg), the geographic extent, and the resolution in degrees. The running example has three entities and a 1° global grid.\nentities &lt;- c(\"forest bird species\",\n              \"non-forest bird species\",\n              \"all bird species\")\n\nebv_create(\n  jsonpath   = json,\n  outputpath = new_nc,\n  entities   = entities,\n  epsg       = 4326,\n  extent     = c(-180, 180, -90, 90),\n  resolution = c(1, 1),\n  fillvalue  = -3.4e+38,\n  overwrite  = TRUE,\n  verbose    = FALSE\n)\nAt this point the file is fully structured but every cell still holds the fill value. Check the skeleton before you add anything to it:\nebv_properties(new_nc, verbose = FALSE)@general$entity_names\n\nebv_datacubepaths(new_nc, verbose = FALSE)\nThe entity names should match what you passed in, and the datacube paths tell you where the data will live. For the running example there is no scenario layer, so the cubes sit at metric_1/ebv_cube.",
+    "text": "4.1 The inputs\nebv_create() needs two things, and we generate both from the published dataset so the unit stays self-contained:\nEvery path below is built from tempdir(), so nothing depends on your working directory or on files cloned from the repository. We start by fetching the published cube and reading the structure we need to match:\nlibrary(ebvcube)\n\n# Download the published dataset once. ebv_download() returns the path to the\n# .nc it wrote, so this works from any working directory.\norig   &lt;- ebv_download(id = 1, outputdir = tempdir(), overwrite = FALSE)\nnew_nc &lt;- file.path(tempdir(), \"bird_diversity_rebuilt.nc\")\n\n# Read the real structure from the published file so the rebuild lines up.\nprops    &lt;- ebv_properties(orig, verbose = FALSE)\nentities &lt;- props@general$entity_names          # the three bird entities, in order\nn_t      &lt;- length(props@temporal$dates)         # number of time steps\ndcs      &lt;- ebv_datacubepaths(orig, verbose = FALSE)$datacubepaths\n\nentities\ndcs\nThe metadata JSON is the same file the portal gives you when you click Download Metadata on the upload form. For your own data you would download that file, or write it from R with ebv_metadata() — the same call introduced as Path B in Chapter 3. We regenerate it here so this unit runs on its own, then feed the result to ebv_create():\nThe raster layers are one multi-band GeoTIFF per metric and entity. In your own project these would be the output of your analysis; here we read each cube out of the published netCDF and write it to a GeoTIFF in tempdir(), so the rebuild has something real to fill from. This is the round trip in action — the same layers that went into the published file come back out, ready to go back in:\nlibrary(terra)\n\ntif_dir &lt;- file.path(tempdir(), \"tifs\")\ndir.create(tif_dir, showWarnings = FALSE)\n\nentity_tag &lt;- function(x) gsub(\"[^A-Za-z0-9]+\", \"-\", tolower(x))\n\nfor (dc in dcs) {\n  m &lt;- as.integer(sub(\"metric_(\\\\d+).*\", \"\\\\1\", dc))   # metric number from the path\n  for (e in seq_along(entities)) {\n    # Read the cube for this entity across all time steps (bands come back as\n    # the time steps), then write it out as a multi-band GeoTIFF.\n    r   &lt;- ebv_read(orig, dc, entity = e, timestep = 1:n_t,\n                    type = \"r\", verbose = FALSE)\n    tif &lt;- file.path(tif_dir,\n                     sprintf(\"metric_%d_%s.tif\", m, entity_tag(entities[e])))\n    terra::writeRaster(r, tif, overwrite = TRUE)\n  }\n}",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating an EBVCube with the `ebvcube` package</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Creating an EBVCube with the `ebvcube` R package</span>"
+    ]
+  },
+  {
+    "objectID": "04-creating-the-cube.html#the-inputs",
+    "href": "04-creating-the-cube.html#the-inputs",
+    "title": "4  Creating an EBVCube with the ebvcube R package",
+    "section": "",
+    "text": "A metadata JSON\nThe structure and attributes of the cube. Downloaded from the portal, or written from R with ebv_metadata().\n\n\nThe raster layers\nOne multi-band GeoTIFF per metric and entity, holding the actual values.\n\n\n\n\n\n\n\n\n\n\n\nGenerate the metadata JSON (same call as Path B in the previous unit)\n\n\n\n\n\nmetric is a list of lists, one entry per metric, which is how the file ends up with both metric_1 and metric_2.\n\njson &lt;- ebv_metadata(\n  outputpath            = file.path(tempdir(), \"metadata.json\"),\n  title                 = \"Local bird diversity (cSAR/BES-SIM)\",\n  summary               = \"Changes in bird diversity at 1-degree resolution caused by land use, estimated by the cSAR model for 1900-2015 using LUH2.0 historical reconstruction of land-use.\",\n  source                = \"cSAR model with LUH2.0 land-use projections and PREDICTS-based coefficients.\",\n  date_created          = \"2018-01-01\",\n  creator_name          = \"Ines Martins\",\n  creator_institution   = \"German Centre for Integrative Biodiversity Research (iDiv)\",\n  license               = \"CC BY\",\n  ebv_class             = \"Community composition\",\n  ebv_name              = \"Taxonomic and phylogenetic diversity\",\n  ebv_spatial_scope     = \"Global\",\n  ebv_domain            = \"Terrestrial\",\n  coverage_content_type = \"modelResult\",\n  ebv_entity_type       = \"Communities\",\n  ebv_entity_scope      = \"Bird communities\",\n  time_coverage_start   = \"1900-01-01\",\n  time_coverage_end     = \"2015-01-01\",\n  metric = list(\n    list(standard_name = \"Relative change in the number of species (%)\",\n         long_name     = \"Relative change in the number of species using 1900 as reference\",\n         units         = \"Percentage points\"),\n    list(standard_name = \"Absolute change in the number of species\",\n         long_name     = \"Absolute change in the number of species using 1900 as reference\",\n         units         = \"Number of species\")\n  ),\n  overwrite = TRUE,\n  verbose   = FALSE\n)\n\n\n\n\n\n\n\n\n\n\n\n\nDoing the extraction as a standalone script\n\n\n\n\n\nThe book ships this same extraction as scripts/prepare-inputs.R, which writes the GeoTIFFs to data/tifs/ instead of a temporary directory. You do not need it to run this unit — everything above is self-contained — but it is handy if you want the layers on disk as a provenance record, or as a starting point for extracting layers from your own published cube.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Creating an EBVCube with the `ebvcube` R package</span>"
+    ]
+  },
+  {
+    "objectID": "04-creating-the-cube.html#writing-the-empty-netcdf-with-ebv_create",
+    "href": "04-creating-the-cube.html#writing-the-empty-netcdf-with-ebv_create",
+    "title": "4  Creating an EBVCube with the ebvcube R package",
+    "section": "4.2 Writing the empty netCDF with ebv_create()",
+    "text": "4.2 Writing the empty netCDF with ebv_create()\nebv_create() reads the metadata JSON and writes a netCDF that has the right shape but no data yet. You supply the entity names and the grid the cubes sit on: the projection (epsg), the geographic extent, and the resolution in degrees. We pass the entity names we just read from the published file, so the rebuild matches it; the grid is global at 1°.\n\nebv_create(\n  jsonpath   = json,\n  outputpath = new_nc,\n  entities   = entities,\n  epsg       = 4326,\n  extent     = c(-180, 180, -90, 90),\n  resolution = c(1, 1),\n  fillvalue  = -3.4e+38,\n  overwrite  = TRUE,\n  verbose    = FALSE\n)\n\nAt this point the file is fully structured but every cell still holds the fill value. Check the skeleton before you add anything to it:\n\nebv_properties(new_nc, verbose = FALSE)@general$entity_names\n\nebv_datacubepaths(new_nc, verbose = FALSE)\n\nThe entity names should match what you passed in, and the datacube paths tell you where the data will live. For dataset id = 1 there is no scenario layer but two metrics, so the paths come back as metric_1/ebv_cube and metric_2/ebv_cube.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Creating an EBVCube with the `ebvcube` R package</span>"
     ]
   },
   {
     "objectID": "04-creating-the-cube.html#adding-your-data-with-ebv_add_data",
     "href": "04-creating-the-cube.html#adding-your-data-with-ebv_add_data",
-    "title": "5  Creating an EBVCube with the ebvcube package",
-    "section": "5.2 Adding your data with ebv_add_data()",
-    "text": "5.2 Adding your data with ebv_add_data()\nEach entity’s data lives in its own GeoTIFF (or in-memory raster), and you add them one at a time. In a real workflow these files are the output of your analysis. Here we synthesize three rasters on the same 1° grid as the netCDF, so the example runs without any bundled files.\n\n# Three 3-band rasters, one per entity, on the netCDF's grid.\ntemplate &lt;- terra::rast(terra::ext(-180, 180, -90, 90),\n                        resolution = 1, crs = \"EPSG:4326\")\ntifs &lt;- file.path(tempdir(), c(\"entity1.tif\", \"entity2.tif\", \"entity3.tif\"))\nfor (i in seq_along(tifs)) {\n  r3 &lt;- terra::rast(template, nlyrs = 3)\n  terra::values(r3) &lt;- matrix(runif(terra::ncell(r3) * 3), ncol = 3)\n  terra::writeRaster(r3, tifs[i], overwrite = TRUE)\n}\n\nfor (i in seq_along(tifs)) {\n  ebv_add_data(\n    filepath_nc = new_nc,\n    metric      = 1,       # add to metric_1\n    entity      = i,\n    timestep    = 1:3,     # first three time steps\n    data        = tifs[i],\n    band        = 1:3,     # bands 1-3 of the tif\n    verbose     = FALSE\n  )\n}\n\nYou can call ebv_add_data() again on the same cube to fill in more time steps later. It appends rather than overwrites, as long as each call keeps the (metric, entity, timestep) combination unique.",
+    "title": "4  Creating an EBVCube with the ebvcube R package",
+    "section": "4.3 Adding your data with ebv_add_data()",
+    "text": "4.3 Adding your data with ebv_add_data()\nEach cube is filled from its own GeoTIFF, one metric and entity at a time. We wrote those layers to tif_dir in the extraction step above, named by metric and entity, so here we loop over the datacube paths and add each one. The time steps live in the GeoTIFF’s bands, so timestep and band both run 1:n_t.\n\nfor (dc in dcs) {\n  m &lt;- as.integer(sub(\"metric_(\\\\d+).*\", \"\\\\1\", dc))   # metric number from the path\n  for (e in seq_along(entities)) {\n    tif &lt;- file.path(tif_dir,\n                     sprintf(\"metric_%d_%s.tif\", m, entity_tag(entities[e])))\n    ebv_add_data(\n      filepath_nc = new_nc,\n      metric      = m,\n      entity      = e,\n      timestep    = 1:n_t,\n      data        = tif,\n      band        = 1:n_t,\n      verbose     = FALSE\n    )\n  }\n}\n\nYou can call ebv_add_data() again on the same cube to fill in more time steps later. It appends rather than overwrites, as long as each call keeps the (metric, entity, timestep) combination unique.",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating an EBVCube with the `ebvcube` package</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Creating an EBVCube with the `ebvcube` R package</span>"
     ]
   },
   {
     "objectID": "04-creating-the-cube.html#correcting-an-attribute-with-ebv_attribute",
     "href": "04-creating-the-cube.html#correcting-an-attribute-with-ebv_attribute",
-    "title": "5  Creating an EBVCube with the ebvcube package",
-    "section": "5.3 Correcting an attribute with ebv_attribute()",
-    "text": "5.3 Correcting an attribute with ebv_attribute()\nIf you later spot a wrong unit, a typo in a description, or any other attribute that needs fixing, you can edit it in place without rebuilding the file:\n\nebv_attribute(new_nc,\n              attribute_name = \"units\",\n              value          = \"Percentage\",\n              levelpath      = \"metric_1/ebv_cube\")\n\nebv_properties(new_nc, \"metric_1/ebv_cube\",\n               verbose = FALSE)@ebv_cube$units\n#&gt; [1] \"Percentage\"\n\nThe levelpath argument points at the layer you want to change. Pass \"metric_1/ebv_cube\" for the cube itself, \"metric_1\" for the metric, or \"/\" for a global attribute.",
+    "title": "4  Creating an EBVCube with the ebvcube R package",
+    "section": "4.4 Correcting an attribute with ebv_attribute()",
+    "text": "4.4 Correcting an attribute with ebv_attribute()\nIf you later spot a wrong unit, a typo in a description, or any other attribute that needs fixing, you can edit it in place without rebuilding the file:\n\nebv_attribute(new_nc,\n              attribute_name = \"units\",\n              value          = \"Percentage points\",\n              levelpath      = \"metric_1/ebv_cube\")\n\nebv_properties(new_nc, \"metric_1/ebv_cube\",\n               verbose = FALSE)@ebv_cube$units\n#&gt; [1] \"Percentage points\"\n\nThe levelpath argument points at the layer you want to change. Pass \"metric_1/ebv_cube\" for the cube itself, \"metric_1\" for the metric, or \"/\" for a global attribute.",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating an EBVCube with the `ebvcube` package</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Creating an EBVCube with the `ebvcube` R package</span>"
     ]
   },
   {
     "objectID": "04-creating-the-cube.html#species-level-datasets-with-ebv_create_taxonomy",
     "href": "04-creating-the-cube.html#species-level-datasets-with-ebv_create_taxonomy",
-    "title": "5  Creating an EBVCube with the ebvcube package",
-    "section": "5.4 Species-level datasets with ebv_create_taxonomy()",
-    "text": "5.4 Species-level datasets with ebv_create_taxonomy()\nWhen your entities are individual species rather than aggregated groups, use ebv_create_taxonomy() in place of ebv_create(). Instead of a plain vector of entity names, you supply a table with one row per species and one column per taxonomic rank. The function writes an extra taxonomy variable into the netCDF that the EBV Data Portal and downstream tools can use to filter and group species.\n\n# The column names you choose become the taxonomic ranks stored in the file.\n# In practice this table usually comes from a GBIF or Catalogue of Life export.\ntaxonomy &lt;- data.frame(\n  species = c(\"Hirundo rustica\", \"Apus apus\",   \"Falco peregrinus\"),\n  genus   = c(\"Hirundo\",         \"Apus\",        \"Falco\"),\n  family  = c(\"Hirundinidae\",    \"Apodidae\",    \"Falconidae\"),\n  order   = c(\"Passeriformes\",   \"Apodiformes\", \"Falconiformes\"),\n  class   = c(\"Aves\",            \"Aves\",        \"Aves\")\n)\ntaxonomy_csv &lt;- file.path(tempdir(), \"taxonomy.csv\")\nwrite.csv(taxonomy, taxonomy_csv, row.names = FALSE)\n\nnew_nc_tax &lt;- file.path(tempdir(), \"bird_diversity_taxonomy.nc\")\n\nebv_create_taxonomy(\n  jsonpath   = json,\n  outputpath = new_nc_tax,\n  taxonomy   = taxonomy_csv,\n  sep        = \",\",\n  epsg       = 4326,\n  extent     = c(-180, 180, -90, 90),\n  resolution = c(1, 1),\n  fillvalue  = -3.4e+38,\n  overwrite  = TRUE,\n  verbose    = FALSE\n)\n\nFrom here ebv_add_data() works exactly as it did above. The taxonomy is read-only metadata and does not change how you fill the cubes. See ?ebv_create_taxonomy for the accepted column names and separator options.",
+    "title": "4  Creating an EBVCube with the ebvcube R package",
+    "section": "4.5 Species-level datasets with ebv_create_taxonomy()",
+    "text": "4.5 Species-level datasets with ebv_create_taxonomy()\nUse ebv_create_taxonomy() when each entity in your dataset is an individual species. Unlike ebv_create(), which takes a simple vector of entity names, ebv_create_taxonomy() expects a CSV file describing the taxonomy of every species.\nEach row represents one species, and each column represents a taxonomic rank, ordered from the highest to the lowest level. For example:\n\n\n\norder\nfamily\ngenus\nscientificName\n\n\n\n\nPasseriformes\nCorvidae\nCorvus\nCorvus corone\n\n\nPasseriformes\nParidae\nParus\nParus major\n\n\n\nThe last column must contain the entity names used in the EBVCube. During creation, this taxonomy is stored in the netCDF alongside the data and can later be retrieved with ebv_properties() under @general$taxonomy.\nFor maximum interoperability, use Darwin Core names for the taxonomic ranks (for example, order, family, genus, and scientificName). You can also include a taxonomy identifier, such as a GBIF usageKey, to link each species to an established taxonomic backbone.\n\n\n\n\n\n\nRow order matters\n\n\n\nYour taxonomy CSV must contain one row for each entity in the same order that the entities appear in your data. This ensures that each species is linked to the correct layers in the EBVCube.\n\n\n\n# Columns run from the highest rank to the lowest, and the last column holds\n# the entity names. In practice this table usually comes from a GBIF or\n# Catalogue of Life export.\ntaxonomy &lt;- data.frame(\n  order          = c(\"Passeriformes\",   \"Apodiformes\", \"Falconiformes\"),\n  family         = c(\"Hirundinidae\",    \"Apodidae\",    \"Falconidae\"),\n  genus          = c(\"Hirundo\",         \"Apus\",        \"Falco\"),\n  scientificName = c(\"Hirundo rustica\", \"Apus apus\",   \"Falco peregrinus\")\n)\ntaxonomy_csv &lt;- file.path(tempdir(), \"taxonomy.csv\")\nwrite.csv(taxonomy, taxonomy_csv, row.names = FALSE)\n\nnew_nc_tax &lt;- file.path(tempdir(), \"bird_diversity_taxonomy.nc\")\n\nebv_create_taxonomy(\n  jsonpath   = json,\n  outputpath = new_nc_tax,\n  taxonomy   = taxonomy_csv,\n  sep        = \",\",\n  epsg       = 4326,\n  extent     = c(-180, 180, -90, 90),\n  resolution = c(1, 1),\n  fillvalue  = -3.4e+38,\n  overwrite  = TRUE,\n  verbose    = FALSE\n)\n\nFrom here ebv_add_data() works exactly as it did above. The taxonomy is read-only metadata and does not change how you fill the cubes. See ?ebv_create_taxonomy for the accepted column names and separator options.",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating an EBVCube with the `ebvcube` package</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Creating an EBVCube with the `ebvcube` R package</span>"
     ]
   },
   {
-    "objectID": "04-creating-the-cube.html#checking-the-finished-file",
-    "href": "04-creating-the-cube.html#checking-the-finished-file",
-    "title": "5  Creating an EBVCube with the ebvcube package",
-    "section": "5.5 Checking the finished file",
-    "text": "5.5 Checking the finished file\nOnce the cubes are filled, confirm the file one more time before you validate it. ebv_properties() reports the general metadata and structure, and ebv_datacubepaths() lists every cube in the file:\n\nebv_properties(new_nc, verbose = FALSE)\n\nebv_datacubepaths(new_nc, verbose = FALSE)\n\n\n\n\n\n\n\nA visual check with Panoply\n\n\n\nPanoply is a free NASA viewer for netCDF and HDF5 files. Drag your new .nc into it and it shows the group hierarchy, dimensions, and attributes side by side, and it can draw a quick map of any cube. It is a fast way to see whether the file looks the way you expect while you are still learning the format.\n\n\n\n\n\n\n\n\nCheckpoint. You have written an empty netCDF from your metadata, filled its cubes with ebv_add_data(), and confirmed the structure with ebv_properties() and ebv_datacubepaths(). If the datacube paths list the entities you expect and the values read back, your EBVCube is ready to validate in Chapter 6.",
+    "objectID": "04-creating-the-cube.html#confirming-the-rebuild-matches-the-original",
+    "href": "04-creating-the-cube.html#confirming-the-rebuild-matches-the-original",
+    "title": "4  Creating an EBVCube with the ebvcube R package",
+    "section": "4.6 Confirming the rebuild matches the original",
+    "text": "4.6 Confirming the rebuild matches the original\nBecause we rebuilt a file we already have, we can check the two against each other instead of just trusting that the code ran. ebv_analyse() reports the mean and the number of valid pixels for a cube; run it on the original and on the rebuild, and the numbers should agree:\n\norig_stats &lt;- ebv_analyse(orig,   \"metric_1/ebv_cube\", entity = 1, verbose = FALSE)\nnew_stats  &lt;- ebv_analyse(new_nc, \"metric_1/ebv_cube\", entity = 1, verbose = FALSE)\n\norig_stats[c(\"mean\", \"n\")]\nnew_stats[c(\"mean\", \"n\")]\n\nIf the mean and the valid-pixel count match, your ebv_create() → ebv_add_data() pipeline reproduced the published cube exactly. That is the check that turns “it ran without error” into “it produced the right file.” You can run ebv_properties() and ebv_datacubepaths() once more for a full readout of the finished structure:\n\nebv_properties(new_nc, verbose = FALSE)\n\nebv_datacubepaths(new_nc, verbose = FALSE)\n\n\n\n\n\n\n\nA visual check with Panoply\n\n\n\n\n\nPanoply is a free NASA viewer for netCDF and HDF5 files. Drag your new .nc into it and it shows the group hierarchy, dimensions, and attributes side by side, and it can draw a quick map of any cube. It is a fast way to see whether the file looks right before you hand it to the portal, without writing any more R.\n\n\n\n\n\n\n\n\n\nCheckpoint. You wrote an empty EBVCube with ebv_create(), filled its cubes with ebv_add_data(), and confirmed with ebv_analyse() that your rebuild reproduces the published dataset. With a valid .nc in hand, you are ready to validate and visualise it before sharing, in Chapter 5.",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating an EBVCube with the `ebvcube` package</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Creating an EBVCube with the `ebvcube` R package</span>"
     ]
   },
   {
     "objectID": "05-validating.html",
     "href": "05-validating.html",
-    "title": "6  Validating your EBVCube before uploading",
+    "title": "5  Validating your EBVCube before uploading",
     "section": "",
-    "text": "6.1 Check the structure\nStart with the two functions you already met. ebv_datacubepaths() lists every cube in the file, and ebv_properties() reports the metadata slot by slot. Read them against what you meant to build:\nebv_datacubepaths(nc, verbose = FALSE)\n\nprops &lt;- ebv_properties(nc, verbose = FALSE)\nprops@general$entity_names     # the entities you declared\nprops@spatial$extent           # c(xmin, xmax, ymin, ymax)\nprops@temporal$dates           # the time axis\nThe datacube paths should list every metric and entity you expect, the entity names should read correctly, and the extent and dates should match your data. A missing entity or an empty time axis points to a step that went wrong in creation.",
+    "text": "5.1 Check the structure\nStart with the two functions you already met. ebv_datacubepaths() lists every cube in the file, and ebv_properties() reports the metadata slot by slot. Read them against what you meant to build:\nebv_datacubepaths(nc, verbose = FALSE)\n\nprops &lt;- ebv_properties(nc, verbose = FALSE)\nprops@general$entity_names     # the entities you declared\nprops@spatial$extent           # c(xmin, xmax, ymin, ymax)\nprops@temporal$dates           # the time axis\nThe datacube paths should list every metric and entity you expect, the entity names should read correctly, and the extent and dates should match your data. A missing entity or an empty time axis points to a step that went wrong in creation.",
     "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Validating your EBVCube before uploading</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Validating your EBVCube before uploading</span>"
     ]
   },
   {
     "objectID": "05-validating.html#check-the-values",
     "href": "05-validating.html#check-the-values",
-    "title": "6  Validating your EBVCube before uploading",
-    "section": "6.2 Check the values",
-    "text": "6.2 Check the values\nStructure can be right while the numbers are wrong, so read a slice and look at its range. ebv_analyse() returns summary statistics for a cube or a subset:\n\nstats &lt;- ebv_analyse(nc, dc, entity = 1, timestep = 1, verbose = FALSE)\nstats[c(\"min\", \"max\", \"mean\", \"n\", \"NAs\")]\n\nn is the number of valid pixels. If it is zero, or NAs covers the whole grid, the cube never received its data. A min or max far outside what your variable should hold usually means a unit problem or a stray fill value that leaked into the data.",
+    "title": "5  Validating your EBVCube before uploading",
+    "section": "5.2 Check the values",
+    "text": "5.2 Check the values\nStructure can be right while the numbers are wrong, so read a slice and look at its range. ebv_analyse() returns summary statistics for a cube or a subset:\n\nstats &lt;- ebv_analyse(nc, dc, entity = 1, timestep = 1, verbose = FALSE)\nstats[c(\"min\", \"max\", \"mean\", \"n\", \"NAs\")]\n\nn is the number of valid pixels. If it is zero, or NAs covers the whole grid, the cube never received its data. A min or max far outside what your variable should hold usually signals a unit problem or a stray fill value that leaked into the data.",
     "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Validating your EBVCube before uploading</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Validating your EBVCube before uploading</span>"
     ]
   },
   {
-    "objectID": "05-validating.html#check-it-visually",
-    "href": "05-validating.html#check-it-visually",
-    "title": "6  Validating your EBVCube before uploading",
-    "section": "6.3 Check it visually",
-    "text": "6.3 Check it visually\nNumbers only tell you so much. ebv_map() draws a single slice, and one look often catches problems a summary hides, such as data in the wrong hemisphere or an all-empty ocean:\n\nebv_map(nc, dc, entity = 1, timestep = 1, verbose = FALSE)\n\n\n\n\n\n\n\nIf the map looks shifted by 180°\n\n\n\nThe file is using the [0, 360] longitude convention while the basemap expects [-180, 180]. Read the slice and wrap it before plotting:\nr &lt;- ebv_read(nc, dc, entity = 1, timestep = 1, type = \"r\")\nr &lt;- terra::rotate(r)",
+    "objectID": "05-validating.html#see-it-map-and-trend",
+    "href": "05-validating.html#see-it-map-and-trend",
+    "title": "5  Validating your EBVCube before uploading",
+    "section": "5.3 See it — map and trend",
+    "text": "5.3 See it — map and trend\nNumbers only tell you so much; a picture catches problems a summary hides, like data in the wrong hemisphere or an all-empty ocean. This is where ebvcube shines — two one-line functions turn a cube into a figure with no plotting or projection code of your own.\n\nMap a slicePlot the trend\n\n\nebv_map() draws a single time step as a classed choropleth, optionally overlaying country borders. One look confirms the data sit where they should:\n\nebv_map(nc, dc, entity = 1, timestep = 1, classes = 9, verbose = FALSE)\n\n\n\nebv_trend() collapses the spatial dimensions to one value per time step and draws the trajectory. It does double duty — it plots and returns the underlying numbers, so a flat line, a break, or an implausible jump is easy to spot and the values are yours to keep:\n\ntrend_vals &lt;- ebv_trend(nc, dc, entity = 1, method = \"mean\", verbose = FALSE)\ntrend_vals\n\n\n\n\n\n\n\n\n\n\nIf the map looks shifted by 180°\n\n\n\nThe file is using the [0, 360] longitude convention while the basemap expects [-180, 180]. Read the slice and wrap it before plotting:\nr &lt;- ebv_read(nc, dc, entity = 1, timestep = 1, type = \"r\")\nr &lt;- terra::rotate(r)",
     "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Validating your EBVCube before uploading</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Validating your EBVCube before uploading</span>"
     ]
   },
   {
     "objectID": "05-validating.html#compare-against-your-metadata",
     "href": "05-validating.html#compare-against-your-metadata",
-    "title": "6  Validating your EBVCube before uploading",
-    "section": "6.4 Compare against your metadata",
-    "text": "6.4 Compare against your metadata\nFinally, confirm the file says what you told it to say. Read the attributes back and check them against the metadata form (or the ebv_metadata() call) you used to create it:\n\nprops@general$title\nebv_properties(nc, dc, verbose = FALSE)@ebv_cube$units\n\nThe title, units, entity count, and time coverage should all match your metadata. If a unit or description is wrong, fix it in place with ebv_attribute() from Chapter 5 rather than rebuilding the file.",
+    "title": "5  Validating your EBVCube before uploading",
+    "section": "5.4 Compare against your metadata",
+    "text": "5.4 Compare against your metadata\nFinally, confirm the file says what you told it to say. Read the attributes back and check them against the metadata form (or the ebv_metadata() call) you used to create it:\n\nprops@general$title\nebv_properties(nc, dc, verbose = FALSE)@ebv_cube$units\n\nThe title, units, entity count, and time coverage should all match your metadata. If a unit or description is wrong, fix it in place with ebv_attribute() from Chapter 4 rather than rebuilding the file.",
     "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Validating your EBVCube before uploading</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Validating your EBVCube before uploading</span>"
     ]
   },
   {
     "objectID": "05-validating.html#a-pre-flight-checklist",
     "href": "05-validating.html#a-pre-flight-checklist",
-    "title": "6  Validating your EBVCube before uploading",
-    "section": "6.5 A pre-flight checklist",
-    "text": "6.5 A pre-flight checklist\nBefore you move to the portal, walk through this list. If every box ticks, the file is ready to upload:\n\nThe datacube paths list every metric and entity you expect.\nEntity names, dates, extent, and resolution match your metadata.\nUnits and the cube description read correctly.\nA map of at least one slice looks right, with no 180° shift.\nValue ranges are plausible and the valid-pixel count (n) is not zero.\n\nThe portal runs its own validation when you submit, but clearing these first saves a round trip. Panoply, introduced in Chapter 5, is a quick way to eyeball the structure outside R if you want a second opinion.\n\n\n\n\n\n\nCheckpoint. Your file’s structure, values, and map all match the dataset you meant to create, and every box in the pre-flight checklist is ticked. If so, you are ready to upload it to the EBV Data Portal in Chapter 7.",
+    "title": "5  Validating your EBVCube before uploading",
+    "section": "5.5 A pre-flight checklist",
+    "text": "5.5 A pre-flight checklist\nBefore you move to the portal, walk through this list. If every box ticks, the file is ready to upload:\n\nThe datacube paths list every metric and entity you expect.\nEntity names, dates, extent, and resolution match your metadata.\nUnits and the cube description read correctly.\nA map of at least one slice looks right, with no 180° shift.\nValue ranges are plausible and the valid-pixel count (n) is not zero.\n\nThe portal runs its own validation when you submit, but clearing these first saves a round trip. Panoply, introduced in Chapter 4, is a quick way to eyeball the structure outside R if you want a second opinion.\n\n\n\n\n\n\nCheckpoint. Your file’s structure, values, map, and trend all match the dataset you meant to create, and every box in the pre-flight checklist is ticked. If so, you are ready to upload it to the EBV Data Portal in Chapter 6.",
     "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Validating your EBVCube before uploading</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Validating your EBVCube before uploading</span>"
     ]
   },
   {
     "objectID": "06-uploading.html",
     "href": "06-uploading.html",
-    "title": "7  Uploading the dataset to the EBV Data Portal",
+    "title": "6  Uploading the dataset to the EBV Data Portal",
     "section": "",
-    "text": "7.1 Back to the upload form\nThe submission uses the same New Upload form you met in Chapter 4. Sign in with your GEO BON account and reopen your draft under Uploads. The General information and EBV attributes tabs are already filled from earlier, so the only tab left to finish is Data upload.",
+    "text": "6.1 Back to the upload form\nThe submission uses the same New Upload form you met in Chapter 3. Sign in with your GEO BON account and reopen your draft under Uploads. The General information and EBV attributes tabs are already filled from earlier, so the only tab left to finish is Data upload.",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Uploading the dataset to the EBV Data Portal</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Uploading the dataset to the EBV Data Portal</span>"
     ]
   },
   {
     "objectID": "06-uploading.html#uploading-your-netcdf",
     "href": "06-uploading.html#uploading-your-netcdf",
-    "title": "7  Uploading the dataset to the EBV Data Portal",
-    "section": "7.2 Uploading your netCDF",
-    "text": "7.2 Uploading your netCDF\nOn the Data upload tab the portal offers two ways to submit: a ZIP of GeoTIFFs, or a netCDF built with the ebvcube package. You built the netCDF, so choose that option and upload your .nc file.\nIf the form asks for a preview image, add one. A small map of a single slice, exported from ebv_map(), is enough and makes your dataset easier to recognize in the catalogue. The portal runs its own validation when you upload; if it flags anything, work back through the checks in Chapter 6, fix the file, and upload it again.",
+    "title": "6  Uploading the dataset to the EBV Data Portal",
+    "section": "6.2 Uploading your netCDF",
+    "text": "6.2 Uploading your netCDF\nThe Data upload tab offers two ways to submit: a ZIP of GeoTIFFs, or a netCDF built with the ebvcube package. You built the netCDF, so choose that option and upload your .nc file.\n\n\n\n\n\n\nAdd a preview image\n\n\n\nIf the form asks for one, a small map of a single slice exported from ebv_map() is enough — it makes your dataset easier to recognise in the catalogue. The portal runs its own validation on upload; if it flags anything, work back through the checks in Chapter 5, fix the file, and upload again.",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Uploading the dataset to the EBV Data Portal</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Uploading the dataset to the EBV Data Portal</span>"
     ]
   },
   {
     "objectID": "06-uploading.html#submitting-for-review",
     "href": "06-uploading.html#submitting-for-review",
-    "title": "7  Uploading the dataset to the EBV Data Portal",
-    "section": "7.3 Submitting for review",
-    "text": "7.3 Submitting for review\nOnce the file is in, submit the dataset for review. It moves out of Draft into a review state, where the portal team checks the metadata and the file against the EBV standard before it goes public. Expect a wait, and possibly a request for small changes. When it is approved, the dataset is published: it appears in the public catalogue and becomes downloadable with ebv_download().",
+    "title": "6  Uploading the dataset to the EBV Data Portal",
+    "section": "6.3 Submitting for review",
+    "text": "6.3 Submitting for review\nOnce the file is in, submit the dataset for review. It moves out of Draft into a review state, where the portal team checks the metadata and the file against the EBV standard before it goes public. Expect a wait, and possibly a request for small changes. When it is approved, the dataset is published: it appears in the public catalogue and becomes downloadable with ebv_download().",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Uploading the dataset to the EBV Data Portal</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Uploading the dataset to the EBV Data Portal</span>"
     ]
   },
   {
     "objectID": "06-uploading.html#after-publication-doi-citation-and-versions",
     "href": "06-uploading.html#after-publication-doi-citation-and-versions",
-    "title": "7  Uploading the dataset to the EBV Data Portal",
-    "section": "7.4 After publication: DOI, citation, and versions",
-    "text": "7.4 After publication: DOI, citation, and versions\nOn publication the portal assigns your dataset a DOI and generates its citation, both shown on the dataset page. You can see this on the live page for the running example, dataset id = 1, where its version history, DOI, and citation all appear. Point people to those when they cite your data, not to the ebvcube package citation, which credits the software rather than the dataset.\nIf you later revise the data, upload it as a new version instead of editing the published one. The portal keeps versions distinct, so anyone who already cited the earlier DOI still lands on the exact data they used.\nHere is that page, embedded live (in the HTML version of the book):\n\n\n\nIf the page does not load, open dataset id = 1 on the EBV Data Portal.\n\n\n\n\n\n\n\nCheckpoint. Your netCDF is uploaded, submitted, and, once approved, live on the EBV Data Portal with its own DOI. If anything snagged along the way, Chapter 8 collects the fixes for the problems that come up most often.",
+    "title": "6  Uploading the dataset to the EBV Data Portal",
+    "section": "6.4 After publication: DOI, citation, and versions",
+    "text": "6.4 After publication: DOI, citation, and versions\nOn publication the portal assigns your dataset a DOI and generates its citation, both shown on the dataset page. You can see this on the live page for the running example, dataset id = 1, where its version history, DOI, and citation all appear.\n\n\n\n\n\n\nCite the dataset, not the package\n\n\n\nPoint people to the dataset DOI when they cite your data — not to the ebvcube package citation, which credits the software rather than the dataset. If you later revise the data, upload it as a new version instead of editing the published one. The portal keeps versions distinct, so anyone who already cited the earlier DOI still lands on the exact data they used.\n\n\nHere is that page, embedded live (in the HTML version of the book):\n\n\n\nIf the page does not load, open dataset id = 1 on the EBV Data Portal.\n\n\n\n\n\n\n\nCheckpoint. Your netCDF is uploaded, submitted, and, once approved, live on the EBV Data Portal with its own DOI. If anything snagged along the way, Chapter 7 collects the fixes for the problems that come up most often.",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Uploading the dataset to the EBV Data Portal</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Uploading the dataset to the EBV Data Portal</span>"
     ]
   },
   {
     "objectID": "07-troubleshooting.html",
     "href": "07-troubleshooting.html",
-    "title": "8  Troubleshooting and getting help",
+    "title": "7  Troubleshooting and getting help",
     "section": "",
-    "text": "8.1 Installation\nThese are the problems that stop library(ebvcube) from loading. The full setup is in Chapter 3.",
+    "text": "7.1 Installation\nThese are the problems that stop library(ebvcube) from loading. The full setup is in Chapter 2.",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Troubleshooting and getting help</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Troubleshooting and getting help</span>"
     ]
   },
   {
     "objectID": "07-troubleshooting.html#installation",
     "href": "07-troubleshooting.html#installation",
-    "title": "8  Troubleshooting and getting help",
+    "title": "7  Troubleshooting and getting help",
     "section": "",
-    "text": "8.1.1 The Bioconductor packages are not found\nthere is no package called 'rhdf5' (or DelayedArray, or HDF5Array). These live on Bioconductor, not CRAN, so install.packages(\"ebvcube\") cannot pull them in on its own:\n\ninstall.packages(\"BiocManager\")\nBiocManager::install(c(\"rhdf5\", \"DelayedArray\", \"HDF5Array\"))\n\nThen retry library(ebvcube).\n\n\n8.1.2 package 'ebvcube' is not available for this version of R\nYou are on an older R, and Bioconductor releases are tied to specific R versions. Either update R to the current release, which is the cleaner fix, or install an older ebvcube that supports your R version:\n\ndevtools::install_github(\"EBVcube/ebvcube@v0.5.0\")   # adjust the tag\n\n\n\n8.1.3 Compilation fails on Linux with HDF5 or GDAL errors\nYou are missing the system libraries the R packages compile against. On Debian or Ubuntu:\nsudo apt-get install libhdf5-dev libgdal-dev libproj-dev libgeos-dev libudunits2-dev\nThen reinstall the dependency that failed (rhdf5, terra, and so on), not ebvcube itself, since the failure is in the dependency.\n\n\n8.1.4 HDF5 library version mismatched\nYour installed rhdf5 was built against a different HDF5 library than the one loaded at runtime. Reinstall it from a clean R session:\n\nremove.packages(\"rhdf5\")\nBiocManager::install(\"rhdf5\", force = TRUE)",
+    "text": "The Bioconductor packages are not found\n\n\n\n\n\nthere is no package called 'rhdf5' (or DelayedArray, or HDF5Array). These live on Bioconductor, not CRAN, so install.packages(\"ebvcube\") cannot pull them in on its own:\n\ninstall.packages(\"BiocManager\")\nBiocManager::install(c(\"rhdf5\", \"DelayedArray\", \"HDF5Array\"))\n\nThen retry library(ebvcube).\n\n\n\n\n\n\n\n\n\npackage ‘ebvcube’ is not available for this version of R\n\n\n\n\n\nYou are on an older R, and Bioconductor releases are tied to specific R versions. Either update R to the current release, which is the cleaner fix, or install an older ebvcube that supports your R version:\n\ndevtools::install_github(\"EBVcube/ebvcube@v0.5.0\")   # adjust the tag\n\n\n\n\n\n\n\n\n\n\nHDF5 library version mismatched\n\n\n\n\n\nYour installed rhdf5 was built against a different HDF5 library than the one loaded at runtime. Reinstall it from a clean R session:\n\nremove.packages(\"rhdf5\")\nBiocManager::install(\"rhdf5\", force = TRUE)",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Troubleshooting and getting help</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Troubleshooting and getting help</span>"
     ]
   },
   {
     "objectID": "07-troubleshooting.html#preparing-data-and-metadata",
     "href": "07-troubleshooting.html#preparing-data-and-metadata",
-    "title": "8  Troubleshooting and getting help",
-    "section": "8.2 Preparing data and metadata",
-    "text": "8.2 Preparing data and metadata\nMost metadata trouble comes from the controlled vocabularies. See Chapter 4 for the full form.\n\n8.2.1 A metadata value is rejected\nFields such as ebv_class, ebv_name, and ebv_entity_type accept only the terms the portal knows. If ebv_metadata() or the upload form refuses a value, it almost always does not match one of those terms. Copy the wording from the portal form’s pick lists, or check ?ebv_metadata for the accepted list, rather than typing your own phrasing.",
+    "title": "7  Troubleshooting and getting help",
+    "section": "7.2 Preparing data and metadata",
+    "text": "7.2 Preparing data and metadata\nMost metadata trouble comes from the controlled vocabularies. See Chapter 3 for the full form.\n\n\n\n\n\n\nA metadata value is rejected\n\n\n\n\n\nFields such as ebv_class, ebv_name, and ebv_entity_type accept only the terms the portal knows. If ebv_metadata() or the upload form refuses a value, it almost always does not match one of those terms. Copy the wording from the portal form’s pick lists, or check ?ebv_metadata for the accepted list, rather than typing your own phrasing.",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Troubleshooting and getting help</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Troubleshooting and getting help</span>"
     ]
   },
   {
     "objectID": "07-troubleshooting.html#creating-the-cube",
     "href": "07-troubleshooting.html#creating-the-cube",
-    "title": "8  Troubleshooting and getting help",
-    "section": "8.3 Creating the cube",
-    "text": "8.3 Creating the cube\nErrors here usually mean the metadata and the data disagree about shape. The build itself is in Chapter 5.\n\n8.3.1 entities length does not match metadata\nThe entities vector you passed to ebv_create() has a different length than the entity count declared in the JSON. Fix one so the two agree.\n\n\n8.3.2 ebv_add_data() fails with a dimension mismatch\nThe GeoTIFF you are adding does not sit on the same grid as the netCDF, so its resolution, extent, or CRS is off. Reproject it onto the netCDF’s grid before adding it:\n\ntarget_r &lt;- ebv_read(new_nc, \"metric_1/ebv_cube\",\n                     entity = 1, timestep = 1, type = \"r\")\n\nr  &lt;- terra::rast(\"your_data.tif\")\nr2 &lt;- terra::project(r, target_r)          # match CRS, resolution, extent\nterra::writeRaster(r2, \"your_data_aligned.tif\", overwrite = TRUE)\n\nAdd your_data_aligned.tif instead of the original.\n\n\n8.3.3 Units, titles, or descriptions look wrong after ebv_create()\nYou do not need to rebuild the file. Fix the attribute in place with ebv_attribute(), as shown in Chapter 5.",
+    "title": "7  Troubleshooting and getting help",
+    "section": "7.3 Creating the cube",
+    "text": "7.3 Creating the cube\nErrors here usually mean the metadata and the data disagree about shape. The build itself is in Chapter 4.\n\n\n\n\n\n\nentities length does not match metadata\n\n\n\n\n\nThe entities vector you passed to ebv_create() has a different length than the entity count declared in the JSON. Fix one so the two agree.\n\n\n\n\n\n\n\n\n\nebv_add_data() fails with a dimension mismatch\n\n\n\n\n\nThe GeoTIFF you are adding does not sit on the same grid as the netCDF, so its resolution, extent, or CRS is off. Reproject it onto the netCDF’s grid before adding it:\n\ntarget_r &lt;- ebv_read(new_nc, \"metric_1/ebv_cube\",\n                     entity = 1, timestep = 1, type = \"r\")\n\nr  &lt;- terra::rast(\"your_data.tif\")\nr2 &lt;- terra::project(r, target_r)          # match CRS, resolution, extent\nterra::writeRaster(r2, \"your_data_aligned.tif\", overwrite = TRUE)\n\nAdd your_data_aligned.tif instead of the original.\n\n\n\n\n\n\n\n\n\nUnits, titles, or descriptions look wrong after ebv_create()\n\n\n\n\n\nYou do not need to rebuild the file. Fix the attribute in place with ebv_attribute(), as shown in Chapter 4.",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Troubleshooting and getting help</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Troubleshooting and getting help</span>"
     ]
   },
   {
     "objectID": "07-troubleshooting.html#reading-the-file-back",
     "href": "07-troubleshooting.html#reading-the-file-back",
-    "title": "8  Troubleshooting and getting help",
-    "section": "8.4 Reading the file back",
-    "text": "8.4 Reading the file back\nThese come up when you validate your file or read a published one. The checks are in Chapter 6.\n\n8.4.1 ebv_read() says “Not enough RAM”\nThe cube you asked for is larger than the package thinks your machine can hold. Two ways out: subset it spatially first with ebv_read_bb() or ebv_read_shp(), or read it lazily with type = \"da\" to get a DelayedArray. Note that ignore_RAM = TRUE only switches off the safety check; it does not make the read lazy.\n\n\n8.4.2 ebv_read_shp() returns an array full of NA\nTwo usual causes. Either the shapefile is in a different projection from the netCDF, so reproject it to match:\n\nshp_p &lt;- sf::st_transform(sf::st_read(shp), 4326)\nsf::st_write(shp_p, \"shp_wgs84.shp\")\n\nOr the shapefile and the file’s extent do not overlap at all. Compare them before reading:\n\nebv_properties(nc, verbose = FALSE)@spatial$extent   # c(xmin, xmax, ymin, ymax)\nsf::st_bbox(sf::st_read(shp))\n\n\n\n8.4.3 The map looks shifted by 180°\nThe file uses the [0, 360] longitude convention while your basemap expects [-180, 180]. Read the slice and wrap it with terra::rotate(), as described in Chapter 6.",
+    "title": "7  Troubleshooting and getting help",
+    "section": "7.4 Reading the file back",
+    "text": "7.4 Reading the file back\nThese come up when you validate your file or read a published one. The checks are in Chapter 5.\n\n\n\n\n\n\nebv_read() says “Not enough RAM”\n\n\n\n\n\nThe cube you asked for is larger than the package thinks your machine can hold. Two ways out: subset it spatially first with ebv_read_bb() or ebv_read_shp(), or read it lazily with type = \"da\" to get a DelayedArray. Note that ignore_RAM = TRUE only switches off the safety check; it does not make the read lazy.\n\n\n\n\n\n\n\n\n\nebv_read_shp() returns an array full of NA\n\n\n\n\n\nTwo usual causes. Either the shapefile is in a different projection from the netCDF, so reproject it to match:\n\nshp_p &lt;- sf::st_transform(sf::st_read(shp), 4326)\nsf::st_write(shp_p, \"shp_wgs84.shp\")\n\nOr the shapefile and the file’s extent do not overlap at all. Compare them before reading:\n\nebv_properties(nc, verbose = FALSE)@spatial$extent   # c(xmin, xmax, ymin, ymax)\nsf::st_bbox(sf::st_read(shp))\n\n\n\n\n\n\n\n\n\n\nThe map looks shifted by 1800b0\n\n\n\n\n\nThe file uses the [0, 360] longitude convention while your basemap expects [-180, 180]. Read the slice and wrap it with terra::rotate(), as described in Chapter 5.",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Troubleshooting and getting help</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Troubleshooting and getting help</span>"
     ]
   },
   {
     "objectID": "07-troubleshooting.html#uploading-to-the-portal",
     "href": "07-troubleshooting.html#uploading-to-the-portal",
-    "title": "8  Troubleshooting and getting help",
-    "section": "8.5 Uploading to the portal",
-    "text": "8.5 Uploading to the portal\nThe submission steps are in Chapter 7; here are the snags that interrupt them.\n\n8.5.1 The upload is rejected\nThe portal validates your file when you upload it. If it pushes the file back, the fault is almost always something the pre-flight checks in Chapter 6 would have caught, so re-run those, fix the file, and upload again. A very large file can also be slow or time out; before you assume the portal is at fault, make sure the file is not larger than it needs to be.\n\n\n8.5.2 A value you need is not in a pick list\nThe form’s controlled vocabularies are deliberate. Choose the closest listed term rather than forcing your own, and if nothing fits, ask the portal team through the contact route on the dataset page rather than working around it.\n\n\n8.5.3 The dataset is stuck in review\nReview is done by people, so it takes time, and a request for small changes is normal. If a long stretch passes with no word, follow up through the dataset page contact or GEO BON.",
+    "title": "7  Troubleshooting and getting help",
+    "section": "7.5 Uploading to the portal",
+    "text": "7.5 Uploading to the portal\nThe submission steps are in Chapter 6; here are the snags that interrupt them.\n\n\n\n\n\n\nThe upload is rejected\n\n\n\n\n\nThe portal validates your file when you upload it. If it pushes the file back, the fault is almost always something the pre-flight checks in Chapter 5 would have caught, so re-run those, fix the file, and upload again. A very large file can also be slow or time out; before you assume the portal is at fault, make sure the file is not larger than it needs to be.\n\n\n\n\n\n\n\n\n\nA value you need is not in a pick list\n\n\n\n\n\nThe form’s controlled vocabularies are deliberate. Choose the closest listed term rather than forcing your own, and if nothing fits, ask the portal team through the contact route on the dataset page rather than working around it.\n\n\n\n\n\n\n\n\n\nThe dataset is stuck in review\n\n\n\n\n\nReview is done by people, so it takes time, and a request for small changes is normal. If a long stretch passes with no word, follow up through the dataset page contact or GEO BON.",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Troubleshooting and getting help</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Troubleshooting and getting help</span>"
     ]
   },
   {
     "objectID": "07-troubleshooting.html#getting-help-and-reporting-bugs",
     "href": "07-troubleshooting.html#getting-help-and-reporting-bugs",
-    "title": "8  Troubleshooting and getting help",
-    "section": "8.6 Getting help and reporting bugs",
-    "text": "8.6 Getting help and reporting bugs\nIf none of the above fixes it, a good bug report is the fastest way forward. Package bugs go to the GitHub issue tracker, and a report the maintainers can act on includes:\n\nthe output of sessionInfo(),\na minimal reproducible example, ideally on a dataset that ships with the package,\nthe full error message, and\nwhat you expected to happen.\n\nFor open questions rather than bugs, use the GitHub Discussions board. Before posting either, check you are on the latest release with packageVersion(\"ebvcube\"), since the fix may already be out.\nTwo more things worth knowing. To cite the package, run citation(\"ebvcube\"), which prints both a plain-text and a BibTeX entry; to cite a dataset, use its own DOI from the portal page rather than the package citation (see Chapter 7). And the package is open source under GPL-3, with the source on GitHub, so pull requests are welcome.\n\n\n\n\n\n\nCheckpoint. You can find the stage where you got stuck, apply the fix, and, if it turns out to be a genuine bug, file a report the maintainers can act on. That closes the whole arc, from a raster on your disk to a published dataset with a DOI. For further reading and references, see Chapter 9.",
+    "title": "7  Troubleshooting and getting help",
+    "section": "7.6 Getting help and reporting bugs",
+    "text": "7.6 Getting help and reporting bugs\nIf none of the above fixes it, a good bug report is the fastest way forward. Package bugs go to the GitHub issue tracker, and a report the maintainers can act on includes:\n\nthe output of sessionInfo(),\na minimal reproducible example, ideally on a dataset that ships with the package,\nthe full error message, and\nwhat you expected to happen.\n\nFor open questions rather than bugs, use the GitHub Discussions board. Before posting either, check you are on the latest release with packageVersion(\"ebvcube\"), since the fix may already be out.\n\n\n\n\n\n\nCiting and licensing\n\n\n\nTo cite the package, run citation(\"ebvcube\"), which prints both a plain-text and a BibTeX entry; to cite a dataset, use its own DOI from the portal page rather than the package citation (see Chapter 6). The package is open source under GPL-3, with the source on GitHub, so pull requests are welcome.\n\n\n\n\n\n\n\n\nCheckpoint. You can find the stage where you got stuck, apply the fix, and, if it turns out to be a genuine bug, file a report the maintainers can act on. That closes the whole arc, from a raster on your disk to a published dataset with a DOI. For further reading and references, see Chapter 8.",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Troubleshooting and getting help</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Troubleshooting and getting help</span>"
     ]
   },
   {
     "objectID": "08-resources.html",
     "href": "08-resources.html",
-    "title": "9  Further reading and references",
+    "title": "8  Further reading and references",
     "section": "",
-    "text": "9.1 Documentation and the format specification\nFor installing the package, see Chapter 3; for where to ask questions or report a bug, see Chapter 8.",
+    "text": "8.1 Documentation and the format specification\nFor installing the package, see Chapter 2; for where to ask questions or report a bug, see Chapter 7.",
     "crumbs": [
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Further reading and references</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Further reading and references</span>"
     ]
   },
   {
     "objectID": "08-resources.html#documentation-and-the-format-specification",
     "href": "08-resources.html#documentation-and-the-format-specification",
-    "title": "9  Further reading and references",
+    "title": "8  Further reading and references",
     "section": "",
     "text": "EBV netCDF format specification — the authoritative description of the EBVCube format: https://github.com/EBVcube/EBVCube-format\nebvcube documentation book — the full package reference, including advanced usage beyond this tutorial: https://EBVcube.github.io/ebvcube/\nebvcube source on GitHub — code and release history: https://github.com/EBVcube/ebvcube\nRunning example dataset — “Local bird diversity (cSAR/BES-SIM)”, the dataset followed throughout this book: https://portal.geobon.org/ebv-detail?id=1 (DOI 10.25829/8grx36). Its official citation is on the dataset page.",
     "crumbs": [
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Further reading and references</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Further reading and references</span>"
     ]
   },
   {
     "objectID": "08-resources.html#references",
     "href": "08-resources.html#references",
-    "title": "9  Further reading and references",
-    "section": "9.2 References",
-    "text": "9.2 References",
+    "title": "8  Further reading and references",
+    "section": "8.2 References",
+    "text": "8.2 References\n\n\nGroup on Earth Observations Biodiversity Observation Network. (n.d.).\nGEO BON. https://geobon.org/. Retrieved July 31, 2026, from https://geobon.org/\n\n\nPereira, H. M., Ferrier, S., Walters, M., Geller, G. N., Jongman, R. H.,\nScholes, R. J., Bruford, M. W., Brummitt, N., Butchart, S. H., Cardoso,\nA., et al. (2013). Essential biodiversity variables. Science,\n339(6117), 277–278.",
     "crumbs": [
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Further reading and references</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Further reading and references</span>"
     ]
   }
 ]

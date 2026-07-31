@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="A step-by-step tutorial on turning your data into an EBVCube with the ebvcube R package, then validating and publishing it as a citable, FAIR dataset on the EBV Data Portal.">
 
-<title>3&nbsp; Installing software and the ebvcube package – From Raster to Portal: Creating and Publishing an EBVCube</title>
+<title>2&nbsp; Installing software and the ebvcube R package – From Raster to Portal: Creating and Publishing an EBVCube</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -118,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02-installation.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> package</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02-installation.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> R package</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -131,7 +130,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./images/ebv_logo.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">From Raster to Portal: Creating and Publishing an EBVCube</a> 
         <div class="sidebar-tools-main">
@@ -150,55 +152,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Overview</span></span></a>
+ <span class="menu-text">Overview</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01-introduction.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02-installation.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> package</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> R package</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03-preparing-data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04-creating-the-cube.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> package</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> R package</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05-validating.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./06-uploading.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./07-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Troubleshooting and getting help</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Troubleshooting and getting help</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08-resources.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Further reading and references</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Further reading and references</span></span></a>
   </div>
 </li>
     </ul>
@@ -211,10 +213,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#what-you-need-first" id="toc-what-you-need-first" class="nav-link active" data-scroll-target="#what-you-need-first"><span class="header-section-number">3.1</span> What you need first</a></li>
-  <li><a href="#installing-ebvcube-from-cran" id="toc-installing-ebvcube-from-cran" class="nav-link" data-scroll-target="#installing-ebvcube-from-cran"><span class="header-section-number">3.2</span> Installing <code>ebvcube</code> from CRAN</a></li>
-  <li><a href="#sec-bioc" id="toc-sec-bioc" class="nav-link" data-scroll-target="#sec-bioc"><span class="header-section-number">3.3</span> Adding the Bioconductor dependencies</a></li>
-  <li><a href="#verifying-your-installation" id="toc-verifying-your-installation" class="nav-link" data-scroll-target="#verifying-your-installation"><span class="header-section-number">3.4</span> Verifying your installation</a></li>
+  <li><a href="#what-you-need-first" id="toc-what-you-need-first" class="nav-link active" data-scroll-target="#what-you-need-first"><span class="header-section-number">2.1</span> What you need first</a></li>
+  <li><a href="#installing-ebvcube-from-cran" id="toc-installing-ebvcube-from-cran" class="nav-link" data-scroll-target="#installing-ebvcube-from-cran"><span class="header-section-number">2.2</span> Installing <code>ebvcube</code> from CRAN</a></li>
+  <li><a href="#sec-bioc" id="toc-sec-bioc" class="nav-link" data-scroll-target="#sec-bioc"><span class="header-section-number">2.3</span> Adding the Bioconductor dependencies</a></li>
+  <li><a href="#verifying-your-installation" id="toc-verifying-your-installation" class="nav-link" data-scroll-target="#verifying-your-installation"><span class="header-section-number">2.4</span> Verifying your installation</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/02-installation.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -223,7 +225,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-installation" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> package</span></span></h1>
+<h1 class="title"><span id="sec-installation" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> R package</span></span></h1>
 </div>
 
 
@@ -240,116 +242,139 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>By the end of this unit, you will be able to:</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="In this unit">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In this unit
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>By the end you will be able to:</p>
 <ul>
 <li>confirm that your R installation meets the requirements for <code>ebvcube</code>;</li>
 <li>install the <code>ebvcube</code> package and its dependencies;</li>
 <li>verify your setup by loading the package and opening an example dataset.</li>
 </ul>
-<p>This unit prepares your machine for the rest of the tutorial. You will install <code>ebvcube</code> and its dependencies, then test the installation by opening an example dataset. Once that’s done, you are ready to prepare your own data in Unit 3.</p>
-<section id="what-you-need-first" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="what-you-need-first"><span class="header-section-number">3.1</span> What you need first</h2>
+</div>
+</div>
+<p>This unit prepares your machine for the rest of the tutorial. You install <code>ebvcube</code> and its dependencies, then test the installation by opening an example dataset. Once that works, you are ready to prepare your own data in <a href="./03-preparing-data.html">Unit 3</a>.</p>
+<section id="what-you-need-first" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="what-you-need-first"><span class="header-section-number">2.1</span> What you need first</h2>
 <p>Before installing <code>ebvcube</code>, make sure you have:</p>
-<ul>
-<li><strong>R ≥ 4.2.0</strong>: The minimum version supported by <code>ebvcube</code>. Check yours in any R session:</li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>    R.version.string</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre><code>If it is older, update R first, or CRAN will refuse to install the package.</code></pre>
-<ul>
-<li><strong>RStudio</strong> (recommended): a free, widely used editor for R. It is not strictly required, but every code example in this tutorial assumes you are working in it.</li>
-</ul>
-<p>The lower-level libraries <code>ebvcube</code> relies on, <strong>HDF5</strong> (for reading netCDF-4 files) and <strong>GDAL</strong> (for spatial data), are installed for you automatically on Windows and macOS: HDF5 comes with the Bioconductor package <code>rhdf5</code>, and GDAL comes with the CRAN build of <code>terra</code>. There is nothing extra to set up.</p>
+<div class="grid">
+<div class="g-col-12 g-col-md-6 border rounded p-3">
+<p><strong>R ≥ 4.2.0</strong> <span class="badge bg-secondary">required</span></p>
+<p><span class="small text-muted">The minimum version <code>ebvcube</code> supports. Check yours with <code>R.version.string</code>, and if it is older, update R first, or CRAN will refuse to install the package.</span></p>
+</div>
+<div class="g-col-12 g-col-md-6 border rounded p-3">
+<p><strong>RStudio</strong> <span class="badge bg-secondary">recommended</span></p>
+<p><span class="small text-muted">A free, widely used editor for R. Not strictly required, but every code example in this tutorial assumes you are working in it. Download it <a href="https://posit.co/downloads">here</a></span></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="What about HDF5 and GDAL?">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+What about HDF5 and GDAL?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The lower-level libraries <code>ebvcube</code> relies on, <strong>HDF5</strong> (for reading netCDF-4 files) and <strong>GDAL</strong> (for spatial data), install automatically on Windows and macOS: HDF5 comes with the Bioconductor package <code>rhdf5</code>, and GDAL comes with the CRAN build of <code>terra</code>. There is nothing extra to set up.</p>
+</div>
+</div>
+</div>
 </section>
-<section id="installing-ebvcube-from-cran" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="installing-ebvcube-from-cran"><span class="header-section-number">3.2</span> Installing <code>ebvcube</code> from CRAN</h2>
+<section id="installing-ebvcube-from-cran" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="installing-ebvcube-from-cran"><span class="header-section-number">2.2</span> Installing <code>ebvcube</code> from CRAN</h2>
 <p>For most users, the released version on CRAN is all you need:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ebvcube"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ebvcube"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>CRAN resolves all of the <em>CRAN</em> dependencies automatically. Three dependencies, however, live on <strong>Bioconductor</strong> rather than CRAN, so on a fresh machine you will usually need the one-time step in the next section as well.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-default callout-note callout-titled" title="Other ways to install">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 Other ways to install
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Most people should use CRAN. If you need a newer feature, you can install the development version with <code>devtools::install_github("EBVcube/ebvcube", ref = "dev")</code>, or get the binary builds from the <a href="https://b-cubed-eu.r-universe.dev/">b-cubed r-universe</a>. These are covered in the package’s <a href="https://github.com/EBVcube/ebvcube">installation guide</a>.</p>
 </div>
 </div>
+</div>
 </section>
-<section id="sec-bioc" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="sec-bioc"><span class="header-section-number">3.3</span> Adding the Bioconductor dependencies</h2>
-<p>Three of <code>ebvcube</code>’s dependencies come from <a href="https://bioconductor.org/">Bioconductor</a>, because reading EBVCube files means reading HDF5 under the hood:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 79%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Package</th>
-<th style="text-align: left;">Why it is needed</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><code>rhdf5</code></td>
-<td style="text-align: left;">Low-level HDF5 read/write (netCDF-4 is HDF5 underneath)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>DelayedArray</code></td>
-<td style="text-align: left;">Lazy, on-disk arrays so large cubes do not exhaust your RAM</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>HDF5Array</code></td>
-<td style="text-align: left;">Connects <code>DelayedArray</code> to HDF5 files</td>
-</tr>
-</tbody>
-</table>
+<section id="sec-bioc" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="sec-bioc"><span class="header-section-number">2.3</span> Adding the Bioconductor dependencies</h2>
+<p>Three of <code>ebvcube</code>’s dependencies come from <a href="https://bioconductor.org/">Bioconductor</a> rather than CRAN, because reading EBVCube files means reading HDF5 under the hood:</p>
+<div class="grid">
+<div class="g-col-12 g-col-md-4 border rounded p-3">
+<p><code>rhdf5</code></p>
+<p><span class="small text-muted">Low-level HDF5 read/write, since netCDF-4 is HDF5 underneath.</span></p>
+</div>
+<div class="g-col-12 g-col-md-4 border rounded p-3">
+<p><code>DelayedArray</code></p>
+<p><span class="small text-muted">Lazy, on-disk arrays so large cubes do not exhaust your RAM.</span></p>
+</div>
+<div class="g-col-12 g-col-md-4 border rounded p-3">
+<p><code>HDF5Array</code></p>
+<p><span class="small text-muted">Connects <code>DelayedArray</code> to HDF5 files.</span></p>
+</div>
+</div>
 <p>If installing <code>ebvcube</code> reports that one of these is missing, install them with <code>BiocManager</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">"rhdf5"</span>, <span class="st">"DelayedArray"</span>, <span class="st">"HDF5Array"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">"rhdf5"</span>, <span class="st">"DelayedArray"</span>, <span class="st">"HDF5Array"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You only need to do this once per R installation.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-default callout-note callout-titled" title="Which Bioconductor version?">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 Which Bioconductor version?
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><code>BiocManager</code> automatically picks the Bioconductor release that matches your version of R, which is what you want. You can pin a specific release with <code>BiocManager::install(version = "3.22")</code>, but only do so if you have a reason to, each Bioconductor release requires a matching R version (3.22 needs R 4.5.x), so leaving it out is also a safe choice.</p>
 </div>
 </div>
+</div>
 </section>
-<section id="verifying-your-installation" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="verifying-your-installation"><span class="header-section-number">3.4</span> Verifying your installation</h2>
+<section id="verifying-your-installation" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="verifying-your-installation"><span class="header-section-number">2.4</span> Verifying your installation</h2>
 <p>First, load the package and confirm the version:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ebvcube)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">"ebvcube"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ebvcube)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">"ebvcube"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then open the small example dataset that ships with the package, a subset of the <em>Local bird diversity (cSAR/BES-SIM)</em> dataset. Because it is bundled, this needs no download and works offline:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"martins_comcom_subset.nc"</span>, <span class="at">package =</span> <span class="st">"ebvcube"</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>prop <span class="ot">&lt;-</span> <span class="fu">ebv_properties</span>(file, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>prop<span class="sc">@</span>general<span class="sc">$</span>title</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "Local bird diversity (cSAR/BES-SIM)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"martins_comcom_subset.nc"</span>, <span class="at">package =</span> <span class="st">"ebvcube"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>prop <span class="ot">&lt;-</span> <span class="fu">ebv_properties</span>(file, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>prop<span class="sc">@</span>general<span class="sc">$</span>title</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "Local bird diversity (cSAR/BES-SIM)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>If the title prints, your installation is working. When you are ready to pull the <em>full</em> dataset from the portal (≈ 4 MB), the same two lines work with a download instead of the bundled file. We do exactly that in the next unit:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">ebv_download</span>(<span class="at">id =</span> <span class="dv">1</span>, <span class="at">outputdir =</span> <span class="fu">tempdir</span>(), <span class="at">overwrite =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>prop <span class="ot">&lt;-</span> <span class="fu">ebv_properties</span>(file, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>prop<span class="sc">@</span>general<span class="sc">$</span>title</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">ebv_download</span>(<span class="at">id =</span> <span class="dv">1</span>, <span class="at">outputdir =</span> <span class="fu">tempdir</span>(), <span class="at">overwrite =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>prop <span class="ot">&lt;-</span> <span class="fu">ebv_properties</span>(file, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>prop<span class="sc">@</span>general<span class="sc">$</span>title</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-simple callout-tip">
 <div class="callout-body d-flex">
@@ -357,7 +382,7 @@ Which Bioconductor version?
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>Checkpoint.</strong> <code>library(ebvcube)</code> loads with no error, and <code>ebv_properties()</code> prints the dataset title. If both work, your setup is complete and you are ready to prepare biodiversity data in Unit 3.</p>
+<p><strong>Checkpoint.</strong> <code>library(ebvcube)</code> loads with no error, and <code>ebv_properties()</code> prints the dataset title. If both work, your setup is complete and you are ready to prepare biodiversity data in <a href="./03-preparing-data.html">Unit 3</a>.</p>
 </div>
 </div>
 </div>
@@ -933,12 +958,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./01-introduction.html" class="pagination-link" aria-label="Introduction">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./03-preparing-data.html" class="pagination-link" aria-label="Preparing biodiversity data and metadata">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

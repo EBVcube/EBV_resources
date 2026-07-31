@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="A step-by-step tutorial on turning your data into an EBVCube with the ebvcube R package, then validating and publishing it as a citable, FAIR dataset on the EBV Data Portal.">
 
-<title>2&nbsp; Introduction – From Raster to Portal: Creating and Publishing an EBVCube</title>
+<title>1&nbsp; Introduction – From Raster to Portal: Creating and Publishing an EBVCube</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -87,7 +106,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01-introduction.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01-introduction.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -100,7 +119,10 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./images/ebv_logo.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">From Raster to Portal: Creating and Publishing an EBVCube</a> 
         <div class="sidebar-tools-main">
@@ -119,55 +141,55 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Overview</span></span></a>
+ <span class="menu-text">Overview</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01-introduction.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02-installation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> package</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> R package</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03-preparing-data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04-creating-the-cube.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> package</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> R package</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05-validating.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./06-uploading.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./07-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Troubleshooting and getting help</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Troubleshooting and getting help</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08-resources.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Further reading and references</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Further reading and references</span></span></a>
   </div>
 </li>
     </ul>
@@ -180,11 +202,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#what-is-an-essential-biodiversity-variable" id="toc-what-is-an-essential-biodiversity-variable" class="nav-link active" data-scroll-target="#what-is-an-essential-biodiversity-variable"><span class="header-section-number">2.1</span> What is an Essential Biodiversity Variable?</a></li>
-  <li><a href="#the-six-ebv-classes" id="toc-the-six-ebv-classes" class="nav-link" data-scroll-target="#the-six-ebv-classes"><span class="header-section-number">2.2</span> The six EBV classes</a></li>
-  <li><a href="#why-netcdf-the-ebvcube-format" id="toc-why-netcdf-the-ebvcube-format" class="nav-link" data-scroll-target="#why-netcdf-the-ebvcube-format"><span class="header-section-number">2.3</span> Why netCDF? The EBVCube format</a></li>
-  <li><a href="#touring-the-ebv-data-portal" id="toc-touring-the-ebv-data-portal" class="nav-link" data-scroll-target="#touring-the-ebv-data-portal"><span class="header-section-number">2.4</span> Touring the EBV Data Portal</a></li>
-  <li><a href="#where-ebvcube-fits" id="toc-where-ebvcube-fits" class="nav-link" data-scroll-target="#where-ebvcube-fits"><span class="header-section-number">2.5</span> Where <code>ebvcube</code> fits</a></li>
+  <li><a href="#what-is-an-essential-biodiversity-variable" id="toc-what-is-an-essential-biodiversity-variable" class="nav-link active" data-scroll-target="#what-is-an-essential-biodiversity-variable"><span class="header-section-number">1.1</span> What is an Essential Biodiversity Variable?</a></li>
+  <li><a href="#the-six-ebv-classes" id="toc-the-six-ebv-classes" class="nav-link" data-scroll-target="#the-six-ebv-classes"><span class="header-section-number">1.2</span> The six EBV classes</a></li>
+  <li><a href="#why-netcdf-the-ebvcube-format" id="toc-why-netcdf-the-ebvcube-format" class="nav-link" data-scroll-target="#why-netcdf-the-ebvcube-format"><span class="header-section-number">1.3</span> Why netCDF? The EBVCube format</a></li>
+  <li><a href="#touring-the-ebv-data-portal" id="toc-touring-the-ebv-data-portal" class="nav-link" data-scroll-target="#touring-the-ebv-data-portal"><span class="header-section-number">1.4</span> Touring the EBV Data Portal</a></li>
+  <li><a href="#where-ebvcube-fits" id="toc-where-ebvcube-fits" class="nav-link" data-scroll-target="#where-ebvcube-fits"><span class="header-section-number">1.5</span> Where <code>ebvcube</code> fits</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/01-introduction.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -193,7 +215,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-intro" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></h1>
+<h1 class="title"><span id="sec-intro" class="quarto-section-identifier"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></h1>
 </div>
 
 
@@ -210,116 +232,127 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>By the end of this unit, you will be able to:</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="In this unit">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In this unit
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>By the end you will be able to:</p>
 <ul>
 <li>define an EBV and explain what it is for;</li>
-<li>name the six EBV classes and recognize how they appear on the portal;</li>
-<li>explain why the EBVCube stores data as netCDF, and what its format adds;</li>
+<li>name the six EBV classes and recognise how they appear on the portal;</li>
+<li>explain why the EBVCube stores data as netCDF, and what the format adds;</li>
 <li>find and inspect a dataset on the EBV Data Portal.</li>
 </ul>
-<p>This unit fills in the concepts you will lean on for the rest of the tutorial: what an EBV is, why the is settled on netCDF, and how datasets are organized. You do not need any software yet. We install <code>ebvcube</code> in Unit 2. For now, everything happens in your browser, on the EBV Data portal.</p>
-<section id="what-is-an-essential-biodiversity-variable" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="what-is-an-essential-biodiversity-variable"><span class="header-section-number">2.1</span> What is an Essential Biodiversity Variable?</h2>
-<p>An <strong>Essential Biodiversity Variable (EBV)</strong> is a standardized, derived measurement that captures a key dimension of biodiversity and enables consistent monitoring of its status and change over time. The concept was proposed by Pereira et al.&nbsp;(2013) and is maintained by the <a href="https://geobon.org/">Group on Earth Observations Biodiversity Observation Network (GEO BON)</a>. EBVs are produced by integrating and harmonizing multiple primary data sources, such as field observations, remote-sensing products, and model outputs, into a common, analysis-ready format. As a result, they provide an intermediate layer between raw biodiversity observations and the indicators used for biodiversity assessment, reporting, and decision making.</p>
-<p>Think of an EBV as the biodiversity counterpart to an <em>Essential Climate Variable</em>: a small, agreed-upon set of variables that different research groups can produce, compare, and combine because they follow the same definitions. That shared standardization is what makes biodiversity data from different projects, taxa, and regions consistent enough to track over time.</p>
+</div>
+</div>
+<p>This unit fills in the concepts you will lean on for the rest of the tutorial: what an EBV is, why it settled on netCDF, and how datasets are organised. You need no software yet, we install <code>ebvcube</code> in <a href="./02-installation.html">Unit 2</a>. For now, everything happens in your browser, on the EBV Data Portal.</p>
+<section id="what-is-an-essential-biodiversity-variable" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="what-is-an-essential-biodiversity-variable"><span class="header-section-number">1.1</span> What is an Essential Biodiversity Variable?</h2>
+<p>An <strong>Essential Biodiversity Variable (EBV)</strong> is a standardised, derived measurement that captures a key dimension of biodiversity and lets us monitor its status and change over time. The concept was proposed by <span class="citation" data-cites="pereira2013">Pereira et al. (<a href="08-resources.html#ref-pereira2013" role="doc-biblioref">2013</a>)</span> and is maintained by the <a href="https://geobon.org/">Group on Earth Observations Biodiversity Observation Network (GEO BON)</a> <span class="citation" data-cites="geobon">(<a href="08-resources.html#ref-geobon" role="doc-biblioref">Group on Earth Observations Biodiversity Observation Network, n.d.</a>)</span>. EBVs harmonise many primary sources, field observations, remote sensing, and model outputs, into a common, analysis-ready format. They sit as an intermediate layer between raw observations and the indicators used for assessment, reporting, and decision making.</p>
+<p>Think of an EBV as the biodiversity counterpart to an <em>Essential Climate Variable</em>: a small, agreed-upon set of variables that different groups can produce, compare, and combine because they follow the same definitions. That shared standardisation is what makes data from different projects, taxa, and regions consistent enough to track over time.</p>
 </section>
-<section id="the-six-ebv-classes" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="the-six-ebv-classes"><span class="header-section-number">2.2</span> The six EBV classes</h2>
-<p>EBVs are organized into six classes, each capturing a different dimension of biodiversity:</p>
-<ul>
-<li><strong>Genetic composition</strong></li>
-<li><strong>Species populations</strong></li>
-<li><strong>Species traits</strong></li>
-<li><strong>Community composition</strong></li>
-<li><strong>Ecosystem structure</strong></li>
-<li><strong>Ecosystem function</strong></li>
-</ul>
-<blockquote class="blockquote">
+<section id="the-six-ebv-classes" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="the-six-ebv-classes"><span class="header-section-number">1.2</span> The six EBV classes</h2>
+<p>EBVs are organised into six classes, each capturing a different dimension of biodiversity:</p>
+<div class="grid">
+<div class="g-col-12 g-col-sm-6 g-col-md-4 border rounded p-3">
+<p><strong>Genetic composition</strong></p>
+<p><span class="small text-muted">Genetic diversity and differentiation within and among populations.</span></p>
+</div>
+<div class="g-col-12 g-col-sm-6 g-col-md-4 border rounded p-3">
+<p><strong>Species populations</strong></p>
+<p><span class="small text-muted">Where species occur and how abundant they are.</span></p>
+</div>
+<div class="g-col-12 g-col-sm-6 g-col-md-4 border rounded p-3">
+<p><strong>Species traits</strong></p>
+<p><span class="small text-muted">Physical, physiological and behavioural characteristics of organisms.</span></p>
+</div>
+<div class="g-col-12 g-col-sm-6 g-col-md-4 border border-success rounded p-3">
+<p><strong>Community composition</strong> <span class="badge bg-success">our example</span></p>
+<p><span class="small text-muted">The diversity and mix of species within a community.</span></p>
+</div>
+<div class="g-col-12 g-col-sm-6 g-col-md-4 border rounded p-3">
+<p><strong>Ecosystem structure</strong></p>
+<p><span class="small text-muted">The physical build and extent of ecosystems.</span></p>
+</div>
+<div class="g-col-12 g-col-sm-6 g-col-md-4 border rounded p-3">
+<p><strong>Ecosystem function</strong></p>
+<p><span class="small text-muted">The processes and productivity that keep ecosystems running.</span></p>
+</div>
+</div>
 <p>The dataset we use throughout this tutorial, <em>Local bird diversity (cSAR/BES-SIM)</em>, belongs to the <strong>Community composition</strong> class.</p>
-</blockquote>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-default callout-note callout-titled" title="Canonical classes vs. what you see on the portal">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 Canonical classes vs.&nbsp;what you see on the portal
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The six EBV classes above are the canonical classification defined by GEO BON. On the <a href="https://portal.geobon.org/datasets">EBV Data Portal</a>, you may not see all six listed at once, the portal shows only the classes for which datasets are currently available. You may also come across more specific labels such as <strong>Species distribution</strong> or <strong>Ecosystem disturbance</strong>; these are finer sub-categories within the canonical classes.</p>
-<blockquote class="blockquote">
-<p><strong>Ecosystem services</strong> is not one of the six EBV classes. It relates to a separate, complementary GEO BON framework, the <strong>Essential Ecosystem Service Variables (EESVs)</strong>, which addresses the benefits people obtain from nature rather than biodiversity itself. For the official EBV classification, refer to the <a href="https://geobon.org/ebvs/what-are-ebvs/">GEO BON definitions page</a>.</p>
-</blockquote>
+<p>The six classes above are the canonical classification defined by GEO BON. On the <a href="https://portal.geobon.org/datasets">EBV Data Portal</a> you may not see all six at once; the portal lists only the classes for which datasets are currently available. You may also meet finer labels such as <strong>Species distribution</strong> or <strong>Ecosystem disturbance</strong>, which are sub-categories within the canonical classes.</p>
+<p><strong>Ecosystem services</strong> is <em>not</em> one of the six EBV classes. It belongs to a separate, complementary GEO BON framework, the <strong>Essential Ecosystem Service Variables (EESVs)</strong>, which covers the benefits people obtain from nature rather than biodiversity itself. For the official classification, see the <a href="https://geobon.org/ebvs/what-are-ebvs/">GEO BON definitions page</a>.</p>
+</div>
 </div>
 </div>
 </section>
-<section id="why-netcdf-the-ebvcube-format" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="why-netcdf-the-ebvcube-format"><span class="header-section-number">2.3</span> Why netCDF? The EBVCube format</h2>
-<p>A single EBV has a value at every location (<strong>longitude</strong>, <strong>latitude</strong>), at several points in <strong>time</strong>, and for each biological <strong>entity</strong> measured (a species, a group, an ecosystem type). Stored as separate map images, that becomes an unwieldy pile of files with no built-in context. The <a href="https://www.unidata.ucar.edu/software/netcdf/">Network Common Data Form (netCDF)</a>, long used in the climate sciences, instead holds it all in one <em>self-describing</em> file: the data and the information that explains it units, dates, entities, projection and travel together.</p>
-<p>The <strong>EBVCube</strong> is the standardized, netCDF based data format defined for EBVs. It follows two established conventions: <strong>CF v1.8</strong> (how coordinates, units, and time are encoded) and <strong>ACDD v1.3</strong> (the attributes portals use to index datasets), plus a few EBV specific rules set out in the <a href="https://github.com/EBVcube/EBVCube-format">EBVCube format specification</a>.</p>
-<p>Every data cube inside an EBVCube shares the same four dimensions, think of each pixel as carrying four pieces of information: <em>where</em> (longitude, latitude), <em>when</em> (time), and <em>which</em> entity:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 23%">
-<col style="width: 76%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Dimension</th>
-<th style="text-align: left;">Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><code>lon</code></td>
-<td style="text-align: left;">Longitude (or projected x-coordinate)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>lat</code></td>
-<td style="text-align: left;">Latitude (or projected y-coordinate)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>time</code></td>
-<td style="text-align: left;">Time steps (annual, decadal, scenario years, irregular)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>entity</code></td>
-<td style="text-align: left;">The biological unit (e.g.&nbsp;species, group of species, or ecosystem type)</td>
-</tr>
-</tbody>
-</table>
-<p>The <code>entity</code> dimension allows a single EBVCube to contain data for multiple species or other biological entities. Beyond these four dimensions, <em>metric</em> and <em>scenario</em> <strong>groups</strong> organize different biodiversity measures or future projections within the same file. We return to that structure in Unit 4.</p>
-<div id="fig-ebvcube-structure" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The EBVCube data model: a hierarchy of scenarios and metrics over four-dimensional data cubes, plus standardized metadata.">
+<section id="why-netcdf-the-ebvcube-format" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="why-netcdf-the-ebvcube-format"><span class="header-section-number">1.3</span> Why netCDF? The EBVCube format</h2>
+<p>A single EBV has a value at every location (<strong>longitude</strong>, <strong>latitude</strong>), at several points in <strong>time</strong>, and for each biological <strong>entity</strong> measured. Stored as separate map images, that becomes an unwieldy pile of files with no built-in context. The <a href="https://www.unidata.ucar.edu/software/netcdf/">Network Common Data Form (netCDF)</a>, long used in the climate sciences, instead holds it all in one <em>self-describing</em> file: the data travels together with the information that explains it, units, dates, entities, and projection.</p>
+<p>The <strong>EBVCube</strong> is the standardised, netCDF-based data format defined for EBVs. It follows two established conventions, <strong>CF v1.8</strong> <span class="citation" data-cites="cfconventions">(<a href="08-resources.html#ref-cfconventions" role="doc-biblioref"><strong>cfconventions?</strong></a>)</span> (how coordinates, units, and time are encoded) and <strong>ACDD v1.3</strong> <span class="citation" data-cites="acdd">(<a href="08-resources.html#ref-acdd" role="doc-biblioref"><strong>acdd?</strong></a>)</span> (the attributes portals use to index datasets), plus a few EBV-specific rules set out in the <a href="https://github.com/EBVcube/EBVCube-format">EBVCube format specification</a>.</p>
+<p>Every data cube inside an EBVCube shares the same four dimensions, so each pixel carries four pieces of information, <em>where</em>, <em>when</em>, and <em>which</em> entity:</p>
+<div class="grid">
+<div class="g-col-6 border rounded p-3">
+<p><code>lon</code></p>
+<p><span class="small text-muted">Longitude, or the projected x-coordinate.</span></p>
+</div>
+<div class="g-col-6 border rounded p-3">
+<p><code>lat</code></p>
+<p><span class="small text-muted">Latitude, or the projected y-coordinate.</span></p>
+</div>
+<div class="g-col-6 border rounded p-3">
+<p><code>time</code></p>
+<p><span class="small text-muted">One date or a whole series: annual, decadal, scenario years, irregular.</span></p>
+</div>
+<div class="g-col-6 border rounded p-3">
+<p><code>entity</code></p>
+<p><span class="small text-muted">The biological unit: a species, a group of species, or an ecosystem type.</span></p>
+</div>
+</div>
+<p>The <code>entity</code> dimension is what lets a single EBVCube hold data for many species or other biological units at once. Above these four dimensions, <em>metric</em> and <em>scenario</em> <strong>groups</strong> organise different biodiversity measures or future projections within the same file. We return to that structure in <a href="./04-creating-the-cube.html">Unit 4</a>.</p>
+<div id="fig-ebvcube-structure" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The EBVCube data model: a hierarchy of scenarios and metrics over four-dimensional data cubes, plus standardised metadata.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ebvcube-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="images/ebvcube-structure.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;2.1: Overview of the EBVCube data model. An EBV dataset combines a hierarchical structure of scenarios and metrics with four-dimensional data cubes (longitude, latitude, time, and entity), and carries standardized metadata following the CF 1.8, ACDD 1.3, and EBV conventions. Source: Quoß et al.&nbsp;(in preparation)."><img src="images/ebvcube-structure.png" class="img-fluid figure-img" alt="The EBVCube data model: a hierarchy of scenarios and metrics over four-dimensional data cubes, plus standardized metadata."></a>
+<a href="images/ebvcube-structure.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1.1: Overview of the EBVCube data model. An EBV dataset combines a hierarchical structure of scenarios and metrics with four-dimensional data cubes (longitude, latitude, time, and entity), and carries standardised metadata following the CF 1.8, ACDD 1.3, and EBV conventions. Source: Quoß et al.&nbsp;(in preparation)."><img src="images/ebvcube-structure.png" class="img-fluid figure-img" alt="The EBVCube data model: a hierarchy of scenarios and metrics over four-dimensional data cubes, plus standardised metadata."></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ebvcube-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.1: Overview of the EBVCube data model. An EBV dataset combines a hierarchical structure of scenarios and metrics with four-dimensional data cubes (longitude, latitude, time, and entity), and carries standardized metadata following the CF 1.8, ACDD 1.3, and EBV conventions. Source: Quoß et al.&nbsp;(in preparation).
+Figure&nbsp;1.1: Overview of the EBVCube data model. An EBV dataset combines a hierarchical structure of scenarios and metrics with four-dimensional data cubes (longitude, latitude, time, and entity), and carries standardised metadata following the CF 1.8, ACDD 1.3, and EBV conventions. Source: Quoß et al.&nbsp;(in preparation).
 </figcaption>
 </figure>
 </div>
 </section>
-<section id="touring-the-ebv-data-portal" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="touring-the-ebv-data-portal"><span class="header-section-number">2.4</span> Touring the EBV Data Portal</h2>
-<p>All published EBV datasets are available through the <a href="https://portal.geobon.org/">EBV Data Portal</a>. Throughout this tutorial, we will use a single dataset as our running example:</p>
-<div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<section id="touring-the-ebv-data-portal" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="touring-the-ebv-data-portal"><span class="header-section-number">1.4</span> Touring the EBV Data Portal</h2>
+<p>All published EBV datasets live on the <a href="https://portal.geobon.org/">EBV Data Portal</a>. Throughout this tutorial we use one of them as the running example:</p>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Worked example: <a href="https://portal.geobon.org/ebv-detail?id=1">Local bird diversity (cSAR/BES-SIM)</a>
+<div class="callout-body-container">
+<p><strong>Worked example: <a href="https://portal.geobon.org/ebv-detail?id=1">Local bird diversity (cSAR/BES-SIM)</a></strong></p>
+<p><span class="badge bg-secondary">id = 1</span> <span class="badge bg-secondary">Community composition</span> <span class="badge bg-secondary">DOI 10.25829/8grx36</span></p>
+<p>Martins, I., Pereira, H., Navarro, L. (2022). <em>Local bird diversity (cSAR/BES-SIM)</em> (Version 1) [Dataset]. German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig. DOI <a href="https://doi.org/10.25829/8grx36">10.25829/8grx36</a></p>
 </div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li><strong>Reference:</strong> Martins, I., Pereira, H., Navarro, L. (2022). Local bird diversity (cSAR/BES-SIM) (Version 1) [Dataset]. German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig. (https://doi.org/10.25829/8grx36)</li>
-<li><strong>EBV class:</strong> Community composition</li>
-<li><strong>ID:</strong> 1</li>
-<li><strong>DOI:</strong> <a href="https://doi.org/10.25829/8grx36">10.25829/8grx36</a></li>
-</ul>
 </div>
 </div>
 <p>Open the dataset page and you will find everything that makes an EBV dataset <strong>FAIR</strong> (findable, accessible, interoperable, and reusable):</p>
@@ -329,7 +362,7 @@ Worked example: <a href="https://portal.geobon.org/ebv-detail?id=1">Local bird d
 <li>the <strong>netCDF file</strong> itself, available for direct download (≈ 4 MB);</li>
 <li>an interactive <strong>EBV Visualizer</strong> for exploring maps and temporal trends without downloading anything.</li>
 </ul>
-<p>The three views you will use most are the <em>Discover</em> page (<a href="#fig-portal-discover" class="quarto-xref">Figure&nbsp;<span>2.2</span></a>), an individual <em>dataset page</em> (<a href="#fig-portal-detail" class="quarto-xref">Figure&nbsp;<span>2.3</span></a>), and the live <em>EBV Visualizer</em> below. Click either screenshot to enlarge it.</p>
+<p>The three views you will use most are the <em>Discover</em> page (<a href="#fig-portal-discover" class="quarto-xref">Figure&nbsp;<span>1.2</span></a>), an individual <em>dataset page</em> (<a href="#fig-portal-detail" class="quarto-xref">Figure&nbsp;<span>1.3</span></a>), and the live <em>EBV Visualizer</em>. Click either screenshot to enlarge it.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Discover page</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Dataset page</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">EBV Visualizer</a></li></ul>
 <div class="tab-content">
@@ -337,10 +370,10 @@ Worked example: <a href="https://portal.geobon.org/ebv-detail?id=1">Local bird d
 <div id="fig-portal-discover" class="quarto-float quarto-figure quarto-figure-center anchored" alt="EBV Data Portal Discover page showing EBV class filters and a list of datasets.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-portal-discover-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="images/portal-discover.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2.2: The discover page showing the EBV class filters and a list of datasets."><img src="images/portal-discover.png" class="img-fluid figure-img" alt="EBV Data Portal Discover page showing EBV class filters and a list of datasets."></a>
+<a href="images/portal-discover.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;1.2: The Discover page showing the EBV class filters and a list of datasets."><img src="images/portal-discover.png" class="img-fluid figure-img" alt="EBV Data Portal Discover page showing EBV class filters and a list of datasets."></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-portal-discover-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.2: The <em>discover</em> page showing the EBV class filters and a list of datasets.
+Figure&nbsp;1.2: The <em>Discover</em> page showing the EBV class filters and a list of datasets.
 </figcaption>
 </figure>
 </div>
@@ -349,10 +382,10 @@ Figure&nbsp;2.2: The <em>discover</em> page showing the EBV class filters and a 
 <div id="fig-portal-detail" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Detail page for the Local bird diversity dataset with metadata and a download button.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-portal-detail-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="images/portal-detail.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;2.3: The dataset page for id = 1, showing its gerneral metadata, and the netCDF download button."><img src="images/portal-detail.png" class="img-fluid figure-img" alt="Detail page for the Local bird diversity dataset with metadata and a download button."></a>
+<a href="images/portal-detail.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;1.3: The dataset page for id = 1, showing its general metadata and the netCDF download button."><img src="images/portal-detail.png" class="img-fluid figure-img" alt="Detail page for the Local bird diversity dataset with metadata and a download button."></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-portal-detail-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.3: The dataset page for id = 1, showing its gerneral metadata, and the netCDF download button.
+Figure&nbsp;1.3: The dataset page for id = 1, showing its general metadata and the netCDF download button.
 </figcaption>
 </figure>
 </div>
@@ -369,19 +402,27 @@ Figure&nbsp;2.3: The dataset page for id = 1, showing its gerneral metadata, and
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>Portal interface as of July 2026. The portal is updated from time to time, so small layout differences are normal, the metadata, DOI, and download are always on the dataset page.</p>
+<p>Portal interface as of July 2026. The portal is updated from time to time, so small layout differences are normal; the metadata, DOI, and download are always on the dataset page.</p>
 </div>
 </div>
 </div>
 <p>Browsing and inspecting datasets like this is how you <em>find</em> data on the portal. Next, we look at how you <em>work with</em> it.</p>
 </section>
-<section id="where-ebvcube-fits" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="where-ebvcube-fits"><span class="header-section-number">2.5</span> Where <code>ebvcube</code> fits</h2>
-<p>The portal is where EBV data is <em>published and discovered</em>; the <strong><code>ebvcube</code></strong> R package is how you <em>work with it</em>. It sits on both sides of the portal:</p>
-<ul>
-<li><p><strong>Reading published data.</strong> Give <code>ebvcube</code> a dataset’s numeric ID and it downloads the file, lists the data cubes inside, and reads, subsets, or maps them for you, pulling dataset id = 1 into R takes a couple of lines instead of a manual download and netCDF wrangling.</p></li>
-<li><p><strong>Producing new data.</strong> Starting from your own rasters or model output, <code>ebvcube</code> assembles them into a valid EBVCube, ready to upload and publish on the portal with its own DOI.</p></li>
-</ul>
+<section id="where-ebvcube-fits" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="where-ebvcube-fits"><span class="header-section-number">1.5</span> Where <code>ebvcube</code> fits</h2>
+<p>The portal is where EBV data is <em>published and discovered</em>; the <strong><code>ebvcube</code></strong> R package <span class="citation" data-cites="ebvcube2025 quoss2022">(<a href="08-resources.html#ref-ebvcube2025" role="doc-biblioref"><strong>ebvcube2025?</strong></a>; <a href="08-resources.html#ref-quoss2022" role="doc-biblioref"><strong>quoss2022?</strong></a>)</span> is how you <em>work with it</em>. It sits on both sides of the portal:</p>
+<div class="grid">
+<div class="g-col-12 g-col-md-6 border rounded p-3">
+<p><span class="small text-success">READ</span><br>
+<strong>Reading published data</strong></p>
+<p><span class="small text-muted">Give <code>ebvcube</code> a dataset’s numeric ID and it downloads the file, lists the cubes inside, and reads, subsets, or maps them, pulling id = 1 into R in a couple of lines instead of a manual download and netCDF wrangling.</span></p>
+</div>
+<div class="g-col-12 g-col-md-6 border rounded p-3">
+<p><span class="small text-success">CREATE</span><br>
+<strong>Producing new data</strong></p>
+<p><span class="small text-muted">Starting from your own rasters or model output, <code>ebvcube</code> assembles them into a valid EBVCube, ready to upload and publish on the portal with its own DOI.</span></p>
+</div>
+</div>
 <p>Read on one side, create on the other: that round trip is the workflow in the Overview diagram, and the path the rest of this tutorial follows, one step at a time.</p>
 <div class="callout callout-style-simple callout-tip">
 <div class="callout-body d-flex">
@@ -389,12 +430,20 @@ Figure&nbsp;2.3: The dataset page for id = 1, showing its gerneral metadata, and
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>Checkpoint.</strong> You just inspected dataset id = 1 on the portal, its <strong>EBV class</strong> (Community composition), its <strong>DOI</strong>, and its <strong>file format</strong> (netCDF). If those three make sense, you are ready to install the tools in Unit 2.</p>
+<p><strong>Checkpoint.</strong> You just inspected dataset id = 1 on the portal, its <strong>EBV class</strong> (Community composition), its <strong>DOI</strong>, and its <strong>file format</strong> (netCDF). If those three make sense, you are ready to install the tools in <a href="./02-installation.html">Unit 2</a>.</p>
 </div>
 </div>
 </div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-geobon" class="csl-entry" role="listitem">
+Group on Earth Observations Biodiversity Observation Network. (n.d.). <em><span>GEO BON</span></em>. <a href="https://geobon.org/" class="uri">https://geobon.org/</a>. Retrieved July 31, 2026, from <a href="https://geobon.org/">https://geobon.org/</a>
+</div>
+<div id="ref-pereira2013" class="csl-entry" role="listitem">
+Pereira, H. M., Ferrier, S., Walters, M., Geller, G. N., Jongman, R. H., Scholes, R. J., Bruford, M. W., Brummitt, N., Butchart, S. H., Cardoso, A., et al. (2013). Essential biodiversity variables. <em>Science</em>, <em>339</em>(6117), 277–278.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -965,17 +1014,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./index.html" class="pagination-link" aria-label="Overview">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Overview</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Overview</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./02-installation.html" class="pagination-link" aria-label="Installing software and the `ebvcube` package">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> package</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./02-installation.html" class="pagination-link" aria-label="Installing software and the `ebvcube` R package">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> R package</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/01-introduction.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>var lightboxQuarto = GLightbox({"loop":false,"selector":".lightbox","openEffect":"zoom","descPosition":"bottom","closeEffect":"zoom"});
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/01-introduction.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>var lightboxQuarto = GLightbox({"loop":false,"selector":".lightbox","closeEffect":"zoom","openEffect":"zoom","descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

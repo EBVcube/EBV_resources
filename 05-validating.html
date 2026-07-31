@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="A step-by-step tutorial on turning your data into an EBVCube with the ebvcube R package, then validating and publishing it as a citable, FAIR dataset on the EBV Data Portal.">
 
-<title>6&nbsp; Validating your EBVCube before uploading – From Raster to Portal: Creating and Publishing an EBVCube</title>
+<title>5&nbsp; Validating your EBVCube before uploading – From Raster to Portal: Creating and Publishing an EBVCube</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -118,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./05-validating.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./05-validating.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -131,7 +130,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./images/ebv_logo.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">From Raster to Portal: Creating and Publishing an EBVCube</a> 
         <div class="sidebar-tools-main">
@@ -150,55 +152,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Overview</span></span></a>
+ <span class="menu-text">Overview</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01-introduction.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02-installation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> package</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Installing software and the <code>ebvcube</code> R package</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03-preparing-data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Preparing biodiversity data and metadata</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04-creating-the-cube.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> package</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> R package</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05-validating.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./06-uploading.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./07-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Troubleshooting and getting help</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Troubleshooting and getting help</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08-resources.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Further reading and references</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Further reading and references</span></span></a>
   </div>
 </li>
     </ul>
@@ -211,11 +213,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#check-the-structure" id="toc-check-the-structure" class="nav-link active" data-scroll-target="#check-the-structure"><span class="header-section-number">6.1</span> Check the structure</a></li>
-  <li><a href="#check-the-values" id="toc-check-the-values" class="nav-link" data-scroll-target="#check-the-values"><span class="header-section-number">6.2</span> Check the values</a></li>
-  <li><a href="#check-it-visually" id="toc-check-it-visually" class="nav-link" data-scroll-target="#check-it-visually"><span class="header-section-number">6.3</span> Check it visually</a></li>
-  <li><a href="#compare-against-your-metadata" id="toc-compare-against-your-metadata" class="nav-link" data-scroll-target="#compare-against-your-metadata"><span class="header-section-number">6.4</span> Compare against your metadata</a></li>
-  <li><a href="#a-pre-flight-checklist" id="toc-a-pre-flight-checklist" class="nav-link" data-scroll-target="#a-pre-flight-checklist"><span class="header-section-number">6.5</span> A pre-flight checklist</a></li>
+  <li><a href="#check-the-structure" id="toc-check-the-structure" class="nav-link active" data-scroll-target="#check-the-structure"><span class="header-section-number">5.1</span> Check the structure</a></li>
+  <li><a href="#check-the-values" id="toc-check-the-values" class="nav-link" data-scroll-target="#check-the-values"><span class="header-section-number">5.2</span> Check the values</a></li>
+  <li><a href="#see-it-map-and-trend" id="toc-see-it-map-and-trend" class="nav-link" data-scroll-target="#see-it-map-and-trend"><span class="header-section-number">5.3</span> See it — map and trend</a></li>
+  <li><a href="#compare-against-your-metadata" id="toc-compare-against-your-metadata" class="nav-link" data-scroll-target="#compare-against-your-metadata"><span class="header-section-number">5.4</span> Compare against your metadata</a></li>
+  <li><a href="#a-pre-flight-checklist" id="toc-a-pre-flight-checklist" class="nav-link" data-scroll-target="#a-pre-flight-checklist"><span class="header-section-number">5.5</span> A pre-flight checklist</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/05-validating.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -224,7 +226,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-validating" class="quarto-section-identifier"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></h1>
+<h1 class="title"><span id="sec-validating" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></h1>
 </div>
 
 
@@ -241,24 +243,61 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>By the end of this unit, you will be able to:</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="In this unit">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In this unit
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>By the end you will be able to:</p>
 <ul>
 <li>inspect the structure of your netCDF with <code>ebv_properties()</code> and <code>ebv_datacubepaths()</code>;</li>
 <li>check that the cube values fall in a sensible range with <code>ebv_analyse()</code>;</li>
-<li>confirm the data maps correctly with <code>ebv_map()</code>;</li>
+<li>see the data as a map with <code>ebv_map()</code> and as a temporal trend with <code>ebv_trend()</code>;</li>
 <li>compare the finished file against the metadata you declared;</li>
 <li>run a short pre-flight checklist before you upload.</li>
 </ul>
-<p>In <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 5</span></a> you built an EBVCube and gave it a first structural look. This unit goes one step further and checks that the file is right before you upload it to the EBV Data Portal in <a href="06-uploading.html" class="quarto-xref"><span>Chapter 7</span></a>. Every problem you catch here is cheaper to fix now than after a reviewer finds it.</p>
-<p>The checks below use the file you created in the previous unit. Set <code>nc</code> to its path, and use the cube path for the running example, which has no scenario layer:</p>
+</div>
+</div>
+<p>In <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 4</span></a> you built an EBVCube and gave it a first structural look. This unit checks that the file is actually right before it goes to the EBV Data Portal in <a href="06-uploading.html" class="quarto-xref"><span>Chapter 6</span></a>. Every problem you catch here is cheaper to fix now than after a reviewer finds it.</p>
+<p>Validation runs on four quick questions — each one function, each cheaper than a rejected upload:</p>
+<div class="grid">
+<div class="g-col-12 g-col-sm-6 g-col-md-3 border rounded p-3">
+<p><span class="small text-success">STRUCTURE</span><br>
+Is the shape right?</p>
+<p><span class="small text-muted"><code>ebv_datacubepaths()</code> and <code>ebv_properties()</code> list the cubes and metadata.</span></p>
+</div>
+<div class="g-col-12 g-col-sm-6 g-col-md-3 border rounded p-3">
+<p><span class="small text-success">VALUES</span><br>
+Are the numbers sane?</p>
+<p><span class="small text-muted"><code>ebv_analyse()</code> reports min, max, mean and the valid-pixel count.</span></p>
+</div>
+<div class="g-col-12 g-col-sm-6 g-col-md-3 border rounded p-3">
+<p><span class="small text-success">VISUAL</span><br>
+Does it look right?</p>
+<p><span class="small text-muted"><code>ebv_map()</code> and <code>ebv_trend()</code> turn the cube into a picture.</span></p>
+</div>
+<div class="g-col-12 g-col-sm-6 g-col-md-3 border rounded p-3">
+<p><span class="small text-success">METADATA</span><br>
+Does it say the truth?</p>
+<p><span class="small text-muted">Read the attributes back and match them to what you declared.</span></p>
+</div>
+</div>
+<p>The checks below run against a real file. So the unit is self-contained, we validate the published dataset (id = 1); when you validate your <em>own</em> cube, point <code>nc</code> at the file you created in <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 4</span></a> instead:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ebvcube)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>nc <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">"bird_diversity.nc"</span>)   <span class="co"># the file from @sec-creating</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="st">"metric_1/ebv_cube"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Self-contained: download the published cube to a temporary directory.</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># For your own file, replace this with: nc &lt;- "path/to/your_cube.nc"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>nc <span class="ot">&lt;-</span> <span class="fu">ebv_download</span>(<span class="at">id =</span> <span class="dv">1</span>, <span class="at">outputdir =</span> <span class="fu">tempdir</span>(), <span class="at">overwrite =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="st">"metric_1/ebv_cube"</span>    <span class="co"># the running example has no scenario layer</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="check-the-structure" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="check-the-structure"><span class="header-section-number">6.1</span> Check the structure</h2>
+<section id="check-the-structure" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="check-the-structure"><span class="header-section-number">5.1</span> Check the structure</h2>
 <p>Start with the two functions you already met. <code>ebv_datacubepaths()</code> lists every cube in the file, and <code>ebv_properties()</code> reports the metadata slot by slot. Read them against what you meant to build:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_datacubepaths</span>(nc, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
@@ -270,22 +309,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>The datacube paths should list every metric and entity you expect, the entity names should read correctly, and the extent and dates should match your data. A missing entity or an empty time axis points to a step that went wrong in creation.</p>
 </section>
-<section id="check-the-values" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="check-the-values"><span class="header-section-number">6.2</span> Check the values</h2>
+<section id="check-the-values" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="check-the-values"><span class="header-section-number">5.2</span> Check the values</h2>
 <p>Structure can be right while the numbers are wrong, so read a slice and look at its range. <code>ebv_analyse()</code> returns summary statistics for a cube or a subset:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">ebv_analyse</span>(nc, dc, <span class="at">entity =</span> <span class="dv">1</span>, <span class="at">timestep =</span> <span class="dv">1</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>stats[<span class="fu">c</span>(<span class="st">"min"</span>, <span class="st">"max"</span>, <span class="st">"mean"</span>, <span class="st">"n"</span>, <span class="st">"NAs"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>n</code> is the number of valid pixels. If it is zero, or <code>NAs</code> covers the whole grid, the cube never received its data. A <code>min</code> or <code>max</code> far outside what your variable should hold usually means a unit problem or a stray fill value that leaked into the data.</p>
+<p><code>n</code> is the number of valid pixels. If it is zero, or <code>NAs</code> covers the whole grid, the cube never received its data. A <code>min</code> or <code>max</code> far outside what your variable should hold usually signals a unit problem or a stray fill value that leaked into the data.</p>
 </section>
-<section id="check-it-visually" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="check-it-visually"><span class="header-section-number">6.3</span> Check it visually</h2>
-<p>Numbers only tell you so much. <code>ebv_map()</code> draws a single slice, and one look often catches problems a summary hides, such as data in the wrong hemisphere or an all-empty ocean:</p>
+<section id="see-it-map-and-trend" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="see-it-map-and-trend"><span class="header-section-number">5.3</span> See it — map and trend</h2>
+<p>Numbers only tell you so much; a picture catches problems a summary hides, like data in the wrong hemisphere or an all-empty ocean. This is where <code>ebvcube</code> shines — two one-line functions turn a cube into a figure with no plotting or projection code of your own.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Map a slice</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Plot the trend</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p><code>ebv_map()</code> draws a single time step as a classed choropleth, optionally overlaying country borders. One look confirms the data sit where they should:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_map</span>(nc, dc, <span class="at">entity =</span> <span class="dv">1</span>, <span class="at">timestep =</span> <span class="dv">1</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_map</span>(nc, dc, <span class="at">entity =</span> <span class="dv">1</span>, <span class="at">timestep =</span> <span class="dv">1</span>, <span class="at">classes =</span> <span class="dv">9</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p><code>ebv_trend()</code> collapses the spatial dimensions to one value per time step and draws the trajectory. It does double duty — it plots <strong>and</strong> returns the underlying numbers, so a flat line, a break, or an implausible jump is easy to spot and the values are yours to keep:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>trend_vals <span class="ot">&lt;-</span> <span class="fu">ebv_trend</span>(nc, dc, <span class="at">entity =</span> <span class="dv">1</span>, <span class="at">method =</span> <span class="st">"mean"</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>trend_vals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note callout-titled" title="If the map looks shifted by 180°">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -296,22 +350,22 @@ If the map looks shifted by 180°
 </div>
 <div class="callout-body-container callout-body">
 <p>The file is using the <code>[0, 360]</code> longitude convention while the basemap expects <code>[-180, 180]</code>. Read the slice and wrap it before plotting:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">ebv_read</span>(nc, dc, <span class="at">entity =</span> <span class="dv">1</span>, <span class="at">timestep =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"r"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rotate</span>(r)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">ebv_read</span>(nc, dc, <span class="at">entity =</span> <span class="dv">1</span>, <span class="at">timestep =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"r"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rotate</span>(r)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-<section id="compare-against-your-metadata" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="compare-against-your-metadata"><span class="header-section-number">6.4</span> Compare against your metadata</h2>
+<section id="compare-against-your-metadata" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="compare-against-your-metadata"><span class="header-section-number">5.4</span> Compare against your metadata</h2>
 <p>Finally, confirm the file says what you told it to say. Read the attributes back and check them against the metadata form (or the <code>ebv_metadata()</code> call) you used to create it:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>props<span class="sc">@</span>general<span class="sc">$</span>title</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_properties</span>(nc, dc, <span class="at">verbose =</span> <span class="cn">FALSE</span>)<span class="sc">@</span>ebv_cube<span class="sc">$</span>units</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>props<span class="sc">@</span>general<span class="sc">$</span>title</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_properties</span>(nc, dc, <span class="at">verbose =</span> <span class="cn">FALSE</span>)<span class="sc">@</span>ebv_cube<span class="sc">$</span>units</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The title, units, entity count, and time coverage should all match your metadata. If a unit or description is wrong, fix it in place with <code>ebv_attribute()</code> from <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 5</span></a> rather than rebuilding the file.</p>
+<p>The title, units, entity count, and time coverage should all match your metadata. If a unit or description is wrong, fix it in place with <code>ebv_attribute()</code> from <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 4</span></a> rather than rebuilding the file.</p>
 </section>
-<section id="a-pre-flight-checklist" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="a-pre-flight-checklist"><span class="header-section-number">6.5</span> A pre-flight checklist</h2>
+<section id="a-pre-flight-checklist" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="a-pre-flight-checklist"><span class="header-section-number">5.5</span> A pre-flight checklist</h2>
 <p>Before you move to the portal, walk through this list. If every box ticks, the file is ready to upload:</p>
 <ul class="task-list">
 <li><label><input type="checkbox">The datacube paths list every metric and entity you expect.</label></li>
@@ -320,14 +374,14 @@ If the map looks shifted by 180°
 <li><label><input type="checkbox">A map of at least one slice looks right, with no 180° shift.</label></li>
 <li><label><input type="checkbox">Value ranges are plausible and the valid-pixel count (<code>n</code>) is not zero.</label></li>
 </ul>
-<p>The portal runs its own validation when you submit, but clearing these first saves a round trip. Panoply, introduced in <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 5</span></a>, is a quick way to eyeball the structure outside R if you want a second opinion.</p>
+<p>The portal runs its own validation when you submit, but clearing these first saves a round trip. Panoply, introduced in <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 4</span></a>, is a quick way to eyeball the structure outside R if you want a second opinion.</p>
 <div class="callout callout-style-simple callout-tip">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>Checkpoint.</strong> Your file’s structure, values, and map all match the dataset you meant to create, and every box in the pre-flight checklist is ticked. If so, you are ready to upload it to the EBV Data Portal in <a href="06-uploading.html" class="quarto-xref"><span>Chapter 7</span></a>.</p>
+<p><strong>Checkpoint.</strong> Your file’s structure, values, map, and trend all match the dataset you meant to create, and every box in the pre-flight checklist is ticked. If so, you are ready to upload it to the EBV Data Portal in <a href="06-uploading.html" class="quarto-xref"><span>Chapter 6</span></a>.</p>
 </div>
 </div>
 </div>
@@ -902,13 +956,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./04-creating-the-cube.html" class="pagination-link" aria-label="Creating an EBVCube with the `ebvcube` package">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> package</span></span>
+      <a href="./04-creating-the-cube.html" class="pagination-link" aria-label="Creating an EBVCube with the `ebvcube` R package">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Creating an EBVCube with the <code>ebvcube</code> R package</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./06-uploading.html" class="pagination-link" aria-label="Uploading the dataset to the EBV Data Portal">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
