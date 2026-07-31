@@ -6,12 +6,8 @@ book:
   title: "From Raster to Portal: Creating and Publishing an EBVCube"
   author:
     - name: "Emmanuel Oceguera-Conchas"
-      affiliation: "German Centre for Integrative Biodiversity Research (iDiv)"
+      affiliation: "German Centre for Integrative Biodiversity Research (iDiv) ![](images/idiv-logo.png){width=22px style=\"vertical-align:text-bottom; margin-left:.4em\"}"
   date: today
-  description: |
-      A step-by-step tutorial on turning your data into an
-      EBVCube with the ebvcube R package, then validating and publishing it as a
-      citable, FAIR dataset on the EBV Data Portal.
   repo-url: https://github.com/EBVcube/EBV_resources
   repo-branch: main
   repo-actions: [edit, issue]
@@ -19,6 +15,7 @@ book:
   search: true
   page-navigation: true
   sidebar:
+    logo: images/ebv_logo.png
     style: docked
     background: light
   chapters:
@@ -31,6 +28,9 @@ book:
     - 06-uploading.qmd
     - 07-troubleshooting.qmd
     - 08-resources.qmd
+
+bibliography: references/references.bib
+csl: references/apa.csl
 
 format:
   html:

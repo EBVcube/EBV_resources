@@ -1,23 +1,61 @@
 # Validating your EBVCube before uploading {#sec-validating}
 
-By the end of this unit, you will be able to:
+::: {.callout-note appearance="simple" title="In this unit"}
+By the end you will be able to:
 
 -   inspect the structure of your netCDF with `ebv_properties()` and `ebv_datacubepaths()`;
 -   check that the cube values fall in a sensible range with `ebv_analyse()`;
--   confirm the data maps correctly with `ebv_map()`;
+-   see the data as a map with `ebv_map()` and as a temporal trend with `ebv_trend()`;
 -   compare the finished file against the metadata you declared;
 -   run a short pre-flight checklist before you upload.
+:::
 
-In [@sec-creating] you built an EBVCube and gave it a first structural look. This unit goes one step further and checks that the file is right before you upload it to the EBV Data Portal in [@sec-uploading]. Every problem you catch here is cheaper to fix now than after a reviewer finds it.
+In [@sec-creating] you built an EBVCube and gave it a first structural look. This unit checks that the file is actually right before it goes to the EBV Data Portal in [@sec-uploading]. Every problem you catch here is cheaper to fix now than after a reviewer finds it.
 
-The checks below use the file you created in the previous unit. Set `nc` to its path, and use the cube path for the running example, which has no scenario layer:
+Validation runs on four quick questions — each one function, each cheaper than a rejected upload:
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-sm-6 .g-col-md-3 .border .rounded .p-3}
+[STRUCTURE]{.small .text-success}\
+Is the shape right?
+
+[`ebv_datacubepaths()` and `ebv_properties()` list the cubes and metadata.]{.small .text-muted}
+:::
+
+::: {.g-col-12 .g-col-sm-6 .g-col-md-3 .border .rounded .p-3}
+[VALUES]{.small .text-success}\
+Are the numbers sane?
+
+[`ebv_analyse()` reports min, max, mean and the valid-pixel count.]{.small .text-muted}
+:::
+
+::: {.g-col-12 .g-col-sm-6 .g-col-md-3 .border .rounded .p-3}
+[VISUAL]{.small .text-success}\
+Does it look right?
+
+[`ebv_map()` and `ebv_trend()` turn the cube into a picture.]{.small .text-muted}
+:::
+
+::: {.g-col-12 .g-col-sm-6 .g-col-md-3 .border .rounded .p-3}
+[METADATA]{.small .text-success}\
+Does it say the truth?
+
+[Read the attributes back and match them to what you declared.]{.small .text-muted}
+:::
+
+:::
+
+The checks below run against a real file. So the unit is self-contained, we validate the published dataset (id = 1); when you validate your *own* cube, point `nc` at the file you created in [@sec-creating] instead:
 
 ```{r}
 #| eval: false
 library(ebvcube)
 
-nc <- file.path(tempdir(), "bird_diversity.nc")   # the file from @sec-creating
-dc <- "metric_1/ebv_cube"
+# Self-contained: download the published cube to a temporary directory.
+# For your own file, replace this with: nc <- "path/to/your_cube.nc"
+nc <- ebv_download(id = 1, outputdir = tempdir(), overwrite = FALSE)
+dc <- "metric_1/ebv_cube"    # the running example has no scenario layer
 ```
 
 ## Check the structure
@@ -46,19 +84,38 @@ stats <- ebv_analyse(nc, dc, entity = 1, timestep = 1, verbose = FALSE)
 stats[c("min", "max", "mean", "n", "NAs")]
 ```
 
-`n` is the number of valid pixels. If it is zero, or `NAs` covers the whole grid, the cube never received its data. A `min` or `max` far outside what your variable should hold usually means a unit problem or a stray fill value that leaked into the data.
+`n` is the number of valid pixels. If it is zero, or `NAs` covers the whole grid, the cube never received its data. A `min` or `max` far outside what your variable should hold usually signals a unit problem or a stray fill value that leaked into the data.
 
-## Check it visually
+## See it — map and trend
 
-Numbers only tell you so much. `ebv_map()` draws a single slice, and one look often catches problems a summary hides, such as data in the wrong hemisphere or an all-empty ocean:
+Numbers only tell you so much; a picture catches problems a summary hides, like data in the wrong hemisphere or an all-empty ocean. This is where `ebvcube` shines — two one-line functions turn a cube into a figure with no plotting or projection code of your own.
+
+::: {.panel-tabset}
+
+#### Map a slice
+
+`ebv_map()` draws a single time step as a classed choropleth, optionally overlaying country borders. One look confirms the data sit where they should:
 
 ```{r}
 #| eval: false
-ebv_map(nc, dc, entity = 1, timestep = 1, verbose = FALSE)
+#| fig-cap: "Relative change in bird species, first time step (global)."
+ebv_map(nc, dc, entity = 1, timestep = 1, classes = 9, verbose = FALSE)
 ```
 
-::: {.callout-note}
-## If the map looks shifted by 180°
+#### Plot the trend
+
+`ebv_trend()` collapses the spatial dimensions to one value per time step and draws the trajectory. It does double duty — it plots **and** returns the underlying numbers, so a flat line, a break, or an implausible jump is easy to spot and the values are yours to keep:
+
+```{r}
+#| eval: false
+#| fig-cap: "Mean relative change in bird species over time."
+trend_vals <- ebv_trend(nc, dc, entity = 1, method = "mean", verbose = FALSE)
+trend_vals
+```
+
+:::
+
+::: {.callout-note appearance="simple" title="If the map looks shifted by 180°"}
 The file is using the `[0, 360]` longitude convention while the basemap expects `[-180, 180]`. Read the slice and wrap it before plotting:
 
 ```r
@@ -92,5 +149,5 @@ Before you move to the portal, walk through this list. If every box ticks, the f
 The portal runs its own validation when you submit, but clearing these first saves a round trip. Panoply, introduced in [@sec-creating], is a quick way to eyeball the structure outside R if you want a second opinion.
 
 ::: {.callout-tip appearance="simple"}
-**Checkpoint.** Your file's structure, values, and map all match the dataset you meant to create, and every box in the pre-flight checklist is ticked. If so, you are ready to upload it to the EBV Data Portal in [@sec-uploading].
+**Checkpoint.** Your file's structure, values, map, and trend all match the dataset you meant to create, and every box in the pre-flight checklist is ticked. If so, you are ready to upload it to the EBV Data Portal in [@sec-uploading].
 :::

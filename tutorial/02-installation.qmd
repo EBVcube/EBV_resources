@@ -1,29 +1,38 @@
-# Installing software and the `ebvcube` package {#sec-installation}
+# Installing software and the `ebvcube` R package {#sec-installation}
 
-By the end of this unit, you will be able to:
+::: {.callout-note appearance="simple" title="In this unit"}
+By the end you will be able to:
 
 -   confirm that your R installation meets the requirements for `ebvcube`;
 -   install the `ebvcube` package and its dependencies;
 -   verify your setup by loading the package and opening an example dataset.
+:::
 
-This unit prepares your machine for the rest of the tutorial. You will install `ebvcube` and its dependencies, then test the installation by opening an example dataset. Once that's done, you are ready to prepare your own data in Unit 3.
+This unit prepares your machine for the rest of the tutorial. You install `ebvcube` and its dependencies, then test the installation by opening an example dataset. Once that works, you are ready to prepare your own data in [Unit 3](03-preparing-data.qmd).
 
 ## What you need first
 
 Before installing `ebvcube`, make sure you have:
 
--   **R ≥ 4.2.0**: The minimum version supported by `ebvcube`. Check yours in any R session:
+::: {.grid}
 
-```r
-    R.version.string
-```
+::: {.g-col-12 .g-col-md-6 .border .rounded .p-3}
+**R ≥ 4.2.0** [required]{.badge .bg-secondary}
 
-    If it is older, update R first, or CRAN will refuse to install the package.
+[The minimum version `ebvcube` supports. Check yours with `R.version.string`, and if it is older, update R first, or CRAN will refuse to install the package.]{.small .text-muted}
+:::
 
--   **RStudio** (recommended):  a free, widely used editor for R. It is not strictly required, but every code example in this tutorial assumes you are working in it.
+::: {.g-col-12 .g-col-md-6 .border .rounded .p-3}
+**RStudio** [recommended]{.badge .bg-secondary}
 
-The lower-level libraries `ebvcube` relies on, **HDF5** (for reading netCDF-4 files) and **GDAL** (for spatial data), are installed for you automatically on Windows and macOS: HDF5 comes with the Bioconductor package `rhdf5`, and GDAL comes with the CRAN build of `terra`. There is nothing extra to set up.
+[A free, widely used editor for R. Not strictly required, but every code example in this tutorial assumes you are working in it. Download it [here](https://posit.co/downloads)]{.small .text-muted}
+:::
 
+:::
+
+::: {.callout-note collapse="true" title="What about HDF5 and GDAL?"}
+The lower-level libraries `ebvcube` relies on, **HDF5** (for reading netCDF-4 files) and **GDAL** (for spatial data), install automatically on Windows and macOS: HDF5 comes with the Bioconductor package `rhdf5`, and GDAL comes with the CRAN build of `terra`. There is nothing extra to set up.
+:::
 
 ## Installing `ebvcube` from CRAN
 
@@ -36,20 +45,35 @@ install.packages("ebvcube")
 
 CRAN resolves all of the *CRAN* dependencies automatically. Three dependencies, however, live on **Bioconductor** rather than CRAN, so on a fresh machine you will usually need the one-time step in the next section as well.
 
-::: {.callout-note}
-## Other ways to install
+::: {.callout-note collapse="true" title="Other ways to install"}
 Most people should use CRAN. If you need a newer feature, you can install the development version with `devtools::install_github("EBVcube/ebvcube", ref = "dev")`, or get the binary builds from the [b-cubed r-universe](https://b-cubed-eu.r-universe.dev/). These are covered in the package's [installation guide](https://github.com/EBVcube/ebvcube).
 :::
 
 ## Adding the Bioconductor dependencies {#sec-bioc}
 
-Three of `ebvcube`'s dependencies come from [Bioconductor](https://bioconductor.org/), because reading EBVCube files means reading HDF5 under the hood:
+Three of `ebvcube`'s dependencies come from [Bioconductor](https://bioconductor.org/) rather than CRAN, because reading EBVCube files means reading HDF5 under the hood:
 
-| Package        | Why it is needed                                            |
-|:---------------|:------------------------------------------------------------|
-| `rhdf5`        | Low-level HDF5 read/write (netCDF-4 is HDF5 underneath)      |
-| `DelayedArray` | Lazy, on-disk arrays so large cubes do not exhaust your RAM  |
-| `HDF5Array`    | Connects `DelayedArray` to HDF5 files                        |
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-4 .border .rounded .p-3}
+`rhdf5`
+
+[Low-level HDF5 read/write, since netCDF-4 is HDF5 underneath.]{.small .text-muted}
+:::
+
+::: {.g-col-12 .g-col-md-4 .border .rounded .p-3}
+`DelayedArray`
+
+[Lazy, on-disk arrays so large cubes do not exhaust your RAM.]{.small .text-muted}
+:::
+
+::: {.g-col-12 .g-col-md-4 .border .rounded .p-3}
+`HDF5Array`
+
+[Connects `DelayedArray` to HDF5 files.]{.small .text-muted}
+:::
+
+:::
 
 If installing `ebvcube` reports that one of these is missing, install them with `BiocManager`:
 
@@ -61,8 +85,7 @@ BiocManager::install(c("rhdf5", "DelayedArray", "HDF5Array"))
 
 You only need to do this once per R installation.
 
-::: {.callout-note}
-## Which Bioconductor version?
+::: {.callout-note collapse="true" title="Which Bioconductor version?"}
 `BiocManager` automatically picks the Bioconductor release that matches your version of R, which is what you want. You can pin a specific release with `BiocManager::install(version = "3.22")`, but only do so if you have a reason to, each Bioconductor release requires a matching R version (3.22 needs R 4.5.x), so leaving it out is also a safe choice.
 :::
 
@@ -97,5 +120,5 @@ prop@general$title
 ```
 
 ::: {.callout-tip appearance="simple"}
-**Checkpoint.** `library(ebvcube)` loads with no error, and `ebv_properties()` prints the dataset title. If both work, your setup is complete and you are ready to prepare biodiversity data in Unit 3.
+**Checkpoint.** `library(ebvcube)` loads with no error, and `ebv_properties()` prints the dataset title. If both work, your setup is complete and you are ready to prepare biodiversity data in [Unit 3](03-preparing-data.qmd).
 :::
