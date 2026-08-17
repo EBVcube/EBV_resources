@@ -77,6 +77,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -287,14 +290,14 @@ Does it say the truth?</p>
 <p><span class="small text-muted">Read the attributes back and match them to what you declared.</span></p>
 </div>
 </div>
-<p>The checks below run against a real file. So the unit is self-contained, we validate the published dataset (id = 1); when you validate your <em>own</em> cube, point <code>nc</code> at the file you created in <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 4</span></a> instead:</p>
+<p>The checks below run against a real file. So the unit is self-contained, we validate the published dataset (id = 30); when you validate your <em>own</em> cube, point <code>nc</code> at the file you created in <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 4</span></a> instead:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ebvcube)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Self-contained: download the published cube to a temporary directory.</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># For your own file, replace this with: nc &lt;- "path/to/your_cube.nc"</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>nc <span class="ot">&lt;-</span> <span class="fu">ebv_download</span>(<span class="at">id =</span> <span class="dv">1</span>, <span class="at">outputdir =</span> <span class="fu">tempdir</span>(), <span class="at">overwrite =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="st">"metric_1/ebv_cube"</span>    <span class="co"># the running example has no scenario layer</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>nc <span class="ot">&lt;-</span> <span class="fu">ebv_download</span>(<span class="at">id =</span> <span class="dv">30</span>, <span class="at">outputdir =</span> <span class="fu">tempdir</span>(), <span class="at">overwrite =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="st">"scenario_1/metric_1/ebv_cube"</span>    <span class="co"># species richness under SSP1xRCP2.6</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="check-the-structure" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="check-the-structure"><span class="header-section-number">5.1</span> Check the structure</h2>
@@ -307,14 +310,24 @@ Does it say the truth?</p>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>props<span class="sc">@</span>spatial<span class="sc">$</span>extent           <span class="co"># c(xmin, xmax, ymin, ymax)</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>props<span class="sc">@</span>temporal<span class="sc">$</span>dates           <span class="co"># the time axis</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The datacube paths should list every metric and entity you expect, the entity names should read correctly, and the extent and dates should match your data. A missing entity or an empty time axis points to a step that went wrong in creation.</p>
+<p>The datacube paths should list every scenario, metric and entity you expect — nine rows for dataset 30 — the entity names should read correctly, and the extent and dates should match your data. A missing entity or an empty time axis points to a step that went wrong in creation. A file that comes back with three paths instead of nine has lost its scenario level, which almost always traces back to the metadata JSON rather than to <code>ebv_create()</code>.</p>
 </section>
 <section id="check-the-values" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="check-the-values"><span class="header-section-number">5.2</span> Check the values</h2>
 <p>Structure can be right while the numbers are wrong, so read a slice and look at its range. <code>ebv_analyse()</code> returns summary statistics for a cube or a subset:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">ebv_analyse</span>(nc, dc, <span class="at">entity =</span> <span class="dv">1</span>, <span class="at">timestep =</span> <span class="dv">1</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">ebv_analyse</span>(nc, dc, <span class="at">entity =</span> <span class="dv">2</span>, <span class="at">timestep =</span> <span class="dv">1</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>stats[<span class="fu">c</span>(<span class="st">"min"</span>, <span class="st">"max"</span>, <span class="st">"mean"</span>, <span class="st">"n"</span>, <span class="st">"NAs"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can restrict the same call to a region by passing a bounding box, which reads only the cells you asked for rather than the whole grid:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bb  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">118</span>, <span class="at">xmax =</span> <span class="sc">-</span><span class="dv">86</span>, <span class="at">ymin =</span> <span class="dv">14</span>, <span class="at">ymax =</span> <span class="dv">33</span>)   <span class="co"># Mexico and Central America</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">ebv_analyse</span>(nc, dc, <span class="at">entity =</span> <span class="dv">2</span>, <span class="at">timestep =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">subset =</span> bb, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>reg[<span class="fu">c</span>(<span class="st">"mean"</span>, <span class="st">"n"</span>)]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $mean</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 65.95752</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $n</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1824</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><code>n</code> is the number of valid pixels. If it is zero, or <code>NAs</code> covers the whole grid, the cube never received its data. A <code>min</code> or <code>max</code> far outside what your variable should hold usually signals a unit problem or a stray fill value that leaked into the data.</p>
 </section>
@@ -322,20 +335,29 @@ Does it say the truth?</p>
 <h2 data-number="5.3" class="anchored" data-anchor-id="see-it-map-and-trend"><span class="header-section-number">5.3</span> See it — map and trend</h2>
 <p>Numbers only tell you so much; a picture catches problems a summary hides, like data in the wrong hemisphere or an all-empty ocean. This is where <code>ebvcube</code> shines — two one-line functions turn a cube into a figure with no plotting or projection code of your own.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Map a slice</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Plot the trend</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Map a slice</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Plot the trend</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Compare the scenarios</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <p><code>ebv_map()</code> draws a single time step as a classed choropleth, optionally overlaying country borders. One look confirms the data sit where they should:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_map</span>(nc, dc, <span class="at">entity =</span> <span class="dv">1</span>, <span class="at">timestep =</span> <span class="dv">1</span>, <span class="at">classes =</span> <span class="dv">9</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_map</span>(nc, dc, <span class="at">entity =</span> <span class="dv">2</span>, <span class="at">timestep =</span> <span class="dv">3</span>, <span class="at">classes =</span> <span class="dv">5</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <p><code>ebv_trend()</code> collapses the spatial dimensions to one value per time step and draws the trajectory. It does double duty — it plots <strong>and</strong> returns the underlying numbers, so a flat line, a break, or an implausible jump is easy to spot and the values are yours to keep:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>trend_vals <span class="ot">&lt;-</span> <span class="fu">ebv_trend</span>(nc, dc, <span class="at">entity =</span> <span class="dv">1</span>, <span class="at">method =</span> <span class="st">"mean"</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>trend_vals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>trend_vals <span class="ot">&lt;-</span> <span class="fu">ebv_trend</span>(nc, dc, <span class="at">entity =</span> <span class="dv">2</span>, <span class="at">method =</span> <span class="st">"mean"</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>trend_vals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p>With a scenario dataset there is a check you cannot do on a flat file: run the same trend across all three scenarios and see whether they behave the way the science says they should.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>trend_ssp1 <span class="ot">&lt;-</span> <span class="fu">ebv_trend</span>(nc, <span class="st">"scenario_1/metric_1/ebv_cube"</span>, <span class="at">entity =</span> <span class="dv">2</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>trend_ssp3 <span class="ot">&lt;-</span> <span class="fu">ebv_trend</span>(nc, <span class="st">"scenario_2/metric_1/ebv_cube"</span>, <span class="at">entity =</span> <span class="dv">2</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>trend_ssp5 <span class="ot">&lt;-</span> <span class="fu">ebv_trend</span>(nc, <span class="st">"scenario_3/metric_1/ebv_cube"</span>, <span class="at">entity =</span> <span class="dv">2</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For dataset 30 the three should share an identical historical decline — from about 33.28 to 31.48 species per cell between 1900 and 2015 — and separate only at 2050, where SSP1×RCP2.6 retains roughly 0.35 more species per cell than the other two. That pattern is itself diagnostic: scenarios that differ <em>before</em> their divergence year mean data has been written into the wrong cube, and scenarios that are identical <em>after</em> it mean a cube was filled from the same source three times.</p>
 </div>
 </div>
 </div>
@@ -350,8 +372,8 @@ If the map looks shifted by 180°
 </div>
 <div class="callout-body-container callout-body">
 <p>The file is using the <code>[0, 360]</code> longitude convention while the basemap expects <code>[-180, 180]</code>. Read the slice and wrap it before plotting:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">ebv_read</span>(nc, dc, <span class="at">entity =</span> <span class="dv">1</span>, <span class="at">timestep =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"r"</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rotate</span>(r)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">ebv_read</span>(nc, dc, <span class="at">entity =</span> <span class="dv">1</span>, <span class="at">timestep =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"r"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rotate</span>(r)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -359,8 +381,8 @@ If the map looks shifted by 180°
 <h2 data-number="5.4" class="anchored" data-anchor-id="compare-against-your-metadata"><span class="header-section-number">5.4</span> Compare against your metadata</h2>
 <p>Finally, confirm the file says what you told it to say. Read the attributes back and check them against the metadata form (or the <code>ebv_metadata()</code> call) you used to create it:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>props<span class="sc">@</span>general<span class="sc">$</span>title</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_properties</span>(nc, dc, <span class="at">verbose =</span> <span class="cn">FALSE</span>)<span class="sc">@</span>ebv_cube<span class="sc">$</span>units</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>props<span class="sc">@</span>general<span class="sc">$</span>title</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_properties</span>(nc, dc, <span class="at">verbose =</span> <span class="cn">FALSE</span>)<span class="sc">@</span>ebv_cube<span class="sc">$</span>units</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The title, units, entity count, and time coverage should all match your metadata. If a unit or description is wrong, fix it in place with <code>ebv_attribute()</code> from <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 4</span></a> rather than rebuilding the file.</p>
 </section>
@@ -368,11 +390,13 @@ If the map looks shifted by 180°
 <h2 data-number="5.5" class="anchored" data-anchor-id="a-pre-flight-checklist"><span class="header-section-number">5.5</span> A pre-flight checklist</h2>
 <p>Before you move to the portal, walk through this list. If every box ticks, the file is ready to upload:</p>
 <ul class="task-list">
-<li><label><input type="checkbox">The datacube paths list every metric and entity you expect.</label></li>
+<li><label><input type="checkbox">The datacube paths list every scenario, metric and entity you expect.</label></li>
 <li><label><input type="checkbox">Entity names, dates, extent, and resolution match your metadata.</label></li>
 <li><label><input type="checkbox">Units and the cube description read correctly.</label></li>
 <li><label><input type="checkbox">A map of at least one slice looks right, with no 180° shift.</label></li>
 <li><label><input type="checkbox">Value ranges are plausible and the valid-pixel count (<code>n</code>) is not zero.</label></li>
+<li><label><input type="checkbox">No cube is still entirely fill value from a skipped <code>ebv_add_data()</code> call.</label></li>
+<li><label><input type="checkbox">If you have scenarios, they differ from each other where they should, and only where they should.</label></li>
 </ul>
 <p>The portal runs its own validation when you submit, but clearing these first saves a round trip. Panoply, introduced in <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 4</span></a>, is a quick way to eyeball the structure outside R if you want a second opinion.</p>
 <div class="callout callout-style-simple callout-tip">
@@ -967,8 +991,58 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p><a href="https://naturaconnect.eu/"><img src="images/NClogo.png" alt="NaturaConnect" height="50"></a></p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/05-validating.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<div style="max-width:360px; margin-left:auto; text-align:left">
+<p><a href="images/eu.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/eu.png" alt="Funded by the European Union" height="52"></a></p>
+<div style="color:#003399; text-align:justify; font-size:.8rem; margin-top:.6em">
+<p>NaturaConnect receives funding under the European Union’s Horizon Europe research and innovation programme under grant agreement number 101060429.</p>
+</div>
+</div>
+</div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","loop":false,"selector":".lightbox","descPosition":"bottom","closeEffect":"zoom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/05-validating.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+</body></html>

@@ -77,6 +77,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -271,7 +274,7 @@ In this unit
 </div>
 <div class="g-col-12 g-col-md-6 border rounded p-3">
 <p><strong>RStudio</strong> <span class="badge bg-secondary">recommended</span></p>
-<p><span class="small text-muted">A free, widely used editor for R. Not strictly required, but every code example in this tutorial assumes you are working in it. Download it <a href="https://posit.co/downloads">here</a></span></p>
+<p><span class="small text-muted">A free, widely used editor for R. It is not required, but it makes it easier to run, save, and revisit the code in this tutorial. Download it <a href="https://posit.co/downloads">here</a>.</span></p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="What about HDF5 and GDAL?">
@@ -286,7 +289,7 @@ What about HDF5 and GDAL?
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The lower-level libraries <code>ebvcube</code> relies on, <strong>HDF5</strong> (for reading netCDF-4 files) and <strong>GDAL</strong> (for spatial data), install automatically on Windows and macOS: HDF5 comes with the Bioconductor package <code>rhdf5</code>, and GDAL comes with the CRAN build of <code>terra</code>. There is nothing extra to set up.</p>
+<p>On Windows and macOS, you will usually not need to install <strong>HDF5</strong> or <strong>GDAL</strong> yourself. Bioconductor supplies HDF5 through <code>rhdf5</code>, while CRAN binary builds of <code>terra</code> normally include the spatial libraries they need. Linux installations can require additional system libraries; <a href="./07-troubleshooting.html">Unit 7</a> covers the common fixes.</p>
 </div>
 </div>
 </div>
@@ -350,7 +353,7 @@ Which Bioconductor version?
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><code>BiocManager</code> automatically picks the Bioconductor release that matches your version of R, which is what you want. You can pin a specific release with <code>BiocManager::install(version = "3.22")</code>, but only do so if you have a reason to, each Bioconductor release requires a matching R version (3.22 needs R 4.5.x), so leaving it out is also a safe choice.</p>
+<p><code>BiocManager</code> automatically selects the Bioconductor release that matches your version of R. Leave the version unspecified unless a package maintainer or a project requirement tells you otherwise.</p>
 </div>
 </div>
 </div>
@@ -362,7 +365,7 @@ Which Bioconductor version?
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ebvcube)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">"ebvcube"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then open the small example dataset that ships with the package, a subset of the <em>Local bird diversity (cSAR/BES-SIM)</em> dataset. Because it is bundled, this needs no download and works offline:</p>
+<p>Then open the small example dataset that ships with the package. Because it is bundled, this needs no download and works offline, making it a reliable installation check:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"martins_comcom_subset.nc"</span>, <span class="at">package =</span> <span class="st">"ebvcube"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -370,11 +373,30 @@ Which Bioconductor version?
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>prop<span class="sc">@</span>general<span class="sc">$</span>title</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "Local bird diversity (cSAR/BES-SIM)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>If the title prints, your installation is working. When you are ready to pull the <em>full</em> dataset from the portal (≈ 4 MB), the same two lines work with a download instead of the bundled file. We do exactly that in the next unit:</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Why is the test file different from the tutorial example?">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Why is the test file different from the tutorial example?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>They are two different published datasets, which can be easy to miss.</p>
+<p>The file bundled inside <code>ebvcube</code> is a spatial subset of <strong><a href="https://portal.geobon.org/ebv-detail?id=1">Local bird diversity (cSAR/BES-SIM)</a></strong>, portal id = 1. The dataset this tutorial follows is <strong>Global trends in biodiversity (BES-SIM cSAR-iDiv)</strong>, portal id = 30. They share a lead author and a model family, which is why the names look so similar, but they are separate published products: id = 1 covers 1900–2015 with no scenarios, while id = 30 covers 1900, 2015 and 2050 across three SSP×RCP scenarios.</p>
+<p>We use the bundled file here and only here, because verifying an installation should not depend on a working internet connection. The tutorial’s scenario-based reference dataset is id = 30.</p>
+</div>
+</div>
+</div>
+<p>If the title prints, your installation is working. You can then optionally download the tutorial’s scenario-based reference dataset from the portal (≈ 3.3 MB). This second check requires an internet connection:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">ebv_download</span>(<span class="at">id =</span> <span class="dv">1</span>, <span class="at">outputdir =</span> <span class="fu">tempdir</span>(), <span class="at">overwrite =</span> <span class="cn">FALSE</span>)</span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">ebv_download</span>(<span class="at">id =</span> <span class="dv">30</span>, <span class="at">outputdir =</span> <span class="fu">tempdir</span>(), <span class="at">overwrite =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>prop <span class="ot">&lt;-</span> <span class="fu">ebv_properties</span>(file, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>prop<span class="sc">@</span>general<span class="sc">$</span>title</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>prop<span class="sc">@</span>general<span class="sc">$</span>title</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "Global trends in biodiversity (BES-SIM cSAR-iDiv)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-simple callout-tip">
 <div class="callout-body d-flex">
@@ -382,7 +404,7 @@ Which Bioconductor version?
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>Checkpoint.</strong> <code>library(ebvcube)</code> loads with no error, and <code>ebv_properties()</code> prints the dataset title. If both work, your setup is complete and you are ready to prepare biodiversity data in <a href="./03-preparing-data.html">Unit 3</a>.</p>
+<p><strong>Checkpoint.</strong> Your setup is complete when <code>library(ebvcube)</code> loads without error and <code>ebv_properties()</code> prints the title of the bundled dataset. Downloading id = 30 is an optional connectivity check. Once the installation check works, you are ready to prepare biodiversity data in <a href="./03-preparing-data.html">Unit 3</a>.</p>
 </div>
 </div>
 </div>
@@ -968,8 +990,58 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p><a href="https://naturaconnect.eu/"><img src="images/NClogo.png" alt="NaturaConnect" height="50"></a></p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/02-installation.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<div style="max-width:360px; margin-left:auto; text-align:left">
+<p><a href="images/eu.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/eu.png" alt="Funded by the European Union" height="52"></a></p>
+<div style="color:#003399; text-align:justify; font-size:.8rem; margin-top:.6em">
+<p>NaturaConnect receives funding under the European Union’s Horizon Europe research and innovation programme under grant agreement number 101060429.</p>
+</div>
+</div>
+</div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","selector":".lightbox","loop":false,"openEffect":"zoom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/02-installation.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+</body></html>

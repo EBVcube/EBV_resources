@@ -24,6 +24,7 @@ ul.task-list li input[type="checkbox"] {
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -61,6 +62,9 @@ div.csl-indent {
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -231,22 +235,50 @@ div.csl-indent {
 <li><strong>EBV netCDF format specification</strong> — the authoritative description of the EBVCube format: <a href="https://github.com/EBVcube/EBVCube-format" class="uri">https://github.com/EBVcube/EBVCube-format</a></li>
 <li><strong><code>ebvcube</code> documentation book</strong> — the full package reference, including advanced usage beyond this tutorial: <a href="https://EBVcube.github.io/ebvcube/" class="uri">https://EBVcube.github.io/ebvcube/</a></li>
 <li><strong><code>ebvcube</code> source on GitHub</strong> — code and release history: <a href="https://github.com/EBVcube/ebvcube" class="uri">https://github.com/EBVcube/ebvcube</a></li>
-<li><strong>Running example dataset</strong> — “Local bird diversity (cSAR/BES-SIM)”, the dataset followed throughout this book: <a href="https://portal.geobon.org/ebv-detail?id=1" class="uri">https://portal.geobon.org/ebv-detail?id=1</a> (DOI <a href="https://doi.org/10.25829/8grx36">10.25829/8grx36</a>). Its official citation is on the dataset page.</li>
+<li><strong>Running example dataset</strong> — “Global trends in biodiversity (BES-SIM cSAR-iDiv)”, the dataset followed throughout this book: <a href="https://portal.geobon.org/ebv-detail?id=30" class="uri">https://portal.geobon.org/ebv-detail?id=30</a> (DOI <a href="https://doi.org/10.25829/5zmy41">10.25829/5zmy41</a>) <span class="citation" data-cites="martins2022">(<a href="08-resources.html#ref-martins2022" role="doc-biblioref">Martins &amp; Pereira, 2022</a>)</span>. Its official citation is on the dataset page.</li>
 </ul>
 <p>For installing the package, see <a href="02-installation.html" class="quarto-xref"><span>Chapter 2</span></a>; for where to ask questions or report a bug, see <a href="07-troubleshooting.html" class="quarto-xref"><span>Chapter 7</span></a>.</p>
 </section>
 <section id="references" class="level2" data-number="8.2">
 <h2 data-number="8.2" class="anchored" data-anchor-id="references"><span class="header-section-number">8.2</span> References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-acdd" class="csl-entry" role="listitem">
+Earth Science Information Partners. (2015). <em><span class="nocase">Attribute Convention for Data Discovery (ACDD), Version
+1.3</span></em>. <a href="https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3" class="uri">https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3</a>.
+<a href="https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3">https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3</a>
+</div>
+<div id="ref-cfconventions" class="csl-entry" role="listitem">
+Eaton, B., Gregory, J., Drach, B., Taylor, K., Hankin, S., et al.
+(2020). <em><span class="nocase">NetCDF Climate and Forecast (CF)
+Metadata Conventions, Version 1.8</span></em>. <a href="https://cfconventions.org/" class="uri">https://cfconventions.org/</a>. <a href="https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html">https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html</a>
+</div>
 <div id="ref-geobon" class="csl-entry" role="listitem">
 Group on Earth Observations Biodiversity Observation Network. (n.d.).
 <em><span>GEO BON</span></em>. <a href="https://geobon.org/" class="uri">https://geobon.org/</a>. Retrieved July 31, 2026, from <a href="https://geobon.org/">https://geobon.org/</a>
+</div>
+<div id="ref-martins2022" class="csl-entry" role="listitem">
+Martins, I., &amp; Pereira, H. M. (2022). <em><span class="nocase">Global trends in biodiversity (BES-SIM
+cSAR-iDiv)</span></em> (Version 1). Dataset, EBV Data Portal; German
+Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig.
+<a href="https://doi.org/10.25829/5zmy41">https://doi.org/10.25829/5zmy41</a>
 </div>
 <div id="ref-pereira2013" class="csl-entry" role="listitem">
 Pereira, H. M., Ferrier, S., Walters, M., Geller, G. N., Jongman, R. H.,
 Scholes, R. J., Bruford, M. W., Brummitt, N., Butchart, S. H., Cardoso,
 A., et al. (2013). Essential biodiversity variables. <em>Science</em>,
 <em>339</em>(6117), 277–278.
+</div>
+<div id="ref-quoss2022" class="csl-entry" role="listitem">
+Quoß, L., Fernandez, N., Langer, C., Valdez, J., &amp; Pereira, H. M.
+(2022). Ebvcube: An <span>R</span> package to work with the
+<span>EBV</span> <span class="nocase">netCDF</span> standard.
+<em>Biodiversity Information Science and Standards</em>, <em>6</em>,
+e91215. <a href="https://doi.org/10.3897/biss.6.e91215">https://doi.org/10.3897/biss.6.e91215</a>
+</div>
+<div id="ref-ebvcube2025" class="csl-entry" role="listitem">
+Quoß, L., Fernandez, N., Langer, C., Valdez, J., &amp; Pereira, H. M.
+(2025). <em>Ebvcube: Working with netCDF for essential biodiversity
+variables</em>. <a href="https://github.com/EBVcube/ebvcube">https://github.com/EBVcube/ebvcube</a>
 </div>
 </div>
 
@@ -828,8 +860,58 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p><a href="https://naturaconnect.eu/"><img src="images/NClogo.png" alt="NaturaConnect" height="50"></a></p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/08-resources.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<div style="max-width:360px; margin-left:auto; text-align:left">
+<p><a href="images/eu.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/eu.png" alt="Funded by the European Union" height="52"></a></p>
+<div style="color:#003399; text-align:justify; font-size:.8rem; margin-top:.6em">
+<p>NaturaConnect receives funding under the European Union’s Horizon Europe research and innovation programme under grant agreement number 101060429.</p>
+</div>
+</div>
+</div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","openEffect":"zoom","closeEffect":"zoom","loop":false,"descPosition":"bottom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/08-resources.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+</body></html>

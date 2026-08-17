@@ -43,6 +43,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -272,7 +275,7 @@ Add a preview image
 </section>
 <section id="after-publication-doi-citation-and-versions" class="level2" data-number="6.4">
 <h2 data-number="6.4" class="anchored" data-anchor-id="after-publication-doi-citation-and-versions"><span class="header-section-number">6.4</span> After publication: DOI, citation, and versions</h2>
-<p>On publication the portal assigns your dataset a DOI and generates its citation, both shown on the dataset page. You can see this on the live page for the running example, <a href="https://portal.geobon.org/ebv-detail?id=1">dataset id = 1</a>, where its version history, DOI, and citation all appear.</p>
+<p>On publication the portal assigns your dataset a DOI and generates its citation, both shown on the dataset page. You can see this on the live page for the running example, <a href="https://portal.geobon.org/ebv-detail?id=30">dataset id = 30</a>, where its version history, DOI, and citation all appear.</p>
 <div class="callout callout-style-simple callout-note callout-titled" title="Cite the dataset, not the package">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -287,10 +290,10 @@ Cite the dataset, not the package
 </div>
 </div>
 <p>Here is that page, embedded live (in the HTML version of the book):</p>
-<iframe src="https://portal.geobon.org/ebv-detail?id=1" title="EBV Data Portal page for dataset id = 1 (Local bird diversity, cSAR/BES-SIM)" width="100%" height="600" style="border:1px solid #ddd; border-radius:6px;" loading="lazy">
+<iframe src="https://portal.geobon.org/ebv-detail?id=30" title="EBV Data Portal page for dataset id = 30 (Global trends in biodiversity, BES-SIM cSAR-iDiv)" width="100%" height="600" style="border:1px solid #ddd; border-radius:6px;" loading="lazy">
 </iframe>
 <p>
-If the page does not load, <a href="https://portal.geobon.org/ebv-detail?id=1">open dataset id = 1 on the EBV Data Portal</a>.
+If the page does not load, <a href="https://portal.geobon.org/ebv-detail?id=30">open dataset id = 30 on the EBV Data Portal</a>.
 </p>
 <div class="callout callout-style-simple callout-tip">
 <div class="callout-body d-flex">
@@ -884,8 +887,58 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p><a href="https://naturaconnect.eu/"><img src="images/NClogo.png" alt="NaturaConnect" height="50"></a></p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/06-uploading.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<div style="max-width:360px; margin-left:auto; text-align:left">
+<p><a href="images/eu.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/eu.png" alt="Funded by the European Union" height="52"></a></p>
+<div style="color:#003399; text-align:justify; font-size:.8rem; margin-top:.6em">
+<p>NaturaConnect receives funding under the European Union’s Horizon Europe research and innovation programme under grant agreement number 101060429.</p>
+</div>
+</div>
+</div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","closeEffect":"zoom","loop":false,"selector":".lightbox","openEffect":"zoom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/06-uploading.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+</body></html>

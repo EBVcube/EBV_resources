@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Emmanuel Oceguera-Conchas">
-<meta name="dcterms.date" content="2026-07-31">
+<meta name="dcterms.date" content="2026-08-17">
 
 <title>From Raster to Portal: Creating and Publishing an EBVCube</title>
 <style>
@@ -235,7 +235,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   <div class="quarto-title-meta-contents">
         <p class="affiliation">
-            German Centre for Integrative Biodiversity Research (iDiv) <img src="images/idiv-logo.png" class="img-fluid" style="vertical-align:text-bottom; margin-left:.4em" width="22">
+            German Centre for Integrative Biodiversity Research (iDiv) <img src="images/idiv-logo.png" class="img-fluid" style="vertical-align:text-bottom; margin-left:.4em" width="22"> <img src="images/NClogo.png" style="vertical-align:text-bottom; margin-left:.5em" height="22">
           </p>
       </div>
   </div>
@@ -246,7 +246,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 31, 2026</p>
+      <p class="date">August 17, 2026</p>
     </div>
   </div>
   
@@ -261,8 +261,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="overview" class="level1 unnumbered">
 <h1 class="unnumbered">Overview</h1>
 <div class="grid mt-3 mb-4">
-<div class="g-col-9 g-col-md-11">
-<p><span class="lead">A step-by-step tutorial on turning your data into an EBVCube with the <code>ebvcube</code> R package, then validating, visualizing and publishing it as a citable, FAIR dataset on the EBV Data Portal.</span></p>
+<div class="g-col-12 g-col-md-9">
+<p><span class="lead">Learn how to turn gridded biodiversity data into an EBVCube: a reusable file that can be checked, shared and published through the EBV Data Portal.</span></p>
 </div>
 </div>
 <div class="callout callout-style-simple callout-note">
@@ -272,36 +272,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container">
 <p><strong>New to this?</strong><br>
-Eight units, each runnable against a real published dataset. Begin with <a href="./01-introduction.html">Unit 1 — Introduction</a>, or jump straight to any unit below.</p>
-<p><span class="small text-muted">R ≥ 4.2 · 4 MB example download · no prior netCDF experience needed</span></p>
+Eight units take you from the EBV framework and EBVCube concepts to creating, validating and publishing a dataset. <a href="./01-introduction.html">Unit 1 — Introduction</a> introduces the terminology used throughout the tutorial; if you already know the EBV framework, you can jump straight to any unit below.</p>
+<p><span class="small text-muted">R ≥ 4.2 · 3.3 MB example download · no prior netCDF experience needed</span></p>
 </div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note callout-titled" title="Four names to keep separate">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Four names to keep separate
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>An <strong>Essential Biodiversity Variable (EBV)</strong> is a standardised measurement used to describe and track an important aspect of biodiversity. An <strong>EBVCube</strong> is the standardised file that stores gridded EBV data and the information needed to interpret it. <strong><code>ebvcube</code></strong> is the R package used to inspect, read, visualise and create EBVCubes. The <strong>EBV Data Portal</strong> is the online service where datasets can be discovered, submitted, published and explored.</p>
 </div>
 </div>
 <section id="four-dimensions-one-file" class="level2">
 <h2 class="anchored" data-anchor-id="four-dimensions-one-file">Four dimensions, one file</h2>
 <div class="grid">
 <div class="g-col-12 g-col-md-5">
-<p><a href="images/ebvcube-hero-preview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/ebvcube-hero-preview.png" class="img-fluid" alt="An EBVCube shown as three stacked boxes, one per entity: All birds, Forest birds and Non-forest birds. The front face of each box is a world map, with longitude running horizontally and latitude vertically; time runs back along the depth axis."></a></p>
+<p><a href="images/ebvcube-hero-preview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/ebvcube-hero-preview.png" class="img-fluid" alt="An EBVCube shown as three stacked boxes, one per entity: All birds, Forest birds and Non-forest birds. The front face of each box is a world map, with longitude running horizontally and latitude vertically; time runs back along the depth axis."></a></p>
 </div>
 <div class="g-col-12 g-col-md-7">
-<p>An EBVCube is the standard format for publishing <strong>Essential Biodiversity Variables</strong>, the standardised measurements the biodiversity community tracks in common. It is a netCDF file organised in a defined way and following the CF and ACDD metadata conventions, so every dataset, whatever produced it, is structured the same way. That is what makes two of them comparable. <a href="./01-introduction.html">Unit 1</a> covers the framework.</p>
-<p>The figure shows the tutorial’s own example, dataset <code>id = 1</code>: three entities, each a box whose front face is the world grid, with time running back along the depth axis.</p>
+<p>EBVCubes use netCDF, a file format designed for multidimensional scientific data. The format keeps data values, their geographic and temporal coordinates, and descriptive metadata together in one self-describing file. It follows the Climate and Forecast (<strong>CF</strong>) and Attribute Convention for Data Discovery (<strong>ACDD</strong>) conventions, plus <strong>EBVCube-specific</strong> biodiversity terms. This common structure makes datasets easier to discover, interpret and exchange.</p>
+<p>The figure uses the tutorial’s bird-diversity example to illustrate this structure. Each box represents one biological entity. It contains values on the same global grid, with time running along the depth axis.</p>
 <div class="grid">
 <div class="g-col-6 border rounded p-3">
-<p><code>lon</code></p>
-<p><span class="small text-muted">The x axis of the grid. You fix it once, with <code>extent</code> and <code>resolution</code>.</span></p>
+<p><strong>Longitude</strong> (<code>lon</code>)</p>
+<p><span class="small text-muted">The east–west coordinate of the spatial grid. Its values are determined by the spatial <code>extent</code> and <code>resolution</code> of your data.</span></p>
 </div>
 <div class="g-col-6 border rounded p-3">
-<p><code>lat</code></p>
-<p><span class="small text-muted">The y axis. Every layer in the file has to share this exact grid and CRS.</span></p>
+<p><strong>Latitude</strong> (<code>lat</code>)</p>
+<p><span class="small text-muted">The north–south coordinate of the spatial grid. Every layer added to the cube must use the same grid and coordinate reference system.</span></p>
 </div>
 <div class="g-col-6 border rounded p-3">
-<p><code>time</code></p>
-<p><span class="small text-muted">A single date, or a whole series. The dates you declare must match the layers you add.</span></p>
+<p><strong>Time</strong> (<code>time</code>)</p>
+<p><span class="small text-muted">The date or dates represented by the data. The values declared in the metadata must match the layers you add to the cube.</span></p>
 </div>
 <div class="g-col-6 border rounded p-3">
-<p><code>entity</code></p>
-<p><span class="small text-muted">The biological unit: a species, a community, an ecosystem.</span></p>
+<p><strong>Entity</strong> (<code>entity</code>)</p>
+<p><span class="small text-muted">The biological unit represented by the data: for example, a species, a group of species, or an ecosystem type.</span></p>
 </div>
 </div>
 </div>
@@ -312,40 +325,35 @@ Eight units, each runnable against a real published dataset. Begin with <a href=
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>Metric</strong> and <strong>scenario</strong> are not dimensions, they organise the cubes <em>inside</em> the file. The file as a whole is the EBVCube; inside it, each <strong>metric</strong> holds one four-dimensional array named <code>ebv_cube</code>, carrying the <code>lon</code>, <code>lat</code>, <code>time</code> and <code>entity</code> dimensions above. A <strong>scenario</strong>, when a dataset has one, adds a level on top: <code>scenario_1/metric_1/ebv_cube</code>.</p>
-<p>Dataset <code>id = 1</code> has two metrics and no scenarios, so it holds exactly two arrays: <code>metric_1/ebv_cube</code> and <code>metric_2/ebv_cube</code>.</p>
+<p><strong>Metrics</strong> and <strong>scenarios</strong> are not dimensions. They organise the four-dimensional data cubes inside an EBVCube.</p>
+<p>A <strong>metric</strong> is what is measured, for example species richness, the relative change in species richness, or its uncertainty. Each metric group contains one four-dimensional data array named <code>ebv_cube</code>, with the dimensions <code>lon</code>, <code>lat</code>, <code>time</code> and <code>entity</code>.</p>
+<p>A <strong>scenario</strong> is an optional higher-level group, normally used for projected data. For example, the same metric may be modelled under several alternative future land-use pathways. When scenarios are present, each metric is stored separately within each scenario: <code>scenario_1/metric_1/ebv_cube</code>.</p>
+<p>If a dataset has 3 scenarios and 3 metrics, it therefore contains 9 scenario–metric combinations and 9 <code>ebv_cube</code> data arrays. All of these cubes use the same four-dimensional structure.</p>
 </div>
 </div>
 </div>
 </section>
-<section id="half-in-r-half-on-the-portal" class="level2">
-<h2 class="anchored" data-anchor-id="half-in-r-half-on-the-portal">Half in R, half on the portal</h2>
-<p>You build and check the file locally, then hand it over. Knowing which half you are in tells you which unit to open.</p>
+<section id="from-concepts-to-publication" class="level2">
+<h2 class="anchored" data-anchor-id="from-concepts-to-publication">From concepts to publication</h2>
+<p>First, you learn the terms and file structure. You then prepare and validate an EBVCube locally in R, and use the portal to publish it. Metadata can be prepared either through the portal form or in R; both routes produce the same JSON file used to create the EBVCube.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
-<pre class="mermaid mermaid-js">flowchart LR
-  subgraph inR["In R — units 2 to 5"]
-    direction LR
-    A["Prepare&lt;br/&gt;data"] --&gt; B["ebv_metadata()&lt;br/&gt;write the JSON"]
-    B --&gt; C["ebv_create()&lt;br/&gt;empty netCDF"]
-    C --&gt; D["ebv_add_data()&lt;br/&gt;fill the cubes"]
-    D --&gt; E["Validate and visualise&lt;br/&gt;check before sharing"]
-  end
-  subgraph onP["On the portal — unit 6"]
-    direction LR
-    F["Upload&lt;br/&gt;submit for review"] --&gt; G["Review&lt;br/&gt;by the portal team"]
-    G --&gt; H["Publish&lt;br/&gt;receive a DOI"]
-  end
-  E --&gt; F
-  classDef rstep fill:#E8F1EA,stroke:#2F6F4E,color:#12211F
-  classDef pstep fill:#FBF0DF,stroke:#B57728,color:#12211F
-  class A,B,C,D,E rstep
-  class F,G,H pstep
-  style inR fill:#FFFFFF,stroke:#2F6F4E,color:#2F6F4E
-  style onP fill:#FFFFFF,stroke:#B57728,color:#B57728
+<pre class="mermaid mermaid-js">%%{init: {"flowchart": {"htmlLabels": false}} }%%
+flowchart LR
+  A("Unit 1&lt;br/&gt;Understand EBVs and EBVCubes")
+  B("Units 2–5&lt;br/&gt;Create and validate an EBVCube in R")
+  C("Unit 6&lt;br/&gt;Publish on the EBV Data Portal")
+  A --&gt; B --&gt; C
+  classDef concept fill:#E8F1F8,stroke:#4E7894,color:#12211F
+  classDef rstep   fill:#E8F1EA,stroke:#2F6F4E,color:#12211F
+  classDef pstep   fill:#FBF0DF,stroke:#B57728,color:#12211F
+  class A concept
+  class B rstep
+  class C pstep
+  linkStyle default stroke:#9AA5A0,stroke-width:1.5px
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -355,37 +363,37 @@ Eight units, each runnable against a real published dataset. Begin with <a href=
 </section>
 <section id="one-real-dataset-start-to-finish" class="level2">
 <h2 class="anchored" data-anchor-id="one-real-dataset-start-to-finish">One real dataset, start to finish</h2>
-<p>The tutorial is built around one published dataset, id = 1, that you can open on the live portal. The metadata fields and code chunks work against that file, so what you read here is what you’d get running it yourself.</p>
+<p>This published dataset illustrates how an EBVCube stores several scenarios and metrics. The later units identify the exact example inputs used in their code; the same creation workflow can be applied to your own data.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Local bird diversity (cSAR/BES-SIM)
+Global trends in biodiversity (BES-SIM cSAR-iDiv)
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><span class="badge bg-secondary">id = 1</span> <span class="badge bg-secondary">Community composition</span> <span class="badge bg-secondary">3 entities</span> <span class="badge bg-secondary">2 metrics</span> <span class="badge bg-secondary">1900–2015</span></p>
-<p>Relative and absolute change in the number of bird species at decadal steps, for forest, non-forest and all bird species. Roughly 4 MB, downloaded once and cached locally.</p>
-<p><em>Martins, I., Pereira, H., Navarro, L. (2022).</em> <a href="https://portal.geobon.org/ebv-detail?id=1">Dataset page</a> · DOI <a href="https://doi.org/10.25829/8grx36">10.25829/8grx36</a></p>
+<p><span class="badge bg-secondary">id = 30</span> <span class="badge bg-secondary">Community composition</span> <span class="badge bg-secondary">3 entities</span> <span class="badge bg-secondary">3 metrics</span> <span class="badge bg-secondary">3 scenarios</span> <span class="badge bg-secondary">1900 · 2015 · 2050</span></p>
+<p>Bird species richness on a 1° global grid, modelled with cSAR-iDiv for all birds, forest birds and non-forest birds, under three SSP-RCP land-use scenarios. Roughly 3.3 MB, downloaded once and cached locally.</p>
+<p><em>Martins, I., Pereira, H. (2022).</em> <a href="https://portal.geobon.org/ebv-detail?id=30">Dataset page</a> · DOI <a href="https://doi.org/10.25829/5zmy41">10.25829/5zmy41</a></p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ebvcube)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_download</span>(<span class="at">id =</span> <span class="dv">1</span>, <span class="at">outputdir =</span> <span class="st">"data/ebv"</span>, <span class="at">overwrite =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_download</span>(<span class="at">id =</span> <span class="dv">30</span>, <span class="at">outputdir =</span> <span class="fu">tempdir</span>(), <span class="at">overwrite =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Every later code chunk starts from that file path. To run the workflow against your <em>own</em> data, point it at your own <code>.nc</code> and the rest of the tutorial runs unchanged.</p>
+<p>Keep this example in mind as you learn the workflow: its nine scenario–metric combinations show how several four-dimensional data cubes can coexist in one file. To create your <em>own</em> EBVCube, replace the example metadata and data where the units indicate. Your entities, metrics, scenarios, dimensions and metadata may differ.</p>
 </div>
 </div>
 </section>
 <section id="how-this-tutorial-is-organised" class="level2">
 <h2 class="anchored" data-anchor-id="how-this-tutorial-is-organised">How this tutorial is organised</h2>
-<p>Each unit opens with its objectives, works through the step with runnable code and screenshots, and closes with a checkpoint so you know you are ready to move on.</p>
+<p>Each unit opens with clear objectives, works through the topic with runnable code and screenshots, and closes with a checkpoint so you know what you should have completed before moving on.</p>
 <div class="grid">
 <div class="g-col-12 g-col-sm-6 g-col-md-3 border rounded p-3">
 <p><span class="small text-success">UNIT 1</span><br>
 <strong><a href="./01-introduction.html">Introduction</a></strong></p>
-<p><span class="small text-muted">What EBVs are, and what the portal is for.</span></p>
+<p><span class="small text-muted">The EBV framework, EBVCube structure, key terminology and the role of the portal.</span></p>
 </div>
 <div class="g-col-12 g-col-sm-6 g-col-md-3 border rounded p-3">
 <p><span class="small text-success">UNIT 2</span><br>
@@ -394,32 +402,32 @@ Local bird diversity (cSAR/BES-SIM)
 </div>
 <div class="g-col-12 g-col-sm-6 g-col-md-3 border rounded p-3">
 <p><span class="small text-success">UNIT 3</span><br>
-<strong><a href="03-preparing.qmd">Preparing data</a></strong></p>
-<p><span class="small text-muted">Line up your rasters, entity list and metadata JSON.</span></p>
+<strong><a href="./03-preparing-data.html">Preparing data</a></strong></p>
+<p><span class="small text-muted">Prepare your spatial data, entity list and metadata JSON for the EBVCube workflow.</span></p>
 </div>
 <div class="g-col-12 g-col-sm-6 g-col-md-3 border rounded p-3">
 <p><span class="small text-success">UNIT 4</span><br>
-<strong><a href="04-creating.qmd">Creating the EBVCube</a></strong></p>
-<p><span class="small text-muted">Build the netCDF, fill it, and confirm it is right.</span></p>
+<strong><a href="./04-creating-the-cube.html">Creating the EBVCube</a></strong></p>
+<p><span class="small text-muted">Create the EBVCube, add your data, and verify its structure.</span></p>
 </div>
 <div class="g-col-12 g-col-sm-6 g-col-md-3 border rounded p-3">
 <p><span class="small text-success">UNIT 5</span><br>
-<strong><a href="./05-validating.html">Validating and Visualizing</a></strong></p>
-<p><span class="small text-muted">Check the file before anyone else sees it.</span></p>
+<strong><a href="./05-validating.html">Validating and visualising</a></strong></p>
+<p><span class="small text-muted">Check the cube’s structure, metadata and data before uploading it.</span></p>
 </div>
 <div class="g-col-12 g-col-sm-6 g-col-md-3 border rounded p-3">
 <p><span class="small text-warning">UNIT 6</span><br>
 <strong><a href="./06-uploading.html">Uploading</a></strong></p>
-<p><span class="small text-muted">Submit through the portal and receive a DOI.</span></p>
+<p><span class="small text-muted">Upload your EBVCube, submit it for review, and publish it with a DOI.</span></p>
 </div>
 <div class="g-col-12 g-col-sm-6 g-col-md-3 border rounded p-3">
-<p><span class="small text-warning">UNIT 7</span><br>
+<p><span class="small text-secondary">UNIT 7</span><br>
 <strong><a href="./07-troubleshooting.html">Troubleshooting</a></strong></p>
 <p><span class="small text-muted">What to do when a step refuses to work.</span></p>
 </div>
 <div class="g-col-12 g-col-sm-6 g-col-md-3 border rounded p-3">
-<p><span class="small text-warning">UNIT 8</span><br>
-<strong><a href="08-references.qmd">Further reading</a></strong></p>
+<p><span class="small text-secondary">UNIT 8</span><br>
+<strong><a href="./08-resources.html">Resources and references</a></strong></p>
 <p><span class="small text-muted">Specifications, papers, and where to ask.</span></p>
 </div>
 </div>
@@ -428,13 +436,14 @@ Local bird diversity (cSAR/BES-SIM)
 <h2 class="anchored" data-anchor-id="before-you-start">Before you start</h2>
 <div class="grid">
 <div class="g-col-12 g-col-md-6">
-<p>You do not need prior netCDF experience, <a href="./01-introduction.html">Unit 1</a> covers the concepts. It helps to be comfortable with:</p>
+<p>You do not need prior knowledge of EBVs, netCDF files or the EBV Data Portal. <a href="./01-introduction.html">Unit 1</a> introduces the concepts and vocabulary used throughout the tutorial.</p>
+<p>It helps to be comfortable with:</p>
 <ul>
 <li>basic R: installing packages and running scripts;</li>
-<li>basic geospatial data in R, at the level of <code>terra</code> or <code>raster</code>;</li>
-<li>your own biodiversity rasters, or following along with the example dataset.</li>
+<li>basic geospatial data handling in R, using packages such as <code>terra</code>;</li>
+<li>biodiversity raster data, if you want to create your own EBVCube rather than follow the example.</li>
 </ul>
-<p>The portal units also need a free <a href="https://members.geobon.org/register/index">GEO BON account</a>.</p>
+<p>A free <a href="https://members.geobon.org/register/index">GEO BON account</a> is needed if you use the portal’s metadata form or submit a dataset for publication. It is not needed to read public datasets or follow the R-only metadata workflow.</p>
 </div>
 <div class="g-col-12 g-col-md-6">
 <p><strong>Key resources</strong></p>
@@ -446,16 +455,6 @@ Local bird diversity (cSAR/BES-SIM)
 <li><a href="https://geobon.org/ebvs/what-are-ebvs/">GEO BON — what are EBVs?</a> — the canonical definition and the six classes.</li>
 <li><a href="https://biss.pensoft.net/article/91215/">Quoss et al.&nbsp;(2022)</a> — the methods paper describing the package.</li>
 </ul>
-</div>
-</div>
-<div class="callout callout-style-simple callout-tip">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p><strong>Working alongside this tutorial.</strong> Every code chunk runs as-is against the example dataset. If you are preparing your <em>own</em> dataset, follow the same steps and swap in your rasters and metadata where Units 3 and 4 point it out.</p>
-</div>
 </div>
 </div>
 
@@ -1038,7 +1037,25 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>var lightboxQuarto = GLightbox({"selector":".lightbox","closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom"});
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p><a href="https://naturaconnect.eu/"><img src="images/NClogo.png" alt="NaturaConnect" height="50"></a></p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<div style="max-width:360px; margin-left:auto; text-align:left">
+<p><a href="images/eu.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="images/eu.png" alt="Funded by the European Union" height="52"></a></p>
+<div style="color:#003399; text-align:justify; font-size:.8rem; margin-top:.6em">
+<p>NaturaConnect receives funding under the European Union’s Horizon Europe research and innovation programme under grant agreement number 101060429.</p>
+</div>
+</div>
+</div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","descPosition":"bottom","loop":false,"closeEffect":"zoom","openEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
