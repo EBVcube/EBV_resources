@@ -7,3 +7,9 @@
 .RData
 /sources/
 /data/
+
+
+# Windows cruft
+Thumbs.db
+ehthumbs.db
+desktop.ini

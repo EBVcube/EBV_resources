@@ -68,7 +68,7 @@ The GeoTIFF you are adding does not sit on the same grid as the netCDF, so its r
 
 ```{r}
 #| eval: false
-target_r <- ebv_read(new_nc, "metric_1/ebv_cube",
+target_r <- ebv_read(new_nc, "scenario_1/metric_1/ebv_cube",
                      entity = 1, timestep = 1, type = "r")
 
 r  <- terra::rast("your_data.tif")

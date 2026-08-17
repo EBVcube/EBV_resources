@@ -7,17 +7,24 @@ page-layout: full
 # Overview {.unnumbered}
 ::: {.grid .mt-3 .mb-4}
 
-::: {.g-col-9 .g-col-md-11}
-[A step-by-step tutorial on turning your data into an EBVCube with the `ebvcube` R package, then validating, visualizing and publishing it as a citable, FAIR dataset on the EBV Data Portal.]{.lead}
+
+::: {.g-col-12 .g-col-md-9}
+[Learn how to turn gridded biodiversity data into an EBVCube: a reusable file that can be checked, shared and published through the EBV Data Portal.]{.lead}
 :::
 :::
 
 ::: {.callout-note appearance="simple"}
 **New to this?** \
-Eight units, each runnable against a real published dataset. Begin
-with [Unit 1 — Introduction](01-introduction.qmd), or jump straight to any unit below.
+Eight units take you from the EBV framework and EBVCube concepts to creating,
+validating and publishing a dataset. [Unit 1 — Introduction](01-introduction.qmd)
+introduces the terminology used throughout the tutorial; if you already know the
+EBV framework, you can jump straight to any unit below.
 
-[R ≥ 4.2 · 4 MB example download · no prior netCDF experience needed]{.small .text-muted}
+[R ≥ 4.2 · 3.3 MB example download · no prior netCDF experience needed]{.small .text-muted}
+:::
+
+::: {.callout-note appearance="simple" title="Four names to keep separate"}
+An **Essential Biodiversity Variable (EBV)** is a standardised measurement used to describe and track an important aspect of biodiversity. An **EBVCube** is the standardised file that stores gridded EBV data and the information needed to interpret it. **`ebvcube`** is the R package used to inspect, read, visualise and create EBVCubes. The **EBV Data Portal** is the online service where datasets can be discovered, submitted, published and explored.
 :::
 
 
@@ -30,35 +37,37 @@ with [Unit 1 — Introduction](01-introduction.qmd), or jump straight to any uni
 :::
 
 ::: {.g-col-12 .g-col-md-7}
-An EBVCube is the standard format for publishing **Essential Biodiversity Variables**, the standardised measurements the biodiversity community tracks in common. It is a netCDF file organised in a defined way and following the CF and ACDD metadata conventions, so every dataset, whatever produced it, is structured the same way. That is what makes two of them comparable. [Unit 1](01-introduction.qmd) covers the framework.
+EBVCubes use netCDF, a file format designed for multidimensional scientific data. The format keeps data values, their geographic and temporal coordinates, and descriptive metadata together in one self-describing file. It follows the Climate and Forecast (**CF**) and Attribute Convention for Data Discovery (**ACDD**) conventions, plus **EBVCube-specific** biodiversity terms. This common structure makes datasets easier to discover, interpret and exchange.
 
-The figure shows the tutorial's own example, dataset `id = 1`: three entities, each a
-box whose front face is the world grid, with time running back along the depth axis.
+The figure uses the tutorial's bird-diversity example to illustrate this structure. Each box represents one biological entity. It contains values on the same global grid, with time running along the depth axis.
+
 
 ::: {.grid}
 
 ::: {.g-col-6 .border .rounded .p-3}
-`lon`
+**Longitude** (`lon`)
 
-[The x axis of the grid. You fix it once, with `extent` and `resolution`.]{.small .text-muted}
+[The east–west coordinate of the spatial grid. Its values are determined by the spatial `extent` and `resolution` of your data.]{.small .text-muted}
+:::
+
+
+::: {.g-col-6 .border .rounded .p-3}
+**Latitude** (`lat`)
+
+[The north–south coordinate of the spatial grid. Every layer added to the cube must use the same grid and coordinate reference system.]{.small .text-muted}
+:::
+
+
+::: {.g-col-6 .border .rounded .p-3}
+**Time** (`time`)
+
+[The date or dates represented by the data. The values declared in the metadata must match the layers you add to the cube.]{.small .text-muted}
 :::
 
 ::: {.g-col-6 .border .rounded .p-3}
-`lat`
+**Entity** (`entity`)
 
-[The y axis. Every layer in the file has to share this exact grid and CRS.]{.small .text-muted}
-:::
-
-::: {.g-col-6 .border .rounded .p-3}
-`time`
-
-[A single date, or a whole series. The dates you declare must match the layers you add.]{.small .text-muted}
-:::
-
-::: {.g-col-6 .border .rounded .p-3}
-`entity`
-
-[The biological unit: a species, a community, an ecosystem.]{.small .text-muted}
+[The biological unit represented by the data: for example, a species, a group of species, or an ecosystem type.]{.small .text-muted}
 
 :::
 
@@ -69,83 +78,78 @@ box whose front face is the world grid, with time running back along the depth a
 :::
 
 ::: {.callout-note appearance="simple"}
-**Metric** and **scenario** are not dimensions, they organise the cubes *inside*
-the file. The file as a whole is the EBVCube; inside it, each **metric** holds one
-four-dimensional array named `ebv_cube`, carrying the `lon`, `lat`, `time` and
-`entity` dimensions above. A **scenario**, when a dataset has one, adds a level on
-top: `scenario_1/metric_1/ebv_cube`.
+**Metrics** and **scenarios** are not dimensions. They organise the four-dimensional data cubes inside an EBVCube.
 
-Dataset `id = 1` has two metrics and no scenarios, so it holds exactly two arrays:
-`metric_1/ebv_cube` and `metric_2/ebv_cube`.
+A **metric** is what is measured, for example species richness, the relative change in species richness, or its uncertainty. Each metric group contains one four-dimensional data array named `ebv_cube`, with the dimensions `lon`, `lat`, `time` and `entity`.
+
+A **scenario** is an optional higher-level group, normally used for projected data. For example, the same metric may be modelled under several alternative future land-use pathways. When scenarios are present, each metric is stored separately within each scenario: `scenario_1/metric_1/ebv_cube`.
+
+If a dataset has 3 scenarios and 3 metrics, it therefore contains 9 scenario–metric
+combinations and 9 `ebv_cube` data arrays. All of these cubes use the same four-dimensional
+structure.
 :::
 
 
+## From concepts to publication
 
-## Half in R, half on the portal
-
-You build and check the file locally, then hand it over. Knowing which half you are in
-tells you which unit to open.
+First, you learn the terms and file structure. You then prepare and validate an EBVCube locally in R, and use the portal to publish it. Metadata can be prepared either through the portal form or in R; both routes produce the same JSON file used to create the EBVCube.
 
 ```{mermaid}
 %%| echo: false
+%%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart LR
-  subgraph inR["In R — units 2 to 5"]
-    direction LR
-    A["Prepare<br/>data"] --> B["ebv_metadata()<br/>write the JSON"]
-    B --> C["ebv_create()<br/>empty netCDF"]
-    C --> D["ebv_add_data()<br/>fill the cubes"]
-    D --> E["Validate and visualise<br/>check before sharing"]
-  end
-  subgraph onP["On the portal — unit 6"]
-    direction LR
-    F["Upload<br/>submit for review"] --> G["Review<br/>by the portal team"]
-    G --> H["Publish<br/>receive a DOI"]
-  end
-  E --> F
-  classDef rstep fill:#E8F1EA,stroke:#2F6F4E,color:#12211F
-  classDef pstep fill:#FBF0DF,stroke:#B57728,color:#12211F
-  class A,B,C,D,E rstep
-  class F,G,H pstep
-  style inR fill:#FFFFFF,stroke:#2F6F4E,color:#2F6F4E
-  style onP fill:#FFFFFF,stroke:#B57728,color:#B57728
+  A("Unit 1<br/>Understand EBVs and EBVCubes")
+  B("Units 2–5<br/>Create and validate an EBVCube in R")
+  C("Unit 6<br/>Publish on the EBV Data Portal")
+  A --> B --> C
+  classDef concept fill:#E8F1F8,stroke:#4E7894,color:#12211F
+  classDef rstep   fill:#E8F1EA,stroke:#2F6F4E,color:#12211F
+  classDef pstep   fill:#FBF0DF,stroke:#B57728,color:#12211F
+  class A concept
+  class B rstep
+  class C pstep
+  linkStyle default stroke:#9AA5A0,stroke-width:1.5px
 ```
 
 ## One real dataset, start to finish
 
-The tutorial is built around one published dataset, id = 1, that you can open on the live portal. The metadata fields and code chunks work against that file, so what you read here is what you'd get running it yourself.
+This published dataset illustrates how an EBVCube stores several scenarios and metrics. The later units identify the exact example inputs used in their code; the same creation workflow can be applied to your own data.
+
 
 ::: {.callout-note}
-## Local bird diversity (cSAR/BES-SIM)
+## Global trends in biodiversity (BES-SIM cSAR-iDiv)
 
-[id = 1]{.badge .bg-secondary}
+[id = 30]{.badge .bg-secondary}
 [Community composition]{.badge .bg-secondary}
 [3 entities]{.badge .bg-secondary}
-[2 metrics]{.badge .bg-secondary}
-[1900–2015]{.badge .bg-secondary}
+[3 metrics]{.badge .bg-secondary}
+[3 scenarios]{.badge .bg-secondary}
+[1900 · 2015 · 2050]{.badge .bg-secondary}
 
-Relative and absolute change in the number of bird species at decadal steps, for
-forest, non-forest and all bird species. Roughly 4 MB, downloaded once and cached
-locally.
+Bird species richness on a 1° global grid, modelled with cSAR-iDiv for all birds,
+forest birds and non-forest birds, under three SSP-RCP land-use scenarios. Roughly
+3.3 MB, downloaded once and cached locally.
 
-*Martins, I., Pereira, H., Navarro, L. (2022).*
-[Dataset page](https://portal.geobon.org/ebv-detail?id=1) ·
-DOI [10.25829/8grx36](https://doi.org/10.25829/8grx36)
+*Martins, I., Pereira, H. (2022).*
+[Dataset page](https://portal.geobon.org/ebv-detail?id=30) ·
+DOI [10.25829/5zmy41](https://doi.org/10.25829/5zmy41)
 
 ```{r}
 #| eval: false
 library(ebvcube)
 
-ebv_download(id = 1, outputdir = "data/ebv", overwrite = FALSE)
+ebv_download(id = 30, outputdir = tempdir(), overwrite = FALSE)
 ```
 
-Every later code chunk starts from that file path. To run the workflow against your
-*own* data, point it at your own `.nc` and the rest of the tutorial runs unchanged.
+Keep this example in mind as you learn the workflow: its nine scenario–metric combinations show how several four-dimensional data cubes can coexist in one file. To create your *own* EBVCube, replace the example metadata and data where the units indicate. Your entities, metrics, scenarios, dimensions and metadata may differ.
+
 :::
 
 ## How this tutorial is organised
 
-Each unit opens with its objectives, works through the step with runnable code and
-screenshots, and closes with a checkpoint so you know you are ready to move on.
+Each unit opens with clear objectives, works through the topic with runnable code and
+screenshots, and closes with a checkpoint so you know what you should have completed
+before moving on.
 
 ::: {.grid}
 
@@ -153,7 +157,8 @@ screenshots, and closes with a checkpoint so you know you are ready to move on.
 [UNIT 1]{.small .text-success}\
 **[Introduction](01-introduction.qmd)**
 
-[What EBVs are, and what the portal is for.]{.small .text-muted}
+[The EBV framework, EBVCube structure, key terminology and the role of the portal.]{.small .text-muted}
+
 :::
 
 ::: {.g-col-12 .g-col-sm-6 .g-col-md-3 .border .rounded .p-3}
@@ -165,42 +170,46 @@ screenshots, and closes with a checkpoint so you know you are ready to move on.
 
 ::: {.g-col-12 .g-col-sm-6 .g-col-md-3 .border .rounded .p-3}
 [UNIT 3]{.small .text-success}\
-**[Preparing data](03-preparing.qmd)**
+**[Preparing data](03-preparing-data.qmd)**
 
-[Line up your rasters, entity list and metadata JSON.]{.small .text-muted}
+[Prepare your spatial data, entity list and metadata JSON for the EBVCube workflow.]{.small .text-muted}
+
 :::
 
 ::: {.g-col-12 .g-col-sm-6 .g-col-md-3 .border .rounded .p-3}
 [UNIT 4]{.small .text-success}\
-**[Creating the EBVCube](04-creating.qmd)**
+**[Creating the EBVCube](04-creating-the-cube.qmd)**
 
-[Build the netCDF, fill it, and confirm it is right.]{.small .text-muted}
+[Create the EBVCube, add your data, and verify its structure.]{.small .text-muted}
+
 :::
 
 ::: {.g-col-12 .g-col-sm-6 .g-col-md-3 .border .rounded .p-3}
 [UNIT 5]{.small .text-success}\
-**[Validating and Visualizing](05-validating.qmd)**
+**[Validating and visualising](05-validating.qmd)**
 
-[Check the file before anyone else sees it.]{.small .text-muted}
+[Check the cube's structure, metadata and data before uploading it.]{.small .text-muted}
+
 :::
 
 ::: {.g-col-12 .g-col-sm-6 .g-col-md-3 .border .rounded .p-3}
 [UNIT 6]{.small .text-warning}\
 **[Uploading](06-uploading.qmd)**
 
-[Submit through the portal and receive a DOI.]{.small .text-muted}
+[Upload your EBVCube, submit it for review, and publish it with a DOI.]{.small .text-muted}
+
 :::
 
 ::: {.g-col-12 .g-col-sm-6 .g-col-md-3 .border .rounded .p-3}
-[UNIT 7]{.small .text-warning}\
+[UNIT 7]{.small .text-secondary}\
 **[Troubleshooting](07-troubleshooting.qmd)**
 
 [What to do when a step refuses to work.]{.small .text-muted}
 :::
 
 ::: {.g-col-12 .g-col-sm-6 .g-col-md-3 .border .rounded .p-3}
-[UNIT 8]{.small .text-warning}\
-**[Further reading](08-references.qmd)**
+[UNIT 8]{.small .text-secondary}\
+**[Resources and references](08-resources.qmd)**
 
 [Specifications, papers, and where to ask.]{.small .text-muted}
 :::
@@ -212,15 +221,18 @@ screenshots, and closes with a checkpoint so you know you are ready to move on.
 ::: {.grid}
 
 ::: {.g-col-12 .g-col-md-6}
-You do not need prior netCDF experience, [Unit 1](01-introduction.qmd) covers the concepts. It helps to be
-comfortable with:
+You do not need prior knowledge of EBVs, netCDF files or the EBV Data Portal. [Unit 1](01-introduction.qmd) introduces the concepts and vocabulary used throughout the tutorial.
+
+It helps to be comfortable with:
 
 -   basic R: installing packages and running scripts;
--   basic geospatial data in R, at the level of `terra` or `raster`;
--   your own biodiversity rasters, or following along with the example dataset.
+-   basic geospatial data handling in R, using packages such as `terra`;
+-   biodiversity raster data, if you want to create your own EBVCube rather than follow the example.
 
-The portal units also need a free [GEO BON account](https://members.geobon.org/register/index).
+
+A free [GEO BON account](https://members.geobon.org/register/index) is needed if you use the portal's metadata form or submit a dataset for publication. It is not needed to read public datasets or follow the R-only metadata workflow.
 :::
+
 
 ::: {.g-col-12 .g-col-md-6}
 **Key resources**
@@ -235,9 +247,4 @@ The portal units also need a free [GEO BON account](https://members.geobon.org/r
 
 :::
 
-::: {.callout-tip appearance="simple"}
-**Working alongside this tutorial.** Every code chunk runs as-is against the example
-dataset. If you are preparing your *own* dataset, follow the same steps and swap in
-your rasters and metadata where Units 3 and 4 point it out.
-:::
 

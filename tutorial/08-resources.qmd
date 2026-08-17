@@ -7,7 +7,7 @@ A short list of where to go beyond this tutorial, followed by the works cited th
 - **EBV netCDF format specification** — the authoritative description of the EBVCube format: <https://github.com/EBVcube/EBVCube-format>
 - **`ebvcube` documentation book** — the full package reference, including advanced usage beyond this tutorial: <https://EBVcube.github.io/ebvcube/>
 - **`ebvcube` source on GitHub** — code and release history: <https://github.com/EBVcube/ebvcube>
-- **Running example dataset** — "Local bird diversity (cSAR/BES-SIM)", the dataset followed throughout this book: <https://portal.geobon.org/ebv-detail?id=1> (DOI [10.25829/8grx36](https://doi.org/10.25829/8grx36)). Its official citation is on the dataset page.
+- **Running example dataset** — "Global trends in biodiversity (BES-SIM cSAR-iDiv)", the dataset followed throughout this book: <https://portal.geobon.org/ebv-detail?id=30> (DOI [10.25829/5zmy41](https://doi.org/10.25829/5zmy41)) [@martins2022]. Its official citation is on the dataset page.
 
 For installing the package, see [@sec-installation]; for where to ask questions or report a bug, see [@sec-troubleshooting].
 

@@ -54,7 +54,7 @@ Once the file is in, submit the dataset for review. It moves out of *Draft* into
 
 ## After publication: DOI, citation, and versions
 
-On publication the portal assigns your dataset a DOI and generates its citation, both shown on the dataset page. You can see this on the live page for the running example, [dataset id = 1](https://portal.geobon.org/ebv-detail?id=1), where its version history, DOI, and citation all appear.
+On publication the portal assigns your dataset a DOI and generates its citation, both shown on the dataset page. You can see this on the live page for the running example, [dataset id = 30](https://portal.geobon.org/ebv-detail?id=30), where its version history, DOI, and citation all appear.
 
 ::: {.callout-note appearance="simple" title="Cite the dataset, not the package"}
 Point people to the dataset DOI when they cite your data — not to the `ebvcube` package citation, which credits the software rather than the dataset. If you later revise the data, upload it as a **new version** instead of editing the published one. The portal keeps versions distinct, so anyone who already cited the earlier DOI still lands on the exact data they used.
@@ -62,14 +62,14 @@ Point people to the dataset DOI when they cite your data — not to the `ebvcube
 
 Here is that page, embedded live (in the HTML version of the book):
 
-<iframe src="https://portal.geobon.org/ebv-detail?id=1"
-        title="EBV Data Portal page for dataset id = 1 (Local bird diversity, cSAR/BES-SIM)"
+<iframe src="https://portal.geobon.org/ebv-detail?id=30"
+        title="EBV Data Portal page for dataset id = 30 (Global trends in biodiversity, BES-SIM cSAR-iDiv)"
         width="100%" height="600"
         style="border:1px solid #ddd; border-radius:6px;"
         loading="lazy">
 </iframe>
 
-<p>If the page does not load, <a href="https://portal.geobon.org/ebv-detail?id=1">open dataset id = 1 on the EBV Data Portal</a>.</p>
+<p>If the page does not load, <a href="https://portal.geobon.org/ebv-detail?id=30">open dataset id = 30 on the EBV Data Portal</a>.</p>
 
 ::: {.callout-tip appearance="simple"}
 **Checkpoint.** Your netCDF is uploaded, submitted, and, once approved, live on the EBV Data Portal with its own DOI. If anything snagged along the way, [@sec-troubleshooting] collects the fixes for the problems that come up most often.

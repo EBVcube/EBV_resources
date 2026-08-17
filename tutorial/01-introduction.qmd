@@ -6,16 +6,17 @@ By the end you will be able to:
 -   define an EBV and explain what it is for;
 -   name the six EBV classes and recognise how they appear on the portal;
 -   explain why the EBVCube stores data as netCDF, and what the format adds;
+-   distinguish the four dimensions of an EBVCube from its metrics and scenarios;
 -   find and inspect a dataset on the EBV Data Portal.
 :::
 
-This unit fills in the concepts you will lean on for the rest of the tutorial: what an EBV is, why it settled on netCDF, and how datasets are organised. You need no software yet, we install `ebvcube` in [Unit 2](02-installation.qmd). For now, everything happens in your browser, on the EBV Data Portal.
+This unit introduces the concepts you will use throughout the tutorial: what an EBV is, why the EBVCube format uses netCDF, and how a dataset is organised. You need no software yet; we install `ebvcube` in [Unit 2](02-installation.qmd). For now, everything happens in your browser, on the EBV Data Portal.
 
 ## What is an Essential Biodiversity Variable?
 
-An **Essential Biodiversity Variable (EBV)** is a standardised, derived measurement that captures a key dimension of biodiversity and lets us monitor its status and change over time. The concept was proposed by @pereira2013 and is maintained by the [Group on Earth Observations Biodiversity Observation Network (GEO BON)](https://geobon.org/) [@geobon]. EBVs harmonise many primary sources, field observations, remote sensing, and model outputs, into a common, analysis-ready format. They sit as an intermediate layer between raw observations and the indicators used for assessment, reporting, and decision making.
+An **Essential Biodiversity Variable (EBV)** is a standardised measurement of an important aspect of biodiversity. EBVs provide a common language for describing and tracking biodiversity change across places and time. They can be derived from field observations, remote sensing, or models, and sit between those primary sources and the indicators used for assessment, reporting, and decision making [@pereira2013; @geobon].
 
-Think of an EBV as the biodiversity counterpart to an *Essential Climate Variable*: a small, agreed-upon set of variables that different groups can produce, compare, and combine because they follow the same definitions. That shared standardisation is what makes data from different projects, taxa, and regions consistent enough to track over time.
+An EBV is not a file. An **EBVCube** is the standardised file used to store *gridded* EBV data, together with the information needed to interpret it. Think of the EBV framework as the shared language for biodiversity measurements, and the EBVCube as one way to make those measurements consistent, reusable, and comparable.
 
 ## The six EBV classes
 
@@ -42,7 +43,7 @@ EBVs are organised into six classes, each capturing a different dimension of bio
 :::
 
 ::: {.g-col-12 .g-col-sm-6 .g-col-md-4 .border .border-success .rounded .p-3}
-**Community composition** [our example]{.badge .bg-success}
+**Community composition** [tutorial example]{.badge .bg-success}
 
 [The diversity and mix of species within a community.]{.small .text-muted}
 :::
@@ -61,76 +62,80 @@ EBVs are organised into six classes, each capturing a different dimension of bio
 
 :::
 
-The dataset we use throughout this tutorial, *Local bird diversity (cSAR/BES-SIM)*, belongs to the **Community composition** class.
+The dataset we use throughout this tutorial, *Global trends in biodiversity (BES-SIM cSAR-iDiv)*, belongs to the **Community composition** class.
 
 ::: {.callout-note collapse="true" title="Canonical classes vs. what you see on the portal"}
-The six classes above are the canonical classification defined by GEO BON. On the [EBV Data Portal](https://portal.geobon.org/datasets) you may not see all six at once; the portal lists only the classes for which datasets are currently available. You may also meet finer labels such as **Species distribution** or **Ecosystem disturbance**, which are sub-categories within the canonical classes.
+The six classes above are the canonical classification defined by GEO BON. On the [EBV Data Portal](https://portal.geobon.org/datasets), you may not see all six at once, because the portal lists only the classes represented by available datasets. The portal may also show additional catalogue labels; these do not replace the six canonical EBV classes.
 
 **Ecosystem services** is *not* one of the six EBV classes. It belongs to a separate, complementary GEO BON framework, the **Essential Ecosystem Service Variables (EESVs)**, which covers the benefits people obtain from nature rather than biodiversity itself. For the official classification, see the [GEO BON definitions page](https://geobon.org/ebvs/what-are-ebvs/).
 :::
 
 ## Why netCDF? The EBVCube format
 
-A single EBV has a value at every location (**longitude**, **latitude**), at several points in **time**, and for each biological **entity** measured. Stored as separate map images, that becomes an unwieldy pile of files with no built-in context. The [Network Common Data Form (netCDF)](https://www.unidata.ucar.edu/software/netcdf/), long used in the climate sciences, instead holds it all in one *self-describing* file: the data travels together with the information that explains it, units, dates, entities, and projection.
+An EBVCube is designed for *gridded* biodiversity data: values arranged across geographic space and, often, through time. Storing each map or time step as a separate file quickly becomes difficult to manage and interpret. The [Network Common Data Form (netCDF)](https://www.unidata.ucar.edu/software/netcdf/), long used in the climate sciences, keeps the data and the information that explains it together in one *self-describing* file: units, dates, entities, and coordinate reference system travel with the values.
 
-The **EBVCube** is the standardised, netCDF-based data format defined for EBVs. It follows two established conventions, **CF v1.8** [@cfconventions] (how coordinates, units, and time are encoded) and **ACDD v1.3** [@acdd] (the attributes portals use to index datasets), plus a few EBV-specific rules set out in the [EBVCube format specification](https://github.com/EBVcube/EBVCube-format).
+The **EBVCube** is the standardised, netCDF-based data format defined for EBVs. It follows two established conventions: **CF v1.8** [@cfconventions], which defines how coordinates, units, and time are encoded; and **ACDD v1.3** [@acdd], which defines metadata that makes a dataset easier to discover and understand. EBVCube-specific biodiversity terms complete the format [@ebvcube2025].
 
-Every data cube inside an EBVCube shares the same four dimensions, so each pixel carries four pieces of information, *where*, *when*, and *which* entity:
+Every data cube inside an EBVCube shares the same four dimensions. Together, they locate each data value: *where*, *when*, and for *which* biological entity.
 
 ::: {.grid}
 
 ::: {.g-col-6 .border .rounded .p-3}
-`lon`
+**Longitude** (`lon`)
 
-[Longitude, or the projected x-coordinate.]{.small .text-muted}
+[The east–west coordinate of the grid, or the projected x-coordinate.]{.small .text-muted}
 :::
 
 ::: {.g-col-6 .border .rounded .p-3}
-`lat`
+**Latitude** (`lat`)
 
-[Latitude, or the projected y-coordinate.]{.small .text-muted}
+[The north–south coordinate of the grid, or the projected y-coordinate.]{.small .text-muted}
 :::
 
 ::: {.g-col-6 .border .rounded .p-3}
-`time`
+**Time** (`time`)
 
 [One date or a whole series: annual, decadal, scenario years, irregular.]{.small .text-muted}
 :::
 
 ::: {.g-col-6 .border .rounded .p-3}
-`entity`
+**Entity** (`entity`)
 
 [The biological unit: a species, a group of species, or an ecosystem type.]{.small .text-muted}
 :::
 
 :::
 
-The `entity` dimension is what lets a single EBVCube hold data for many species or other biological units at once. Above these four dimensions, *metric* and *scenario* **groups** organise different biodiversity measures or future projections within the same file. We return to that structure in [Unit 4](04-creating-the-cube.qmd).
+The `entity` dimension lets one EBVCube hold data for many species or other biological units at once. Above these four dimensions, **metrics** and **scenarios** organise the data cubes inside the file. A *metric* is what is measured, such as species richness or its uncertainty. A *scenario* is an optional grouping, normally used for projected data under alternative future pathways.
+
+Our example uses both levels: three scenarios, each with three metrics, make nine data cubes in total. Every one uses the same four dimensions. We return to this hierarchy in [Unit 4](04-creating-the-cube.qmd).
 
 ![Overview of the EBVCube data model. An EBV dataset combines a hierarchical structure of scenarios and metrics with four-dimensional data cubes (longitude, latitude, time, and entity), and carries standardised metadata following the CF 1.8, ACDD 1.3, and EBV conventions. Source: Quoß et al. (in preparation).](images/ebvcube-structure.png){#fig-ebvcube-structure fig-alt="The EBVCube data model: a hierarchy of scenarios and metrics over four-dimensional data cubes, plus standardised metadata."}
 
 ## Touring the EBV Data Portal
 
-All published EBV datasets live on the [EBV Data Portal](https://portal.geobon.org/). Throughout this tutorial we use one of them as the running example:
+Published EBV datasets can be found on the [EBV Data Portal](https://portal.geobon.org/). Throughout this tutorial we use one of them as the running example:
 
 ::: {.callout-note appearance="simple"}
-**Worked example: [Local bird diversity (cSAR/BES-SIM)](https://portal.geobon.org/ebv-detail?id=1)**
+**Worked example: [Global trends in biodiversity (BES-SIM cSAR-iDiv)](https://portal.geobon.org/ebv-detail?id=30)**
 
-[id = 1]{.badge .bg-secondary}
+[id = 30]{.badge .bg-secondary}
 [Community composition]{.badge .bg-secondary}
-[DOI 10.25829/8grx36]{.badge .bg-secondary}
+[DOI 10.25829/5zmy41]{.badge .bg-secondary}
 
-Martins, I., Pereira, H., Navarro, L. (2022). *Local bird diversity (cSAR/BES-SIM)* (Version 1) \[Dataset\]. German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig. DOI [10.25829/8grx36](https://doi.org/10.25829/8grx36)
+Martins, I., Pereira, H. (2022). *Global trends in biodiversity (BES-SIM cSAR-iDiv)* (Version 1) \[Dataset\]. German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig. DOI [10.25829/5zmy41](https://doi.org/10.25829/5zmy41) [@martins2022]
+
+We picked this dataset deliberately. It reports bird species richness for 1900, 2015 and 2050 across three entities (all birds, forest birds, non-forest birds), under three SSP×RCP land-use scenarios. Because it carries **both** a scenario level and multiple metrics, working through it exposes the entire EBVCube hierarchy — a dataset without scenarios would let you finish the tutorial without ever meeting half the structure.
 :::
 
-Open the dataset page and you will find everything that makes an EBV dataset **FAIR** (findable, accessible, interoperable, and reusable):
+Open the dataset page and you will find information that supports **FAIR** (findable, accessible, interoperable, and reusable) use of the dataset:
 
--   a stable **dataset ID** (`1`) and a persistent **DOI** you can cite;
+-   a stable **dataset ID** (`30`) and a persistent **DOI** you can cite;
 -   a structured **JSON metadata record** (title, abstract, EBV class, creators, license, entities);
--   the **netCDF file** itself, available for direct download (≈ 4 MB);
+-   the **netCDF file** itself, available for direct download (≈ 3.3 MB);
 -   an interactive **EBV Visualizer** for exploring maps and temporal trends without downloading anything.
 
-The three views you will use most are the *Discover* page (@fig-portal-discover), an individual *dataset page* (@fig-portal-detail), and the live *EBV Visualizer*. Click either screenshot to enlarge it.
+The three views you will use most are the *Discover* page (@fig-portal-discover), an individual *dataset page*, and the live *EBV Visualizer*. Click the Discover screenshot to enlarge it.
 
 ::: panel-tabset
 ### Discover page
@@ -139,33 +144,47 @@ The three views you will use most are the *Discover* page (@fig-portal-discover)
 
 ### Dataset page
 
-![The dataset page for id = 1, showing its general metadata and the netCDF download button.](images/portal-detail.png){#fig-portal-detail fig-alt="Detail page for the Local bird diversity dataset with metadata and a download button."}
+[Open dataset id = 30 on the EBV Data Portal](https://portal.geobon.org/ebv-detail?id=30) to inspect its general metadata, entities, citation, DOI, and netCDF download. <!-- Replace this link with a current screenshot of dataset id = 30 before publication. -->
 
 ### EBV Visualizer
 
-<iframe src="https://portal.geobon.org/map/?id=1" width="100%" height="600" style="border:1px solid #ddd; border-radius:6px;" loading="lazy">
+<iframe src="https://portal.geobon.org/map/?id=30" width="100%" height="600" style="border:1px solid #ddd; border-radius:6px;" loading="lazy">
 
 </iframe>
 
 :::
 
 ::: {.callout-note appearance="simple"}
-Portal interface as of July 2026. The portal is updated from time to time, so small layout differences are normal; the metadata, DOI, and download are always on the dataset page.
+Portal interface checked in August 2026. The portal is updated from time to time, so small layout differences are normal; the metadata, DOI, and download remain on the dataset page.
 :::
 
 Browsing and inspecting datasets like this is how you *find* data on the portal. Next, we look at how you *work with* it.
 
 ## Where `ebvcube` fits
 
-The portal is where EBV data is *published and discovered*; the **`ebvcube`** R package [@ebvcube2025; @quoss2022] is how you *work with it*. It sits on both sides of the portal:
+The portal is where EBV data is *published and discovered*. The **`ebvcube`** R package [@ebvcube2025; @quoss2022] lets you discover, access, visualise, and create EBVCubes.
 
 ::: {.grid}
 
 ::: {.g-col-12 .g-col-md-6 .border .rounded .p-3}
-[READ]{.small .text-success}\
-**Reading published data**
+[DISCOVER]{.small .text-success}\
+**Inspect a published file**
 
-[Give `ebvcube` a dataset's numeric ID and it downloads the file, lists the cubes inside, and reads, subsets, or maps them, pulling id = 1 into R in a couple of lines instead of a manual download and netCDF wrangling.]{.small .text-muted}
+[Find out what a file contains and how it is organised: list its data-cube paths and inspect its metadata before reading any values.]{.small .text-muted}
+:::
+
+::: {.g-col-12 .g-col-md-6 .border .rounded .p-3}
+[ACCESS]{.small .text-success}\
+**Read the data you need**
+
+[Download a published file, read a selected entity or time step, or subset it to a geographic area instead of loading more data than you need.]{.small .text-muted}
+:::
+
+::: {.g-col-12 .g-col-md-6 .border .rounded .p-3}
+[VISUALISE]{.small .text-success}\
+**Explore patterns and change**
+
+[Make a map of one data slice or a trend plot through time, without first learning the details of netCDF.]{.small .text-muted}
 :::
 
 ::: {.g-col-12 .g-col-md-6 .border .rounded .p-3}
@@ -177,8 +196,12 @@ The portal is where EBV data is *published and discovered*; the **`ebvcube`** R 
 
 :::
 
-Read on one side, create on the other: that round trip is the workflow in the Overview diagram, and the path the rest of this tutorial follows, one step at a time.
+This tutorial concentrates on the path from understanding a published dataset to creating and publishing your own EBVCube, one step at a time.
 
 ::: {.callout-tip appearance="simple"}
-**Checkpoint.** You just inspected dataset id = 1 on the portal, its **EBV class** (Community composition), its **DOI**, and its **file format** (netCDF). If those three make sense, you are ready to install the tools in [Unit 2](02-installation.qmd).
+**Checkpoint.** Open dataset id = 30 on the portal and identify its **EBV class**,
+**DOI**, **entities**, and the **file formats** offered for download. Then identify one
+scenario and one metric in the dataset. If you can also explain why the data is stored
+as netCDF rather than as a folder of maps, you are ready to install the software in
+[Unit 2](02-installation.qmd).
 :::

@@ -25,13 +25,13 @@ Before installing `ebvcube`, make sure you have:
 ::: {.g-col-12 .g-col-md-6 .border .rounded .p-3}
 **RStudio** [recommended]{.badge .bg-secondary}
 
-[A free, widely used editor for R. Not strictly required, but every code example in this tutorial assumes you are working in it. Download it [here](https://posit.co/downloads)]{.small .text-muted}
+[A free, widely used editor for R. It is not required, but it makes it easier to run, save, and revisit the code in this tutorial. Download it [here](https://posit.co/downloads).]{.small .text-muted}
 :::
 
 :::
 
 ::: {.callout-note collapse="true" title="What about HDF5 and GDAL?"}
-The lower-level libraries `ebvcube` relies on, **HDF5** (for reading netCDF-4 files) and **GDAL** (for spatial data), install automatically on Windows and macOS: HDF5 comes with the Bioconductor package `rhdf5`, and GDAL comes with the CRAN build of `terra`. There is nothing extra to set up.
+On Windows and macOS, you will usually not need to install **HDF5** or **GDAL** yourself. Bioconductor supplies HDF5 through `rhdf5`, while CRAN binary builds of `terra` normally include the spatial libraries they need. Linux installations can require additional system libraries; [Unit 7](07-troubleshooting.qmd) covers the common fixes.
 :::
 
 ## Installing `ebvcube` from CRAN
@@ -86,7 +86,7 @@ BiocManager::install(c("rhdf5", "DelayedArray", "HDF5Array"))
 You only need to do this once per R installation.
 
 ::: {.callout-note collapse="true" title="Which Bioconductor version?"}
-`BiocManager` automatically picks the Bioconductor release that matches your version of R, which is what you want. You can pin a specific release with `BiocManager::install(version = "3.22")`, but only do so if you have a reason to, each Bioconductor release requires a matching R version (3.22 needs R 4.5.x), so leaving it out is also a safe choice.
+`BiocManager` automatically selects the Bioconductor release that matches your version of R. Leave the version unspecified unless a package maintainer or a project requirement tells you otherwise.
 :::
 
 ## Verifying your installation
@@ -99,7 +99,7 @@ library(ebvcube)
 packageVersion("ebvcube")
 ```
 
-Then open the small example dataset that ships with the package, a subset of the *Local bird diversity (cSAR/BES-SIM)* dataset. Because it is bundled, this needs no download and works offline:
+Then open the small example dataset that ships with the package. Because it is bundled, this needs no download and works offline, making it a reliable installation check:
 
 ```{r}
 #| eval: false
@@ -110,15 +110,24 @@ prop@general$title
 #> [1] "Local bird diversity (cSAR/BES-SIM)"
 ```
 
-If the title prints, your installation is working. When you are ready to pull the *full* dataset from the portal (≈ 4 MB), the same two lines work with a download instead of the bundled file. We do exactly that in the next unit:
+::: {.callout-important collapse="true" title="Why is the test file different from the tutorial example?"}
+They are two different published datasets, which can be easy to miss.
+
+The file bundled inside `ebvcube` is a spatial subset of **[Local bird diversity (cSAR/BES-SIM)](https://portal.geobon.org/ebv-detail?id=1)**, portal id = 1. The dataset this tutorial follows is **Global trends in biodiversity (BES-SIM cSAR-iDiv)**, portal id = 30. They share a lead author and a model family, which is why the names look so similar, but they are separate published products: id = 1 covers 1900–2015 with no scenarios, while id = 30 covers 1900, 2015 and 2050 across three SSP×RCP scenarios.
+
+We use the bundled file here and only here, because verifying an installation should not depend on a working internet connection. The tutorial's scenario-based reference dataset is id = 30.
+:::
+
+If the title prints, your installation is working. You can then optionally download the tutorial's scenario-based reference dataset from the portal (≈ 3.3 MB). This second check requires an internet connection:
 
 ```{r}
 #| eval: false
-file <- ebv_download(id = 1, outputdir = tempdir(), overwrite = FALSE)
+file <- ebv_download(id = 30, outputdir = tempdir(), overwrite = FALSE)
 prop <- ebv_properties(file, verbose = FALSE)
 prop@general$title
+#> [1] "Global trends in biodiversity (BES-SIM cSAR-iDiv)"
 ```
 
 ::: {.callout-tip appearance="simple"}
-**Checkpoint.** `library(ebvcube)` loads with no error, and `ebv_properties()` prints the dataset title. If both work, your setup is complete and you are ready to prepare biodiversity data in [Unit 3](03-preparing-data.qmd).
+**Checkpoint.** Your setup is complete when `library(ebvcube)` loads without error and `ebv_properties()` prints the title of the bundled dataset. Downloading id = 30 is an optional connectivity check. Once the installation check works, you are ready to prepare biodiversity data in [Unit 3](03-preparing-data.qmd).
 :::

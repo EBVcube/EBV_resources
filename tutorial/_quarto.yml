@@ -6,7 +6,7 @@ book:
   title: "From Raster to Portal: Creating and Publishing an EBVCube"
   author:
     - name: "Emmanuel Oceguera-Conchas"
-      affiliation: "German Centre for Integrative Biodiversity Research (iDiv) ![](images/idiv-logo.png){width=22px style=\"vertical-align:text-bottom; margin-left:.4em\"}"
+      affiliation: "German Centre for Integrative Biodiversity Research (iDiv) ![](images/idiv-logo.png){width=22px style=\"vertical-align:text-bottom; margin-left:.4em\"} ![](images/NClogo.png){height=22px style=\"vertical-align:text-bottom; margin-left:.5em\"}"
   date: today
   repo-url: https://github.com/EBVcube/EBV_resources
   repo-branch: main
@@ -18,6 +18,21 @@ book:
     logo: images/ebv_logo.png
     style: docked
     background: light
+  page-footer:
+    left:  |
+      [![](images/NClogo.png){height=50px fig-alt="NaturaConnect"}](https://naturaconnect.eu/)
+    
+    right: |
+      :::: {style="max-width:360px; margin-left:auto; text-align:left"}
+      ![](images/eu.png){height=52px fig-alt="Funded by the European Union"}
+
+      ::: {style="color:#003399; text-align:justify; font-size:.8rem; margin-top:.6em"}
+      NaturaConnect receives funding under the European Union's Horizon Europe
+      research and innovation programme under grant agreement number 101060429.
+      :::
+      ::::
+    border: true
+  
   chapters:
     - index.qmd
     - 01-introduction.qmd

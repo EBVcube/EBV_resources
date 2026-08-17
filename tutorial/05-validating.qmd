@@ -46,7 +46,7 @@ Does it say the truth?
 
 :::
 
-The checks below run against a real file. So the unit is self-contained, we validate the published dataset (id = 1); when you validate your *own* cube, point `nc` at the file you created in [@sec-creating] instead:
+The checks below run against a real file. So the unit is self-contained, we validate the published dataset (id = 30); when you validate your *own* cube, point `nc` at the file you created in [@sec-creating] instead:
 
 ```{r}
 #| eval: false
@@ -54,8 +54,8 @@ library(ebvcube)
 
 # Self-contained: download the published cube to a temporary directory.
 # For your own file, replace this with: nc <- "path/to/your_cube.nc"
-nc <- ebv_download(id = 1, outputdir = tempdir(), overwrite = FALSE)
-dc <- "metric_1/ebv_cube"    # the running example has no scenario layer
+nc <- ebv_download(id = 30, outputdir = tempdir(), overwrite = FALSE)
+dc <- "scenario_1/metric_1/ebv_cube"    # species richness under SSP1xRCP2.6
 ```
 
 ## Check the structure
@@ -72,7 +72,7 @@ props@spatial$extent           # c(xmin, xmax, ymin, ymax)
 props@temporal$dates           # the time axis
 ```
 
-The datacube paths should list every metric and entity you expect, the entity names should read correctly, and the extent and dates should match your data. A missing entity or an empty time axis points to a step that went wrong in creation.
+The datacube paths should list every scenario, metric and entity you expect — nine rows for dataset 30 — the entity names should read correctly, and the extent and dates should match your data. A missing entity or an empty time axis points to a step that went wrong in creation. A file that comes back with three paths instead of nine has lost its scenario level, which almost always traces back to the metadata JSON rather than to `ebv_create()`.
 
 ## Check the values
 
@@ -80,8 +80,21 @@ Structure can be right while the numbers are wrong, so read a slice and look at 
 
 ```{r}
 #| eval: false
-stats <- ebv_analyse(nc, dc, entity = 1, timestep = 1, verbose = FALSE)
+stats <- ebv_analyse(nc, dc, entity = 2, timestep = 1, verbose = FALSE)
 stats[c("min", "max", "mean", "n", "NAs")]
+```
+
+You can restrict the same call to a region by passing a bounding box, which reads only the cells you asked for rather than the whole grid:
+
+```{r}
+#| eval: false
+bb  <- c(xmin = -118, xmax = -86, ymin = 14, ymax = 33)   # Mexico and Central America
+reg <- ebv_analyse(nc, dc, entity = 2, timestep = 1:3, subset = bb, verbose = FALSE)
+reg[c("mean", "n")]
+#> $mean
+#> [1] 65.95752
+#> $n
+#> [1] 1824
 ```
 
 `n` is the number of valid pixels. If it is zero, or `NAs` covers the whole grid, the cube never received its data. A `min` or `max` far outside what your variable should hold usually signals a unit problem or a stray fill value that leaked into the data.
@@ -98,8 +111,8 @@ Numbers only tell you so much; a picture catches problems a summary hides, like 
 
 ```{r}
 #| eval: false
-#| fig-cap: "Relative change in bird species, first time step (global)."
-ebv_map(nc, dc, entity = 1, timestep = 1, classes = 9, verbose = FALSE)
+#| fig-cap: "Forest-bird species richness in 2050 under SSP1xRCP2.6."
+ebv_map(nc, dc, entity = 2, timestep = 3, classes = 5, verbose = FALSE)
 ```
 
 #### Plot the trend
@@ -108,10 +121,24 @@ ebv_map(nc, dc, entity = 1, timestep = 1, classes = 9, verbose = FALSE)
 
 ```{r}
 #| eval: false
-#| fig-cap: "Mean relative change in bird species over time."
-trend_vals <- ebv_trend(nc, dc, entity = 1, method = "mean", verbose = FALSE)
+#| fig-cap: "Mean forest-bird species richness over time."
+trend_vals <- ebv_trend(nc, dc, entity = 2, method = "mean", verbose = FALSE)
 trend_vals
 ```
+
+#### Compare the scenarios
+
+With a scenario dataset there is a check you cannot do on a flat file: run the same trend across all three scenarios and see whether they behave the way the science says they should.
+
+```{r}
+#| eval: false
+#| fig-cap: "Mean forest-bird species richness under three SSP-RCP scenarios."
+trend_ssp1 <- ebv_trend(nc, "scenario_1/metric_1/ebv_cube", entity = 2, verbose = FALSE)
+trend_ssp3 <- ebv_trend(nc, "scenario_2/metric_1/ebv_cube", entity = 2, verbose = FALSE)
+trend_ssp5 <- ebv_trend(nc, "scenario_3/metric_1/ebv_cube", entity = 2, verbose = FALSE)
+```
+
+For dataset 30 the three should share an identical historical decline — from about 33.28 to 31.48 species per cell between 1900 and 2015 — and separate only at 2050, where SSP1×RCP2.6 retains roughly 0.35 more species per cell than the other two. That pattern is itself diagnostic: scenarios that differ *before* their divergence year mean data has been written into the wrong cube, and scenarios that are identical *after* it mean a cube was filled from the same source three times.
 
 :::
 
@@ -140,11 +167,13 @@ The title, units, entity count, and time coverage should all match your metadata
 
 Before you move to the portal, walk through this list. If every box ticks, the file is ready to upload:
 
-- [ ] The datacube paths list every metric and entity you expect.
+- [ ] The datacube paths list every scenario, metric and entity you expect.
 - [ ] Entity names, dates, extent, and resolution match your metadata.
 - [ ] Units and the cube description read correctly.
 - [ ] A map of at least one slice looks right, with no 180° shift.
 - [ ] Value ranges are plausible and the valid-pixel count (`n`) is not zero.
+- [ ] No cube is still entirely fill value from a skipped `ebv_add_data()` call.
+- [ ] If you have scenarios, they differ from each other where they should, and only where they should.
 
 The portal runs its own validation when you submit, but clearing these first saves a round trip. Panoply, introduced in [@sec-creating], is a quick way to eyeball the structure outside R if you want a second opinion.
 
