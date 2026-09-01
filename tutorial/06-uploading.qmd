@@ -1,23 +1,23 @@
-# Uploading the dataset to the EBV Data Portal {#sec-uploading}
+# Uploading a dataset to the EBV Data Portal {#sec-uploading}
 
 ::: {.callout-note appearance="simple" title="In this unit"}
 By the end you will be able to:
 
--   return to the portal upload form you started in [@sec-preparing];
--   upload your validated netCDF and a preview image;
--   submit the dataset for review and follow it through to publication;
--   find your dataset's DOI and citation, and publish later versions.
+- open the portal submission associated with your validated EBVCube;
+- upload your validated netCDF and a preview image;
+- submit the dataset for review; and
+- find a published dataset's DOI, citation, and version information.
 :::
 
-By this point the hard part is done. You filled the upload form in [@sec-preparing], then built and checked the netCDF in [@sec-creating] and [@sec-validating]. This unit closes the loop — go back to the portal, upload the file, and submit it for review. It is mostly clicking, so it is short.
+You prepared the metadata in [@sec-preparing], then built and validated the netCDF in [@sec-creating] and [@sec-validating]. This unit returns to the EBV Data Portal to attach the finished file to its metadata and submit the dataset for review.
 
 ::: {.grid}
 
 ::: {.g-col-12 .g-col-md-4 .border .rounded .p-3}
 [STEP 1]{.small .text-success}\
-**Reopen the form**
+**Open the submission**
 
-[Sign in to the portal and return to your draft under *Uploads*.]{.small .text-muted}
+[Resume the portal draft from Unit 3, or start a new upload if you created the metadata JSON in R.]{.small .text-muted}
 :::
 
 ::: {.g-col-12 .g-col-md-4 .border .rounded .p-3}
@@ -31,46 +31,50 @@ By this point the hard part is done. You filled the upload form in [@sec-prepari
 [STEP 3]{.small .text-success}\
 **Submit for review**
 
-[The portal team checks it against the EBV standard, then publishes it.]{.small .text-muted}
+[Review the submission, then use *Submit for review*. Published datasets display a DOI, citation, and version information.]{.small .text-muted}
 :::
 
 :::
 
 ## Back to the upload form
 
-The submission uses the same New Upload form you met in [@sec-preparing]. Sign in with your GEO BON account and reopen your draft under **Uploads**. The *General information* and *EBV attributes* tabs are already filled from earlier, so the only tab left to finish is *Data upload*.
+The submission uses the same **New Upload** form you met in [@sec-preparing]. Sign in with your GEO BON account.
+
+If you created the metadata JSON through the portal, reopen your draft under **Uploads**. The *General information* and *EBV attributes* tabs should already contain the information you entered earlier, leaving *Data upload* to finish.
+
+If you created the metadata JSON in R with `ebv_metadata()`, start a new upload and complete the portal form before attaching the netCDF. Check that the portal fields describe the same dataset as the metadata and file you validated.
 
 ## Uploading your netCDF
 
-The *Data upload* tab offers two ways to submit: a ZIP of GeoTIFFs, or a netCDF built with the `ebvcube` package. You built the netCDF, so choose that option and upload your `.nc` file.
+The *Data upload* tab offers two ways to submit: a ZIP of GeoTIFFs or a netCDF built with the `ebvcube` package. You built the netCDF, so choose that option and upload your `.nc` file.
 
 ::: {.callout-tip appearance="simple" title="Add a preview image"}
-If the form asks for one, a small map of a single slice exported from `ebv_map()` is enough — it makes your dataset easier to recognise in the catalogue. The portal runs its own validation on upload; if it flags anything, work back through the checks in [@sec-validating], fix the file, and upload again.
+The portal accepts a JPG or PNG preview image. A small map of a single slice exported from `ebv_map()` is a clear choice and makes your dataset easier to recognise in the catalogue. If the portal flags a problem with the submission, return to the checks in [@sec-validating], correct the relevant file or metadata, and upload the revised file.
 :::
 
 ## Submitting for review
 
-Once the file is in, submit the dataset for review. It moves out of *Draft* into a review state, where the portal team checks the metadata and the file against the EBV standard before it goes public. Expect a wait, and possibly a request for small changes. When it is approved, the dataset is published: it appears in the public catalogue and becomes downloadable with `ebv_download()`.
+Once the file is attached, review the submission and select **Submit for review**. In *Draft* mode, the person who submitted the dataset has editing rights. Submitting confirms that the dataset is ready for review; use any feedback from that process to identify whether the metadata, netCDF file, or both need revision.
+
+Published datasets appear in the public catalogue and can be downloaded with `ebv_download()`.
 
 ## After publication: DOI, citation, and versions
 
-On publication the portal assigns your dataset a DOI and generates its citation, both shown on the dataset page. You can see this on the live page for the running example, [dataset id = 30](https://portal.geobon.org/ebv-detail?id=30), where its version history, DOI, and citation all appear.
+On publication, the portal page displays the dataset DOI and citation. You can see these on the live page for the running example, [dataset ID 30](https://portal.geobon.org/ebv-detail?id=30), together with its version history.
 
 ::: {.callout-note appearance="simple" title="Cite the dataset, not the package"}
-Point people to the dataset DOI when they cite your data — not to the `ebvcube` package citation, which credits the software rather than the dataset. If you later revise the data, upload it as a **new version** instead of editing the published one. The portal keeps versions distinct, so anyone who already cited the earlier DOI still lands on the exact data they used.
+Use the dataset DOI when citing your data — not the `ebvcube` package citation, which credits the software rather than the dataset. If you later revise the data, use the portal's versioning workflow and keep the netCDF file, metadata JSON, and description of the changes together. This preserves a clear record of what each version represents.
 :::
 
-Here is that page, embedded live (in the HTML version of the book):
-
 <iframe src="https://portal.geobon.org/ebv-detail?id=30"
-        title="EBV Data Portal page for dataset id = 30 (Global trends in biodiversity, BES-SIM cSAR-iDiv)"
+        title="EBV Data Portal page for dataset ID 30 (Global trends in biodiversity, BES-SIM cSAR-iDiv)"
         width="100%" height="600"
         style="border:1px solid #ddd; border-radius:6px;"
         loading="lazy">
 </iframe>
 
-<p>If the page does not load, <a href="https://portal.geobon.org/ebv-detail?id=30">open dataset id = 30 on the EBV Data Portal</a>.</p>
+<p>If the page does not load, <a href="https://portal.geobon.org/ebv-detail?id=30">open dataset ID 30 on the EBV Data Portal</a>.</p>
 
 ::: {.callout-tip appearance="simple"}
-**Checkpoint.** Your netCDF is uploaded, submitted, and, once approved, live on the EBV Data Portal with its own DOI. If anything snagged along the way, [@sec-troubleshooting] collects the fixes for the problems that come up most often.
+**Checkpoint.** Your validated netCDF is attached to a portal submission, and you know how to submit it for review. After publication, use the dataset page to find its DOI, citation, and version information. If anything snagged along the way, [@sec-troubleshooting] collects the fixes for the problems that come up most often.
 :::

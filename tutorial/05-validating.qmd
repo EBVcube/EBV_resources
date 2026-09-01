@@ -1,182 +1,198 @@
-# Validating your EBVCube before uploading {#sec-validating}
+# Validating and visualising your EBVCube {#sec-validating}
 
 ::: {.callout-note appearance="simple" title="In this unit"}
 By the end you will be able to:
 
--   inspect the structure of your netCDF with `ebv_properties()` and `ebv_datacubepaths()`;
--   check that the cube values fall in a sensible range with `ebv_analyse()`;
--   see the data as a map with `ebv_map()` and as a temporal trend with `ebv_trend()`;
--   compare the finished file against the metadata you declared;
--   run a short pre-flight checklist before you upload.
+- inspect the structure and metadata of a finished EBVCube;
+- check whether a selected data slice contains plausible values;
+- create a map and a temporal trend to inspect the data visually; and
+- complete a short pre-upload checklist.
 :::
 
-In [@sec-creating] you built an EBVCube and gave it a first structural look. This unit checks that the file is actually right before it goes to the EBV Data Portal in [@sec-uploading]. Every problem you catch here is cheaper to fix now than after a reviewer finds it.
+In [@sec-creating] you created an EBVCube and checked that data could be written to it. This unit is the final check before upload. It does not prove that the underlying science is correct; it confirms that the file contains the data and metadata you intended to publish.
 
-Validation runs on four quick questions — each one function, each cheaper than a rejected upload:
+Use the metadata JSON, source rasters, and creation settings from Units 3 and 4 as your reference. The file alone cannot tell you what its intended extent, units, or values should have been.
+
+Validation has four parts:
 
 ::: {.grid}
 
 ::: {.g-col-12 .g-col-sm-6 .g-col-md-3 .border .rounded .p-3}
 [STRUCTURE]{.small .text-success}\
-Is the shape right?
+Are the expected cubes present?
 
-[`ebv_datacubepaths()` and `ebv_properties()` list the cubes and metadata.]{.small .text-muted}
+[`ebv_datacubepaths()` lists the data cubes; `ebv_properties()` reads the file metadata.]{.small .text-muted}
 :::
 
 ::: {.g-col-12 .g-col-sm-6 .g-col-md-3 .border .rounded .p-3}
 [VALUES]{.small .text-success}\
-Are the numbers sane?
+Do the numbers make sense?
 
-[`ebv_analyse()` reports min, max, mean and the valid-pixel count.]{.small .text-muted}
+[`ebv_analyse()` reports the range, summary statistics, and number of valid pixels.]{.small .text-muted}
 :::
 
 ::: {.g-col-12 .g-col-sm-6 .g-col-md-3 .border .rounded .p-3}
 [VISUAL]{.small .text-success}\
-Does it look right?
+Does the pattern look right?
 
-[`ebv_map()` and `ebv_trend()` turn the cube into a picture.]{.small .text-muted}
+[`ebv_map()` and `ebv_trend()` make a map and a time-series plot directly from the cube.]{.small .text-muted}
 :::
 
 ::: {.g-col-12 .g-col-sm-6 .g-col-md-3 .border .rounded .p-3}
 [METADATA]{.small .text-success}\
-Does it say the truth?
+Does the file describe the data accurately?
 
-[Read the attributes back and match them to what you declared.]{.small .text-muted}
+[Compare the stored title, dates, entity names, and metric information with your metadata JSON.]{.small .text-muted}
 :::
 
 :::
 
-The checks below run against a real file. So the unit is self-contained, we validate the published dataset (id = 30); when you validate your *own* cube, point `nc` at the file you created in [@sec-creating] instead:
+## Choose the file and slice to inspect
+
+The rendered examples use the tutorial reference dataset (portal ID 30), so that the map and trend are visible in this unit. When validating your own file, replace `nc` with the path to the EBVCube you created in [@sec-creating]. The example selects the first available data cube, its first entity, and its final time step. These are choices for inspection, not assumptions about your data: replace them with the cube, entity, and date you want to check.
 
 ```{r}
-#| eval: false
+#| cache: true
 library(ebvcube)
 
-# Self-contained: download the published cube to a temporary directory.
-# For your own file, replace this with: nc <- "path/to/your_cube.nc"
+# Tutorial reference dataset. The download is cached in the temporary folder
+# during the render, so it is not requested again when already present.
 nc <- ebv_download(id = 30, outputdir = tempdir(), overwrite = FALSE)
-dc <- "scenario_1/metric_1/ebv_cube"    # species richness under SSP1xRCP2.6
-```
 
-## Check the structure
+# To validate your own file instead, use for example:
+# nc <- "path/to/your_ebvcube.nc"
 
-Start with the two functions you already met. `ebv_datacubepaths()` lists every cube in the file, and `ebv_properties()` reports the metadata slot by slot. Read them against what you meant to build:
-
-```{r}
-#| eval: false
-ebv_datacubepaths(nc, verbose = FALSE)
-
+cubes <- ebv_datacubepaths(nc, verbose = FALSE)
 props <- ebv_properties(nc, verbose = FALSE)
-props@general$entity_names     # the entities you declared
-props@spatial$extent           # c(xmin, xmax, ymin, ymax)
-props@temporal$dates           # the time axis
+
+dc       <- cubes$datacubepaths[1]
+entity   <- 1
+timestep <- length(props@temporal$dates)
 ```
 
-The datacube paths should list every scenario, metric and entity you expect — nine rows for dataset 30 — the entity names should read correctly, and the extent and dates should match your data. A missing entity or an empty time axis points to a step that went wrong in creation. A file that comes back with three paths instead of nine has lost its scenario level, which almost always traces back to the metadata JSON rather than to `ebv_create()`.
+## 1. Check the structure
 
-## Check the values
-
-Structure can be right while the numbers are wrong, so read a slice and look at its range. `ebv_analyse()` returns summary statistics for a cube or a subset:
+`ebv_datacubepaths()` lists the data cubes stored in the file. A data-cube path represents a scenario and metric combination when scenarios are present. Entities are stored as a dimension *within* each cube, so check their names separately.
 
 ```{r}
-#| eval: false
-stats <- ebv_analyse(nc, dc, entity = 2, timestep = 1, verbose = FALSE)
-stats[c("min", "max", "mean", "n", "NAs")]
+cubes
+
+props@general$entity_names
+props@spatial$extent
+props@temporal$dates
 ```
 
-You can restrict the same call to a region by passing a bounding box, which reads only the cells you asked for rather than the whole grid:
+Compare this output with the metadata and source data you prepared. The number of paths should equal the number of scenario--metric combinations you intended to create. For the tutorial reference dataset, that is three scenarios times three metrics, or nine paths. A file without scenarios can correctly have only one path per metric.
+
+Check that the entity names, spatial extent, and dates match what you declared. A missing cube, an unexpected entity name, or an empty time axis is a reason to return to the creation workflow before uploading.
+
+## 2. Check the values
+
+The file structure can be correct even when a cube contains no usable values. `ebv_analyse()` summarises the selected slice without requiring you to read the complete cube into memory:
 
 ```{r}
-#| eval: false
-bb  <- c(xmin = -118, xmax = -86, ymin = 14, ymax = 33)   # Mexico and Central America
-reg <- ebv_analyse(nc, dc, entity = 2, timestep = 1:3, subset = bb, verbose = FALSE)
-reg[c("mean", "n")]
-#> $mean
-#> [1] 65.95752
-#> $n
-#> [1] 1824
+stats <- ebv_analyse(
+  nc, dc, entity = entity, timestep = timestep, verbose = FALSE
+)
+stats[c("min", "mean", "max", "n", "NAs")]
 ```
 
-`n` is the number of valid pixels. If it is zero, or `NAs` covers the whole grid, the cube never received its data. A `min` or `max` far outside what your variable should hold usually signals a unit problem or a stray fill value that leaked into the data.
+`n` is the number of valid pixels. Compare the minimum, maximum, and mean with the units and expected range of your source data. If `n` is zero, or all cells are `NA`, that slice was not populated. A value outside the expected range can indicate a unit mismatch, an unexpected fill value, or an issue in the source raster.
 
-## See it — map and trend
+If the data covers a large area, repeat this check for a smaller region that you know well. Use a bounding box or shapefile subset only when you can confirm that it overlaps the cube and uses the same coordinate reference system.
 
-Numbers only tell you so much; a picture catches problems a summary hides, like data in the wrong hemisphere or an all-empty ocean. This is where `ebvcube` shines — two one-line functions turn a cube into a figure with no plotting or projection code of your own.
+## 3. Inspect the data visually
+
+Visual checks make spatial and temporal problems easier to spot. They complement the numerical summary above: a plausible mean can still hide data in the wrong place or a sudden change at one date.
 
 ::: {.panel-tabset}
 
 #### Map a slice
 
-`ebv_map()` draws a single time step as a classed choropleth, optionally overlaying country borders. One look confirms the data sit where they should:
+`ebv_map()` creates a map for one entity and time step. Confirm that the data appears in the expected geographic area and that missing areas are plausible for the dataset.
+
+```{r}
+#| fig-cap: "A selected EBVCube data slice for visual validation."
+ebv_map(
+  nc, dc, entity = entity, timestep = timestep,
+  classes = 5, verbose = FALSE
+)
+```
+
+#### Plot a trend
+
+`ebv_trend()` plots one summary value for each time step and returns those values. Look for a flat line when change is expected, an unexplained jump, or a missing time step. Whether a particular pattern is plausible must be judged against your data and method.
+
+```{r}
+#| fig-cap: "Mean value over time for the selected EBVCube entity."
+trend_values <- ebv_trend(
+  nc, dc, entity = entity, method = "mean", verbose = FALSE
+)
+trend_values
+```
+
+#### Optional: make a clearer trend figure
+
+If you want a presentation-ready figure, reuse the values returned by `ebv_trend()` with `ggplot2`. This is optional and does not add another validation requirement. Install `ggplot2` first if it is not already available.
 
 ```{r}
 #| eval: false
-#| fig-cap: "Forest-bird species richness in 2050 under SSP1xRCP2.6."
-ebv_map(nc, dc, entity = 2, timestep = 3, classes = 5, verbose = FALSE)
+# install.packages("ggplot2")  # run once, only if needed
+
+trend_data <- data.frame(
+  date  = props@temporal$dates,
+  value = trend_values
+)
+
+ggplot2::ggplot(trend_data, ggplot2::aes(date, value)) +
+  ggplot2::geom_line(linewidth = 0.9, colour = "#167A5A") +
+  ggplot2::geom_point(size = 2, colour = "#167A5A") +
+  ggplot2::labs(
+    title = "Mean value over time",
+    x = NULL,
+    y = "Mean value"
+  ) +
+  ggplot2::theme_minimal(base_size = 12)
 ```
-
-#### Plot the trend
-
-`ebv_trend()` collapses the spatial dimensions to one value per time step and draws the trajectory. It does double duty — it plots **and** returns the underlying numbers, so a flat line, a break, or an implausible jump is easy to spot and the values are yours to keep:
-
-```{r}
-#| eval: false
-#| fig-cap: "Mean forest-bird species richness over time."
-trend_vals <- ebv_trend(nc, dc, entity = 2, method = "mean", verbose = FALSE)
-trend_vals
-```
-
-#### Compare the scenarios
-
-With a scenario dataset there is a check you cannot do on a flat file: run the same trend across all three scenarios and see whether they behave the way the science says they should.
-
-```{r}
-#| eval: false
-#| fig-cap: "Mean forest-bird species richness under three SSP-RCP scenarios."
-trend_ssp1 <- ebv_trend(nc, "scenario_1/metric_1/ebv_cube", entity = 2, verbose = FALSE)
-trend_ssp3 <- ebv_trend(nc, "scenario_2/metric_1/ebv_cube", entity = 2, verbose = FALSE)
-trend_ssp5 <- ebv_trend(nc, "scenario_3/metric_1/ebv_cube", entity = 2, verbose = FALSE)
-```
-
-For dataset 30 the three should share an identical historical decline — from about 33.28 to 31.48 species per cell between 1900 and 2015 — and separate only at 2050, where SSP1×RCP2.6 retains roughly 0.35 more species per cell than the other two. That pattern is itself diagnostic: scenarios that differ *before* their divergence year mean data has been written into the wrong cube, and scenarios that are identical *after* it mean a cube was filled from the same source three times.
 
 :::
 
-::: {.callout-note appearance="simple" title="If the map looks shifted by 180°"}
-The file is using the `[0, 360]` longitude convention while the basemap expects `[-180, 180]`. Read the slice and wrap it before plotting:
+::: {.callout-note appearance="simple" title="If a custom map looks shifted by 180°"}
+This can happen when a raster uses the `[0, 360]` longitude convention and you add a `[-180, 180]` basemap. When creating your own map from `ebv_read()`, rotate the raster before plotting. This changes the display raster, not the EBVCube file.
 
 ```r
-r <- ebv_read(nc, dc, entity = 1, timestep = 1, type = "r")
+r <- ebv_read(nc, dc, entity = entity, timestep = timestep, type = "r")
 r <- terra::rotate(r)
 ```
 :::
 
-## Compare against your metadata
+## 4. Compare against your metadata
 
-Finally, confirm the file says what you told it to say. Read the attributes back and check them against the metadata form (or the `ebv_metadata()` call) you used to create it:
+Read the stored information back from the file and compare it with the metadata JSON or the values supplied through `ebv_metadata()`. Use the selected data-cube path to include metric-specific information.
 
 ```{r}
-#| eval: false
+cube_props <- ebv_properties(nc, dc, verbose = FALSE)
+
 props@general$title
-ebv_properties(nc, dc, verbose = FALSE)@ebv_cube$units
+props@general$entity_names
+props@temporal$dates
+cube_props@metric
 ```
 
-The title, units, entity count, and time coverage should all match your metadata. If a unit or description is wrong, fix it in place with `ebv_attribute()` from [@sec-creating] rather than rebuilding the file.
+The title, entity names, temporal coverage, metric name, description, and units should agree with the metadata you intend to submit. If you find an incorrect attribute, correct it with `ebv_attribute()` as described in [@sec-creating], then repeat the affected checks.
 
-## A pre-flight checklist
+## Pre-upload checklist
 
-Before you move to the portal, walk through this list. If every box ticks, the file is ready to upload:
+Before continuing to the portal, confirm the following:
 
-- [ ] The datacube paths list every scenario, metric and entity you expect.
-- [ ] Entity names, dates, extent, and resolution match your metadata.
-- [ ] Units and the cube description read correctly.
-- [ ] A map of at least one slice looks right, with no 180° shift.
-- [ ] Value ranges are plausible and the valid-pixel count (`n`) is not zero.
-- [ ] No cube is still entirely fill value from a skipped `ebv_add_data()` call.
-- [ ] If you have scenarios, they differ from each other where they should, and only where they should.
-
-The portal runs its own validation when you submit, but clearing these first saves a round trip. Panoply, introduced in [@sec-creating], is a quick way to eyeball the structure outside R if you want a second opinion.
+- [ ] The data-cube paths contain every scenario--metric combination I intended to create.
+- [ ] The entity names, spatial extent, and dates agree with my metadata and source data.
+- [ ] The selected slices contain valid pixels and values in the expected range.
+- [ ] A map of at least one slice appears in the expected location.
+- [ ] A temporal trend has the expected dates and contains no unexplained gaps or jumps.
+- [ ] The stored title and metric information agree with my metadata JSON.
+- [ ] I repeated the relevant checks after making any correction.
 
 ::: {.callout-tip appearance="simple"}
-**Checkpoint.** Your file's structure, values, map, and trend all match the dataset you meant to create, and every box in the pre-flight checklist is ticked. If so, you are ready to upload it to the EBV Data Portal in [@sec-uploading].
+**Checkpoint.** You have checked the structure, values, visual pattern, and metadata of your EBVCube against the information you prepared. You are now ready to upload the file in [@sec-uploading].
 :::

@@ -1,15 +1,46 @@
 # Further reading and references {#sec-resources}
 
-A short list of where to go beyond this tutorial, followed by the works cited throughout the book.
+::: {.callout-note appearance="simple" title="In this unit"}
+By the end of this unit, you will be able to:
 
-## Documentation and the format specification
+- choose the appropriate documentation, specification, or portal resource for your next task;
+- find the source code and the right route for package or portal support; and
+- cite the `ebvcube` software, the tutorial dataset, and the underlying methods correctly.
+:::
 
-- **EBV netCDF format specification** — the authoritative description of the EBVCube format: <https://github.com/EBVcube/EBVCube-format>
-- **`ebvcube` documentation book** — the full package reference, including advanced usage beyond this tutorial: <https://EBVcube.github.io/ebvcube/>
-- **`ebvcube` source on GitHub** — code and release history: <https://github.com/EBVcube/ebvcube>
-- **Running example dataset** — "Global trends in biodiversity (BES-SIM cSAR-iDiv)", the dataset followed throughout this book: <https://portal.geobon.org/ebv-detail?id=30> (DOI [10.25829/5zmy41](https://doi.org/10.25829/5zmy41)) [@martins2022]. Its official citation is on the dataset page.
+This unit brings together the resources used throughout the tutorial. Use it as a reference when you need more detail than a tutorial step provides, want to inspect the format specification, or need support with the package or portal.
 
-For installing the package, see [@sec-installation]; for where to ask questions or report a bug, see [@sec-troubleshooting].
+## Package documentation and source code
+
+For function-level details, use the [`ebvcube` function reference](https://rdrr.io/cran/ebvcube/man/). The [source repository](https://github.com/EBVcube/ebvcube) contains the package code, release history, and the package citation [@ebvcube2025].
+
+The released package is available from [CRAN](https://cran.r-project.org/package=ebvcube). The [B-Cubed r-universe package collection](https://b-cubed-eu.r-universe.dev/packages) also lists `ebvcube` and may provide more recent builds. When reproducibility matters, record the version returned by `packageVersion("ebvcube")`.
+
+For installation and a first working example, return to [@sec-installation]. For creating, reading, or mapping an EBVCube, the package documentation is the best next step after the relevant tutorial unit.
+
+## Format standards and the EBV framework
+
+The [EBVCube netCDF format specification](https://github.com/EBVcube/EBVCube-format) is the authoritative description of the file structure, required attributes, and metadata conventions. Consult it when a question concerns the contents of the netCDF file rather than how to use an R function.
+
+The format builds on the [CF Metadata Conventions](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) and the [Attribute Convention for Data Discovery (ACDD)](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) [@cfconventions; @acdd]. For the broader scientific context, see GEO BON's [introduction to Essential Biodiversity Variables](https://geobon.org/ebvs/what-are-ebvs/) and the foundational EBV paper [@pereira2013].
+
+## The EBV Data Portal and the tutorial dataset
+
+Use the [EBV Data Portal](https://portal.geobon.org/) to discover published datasets, view their metadata, and begin a submission. The [dataset page for *Global trends in biodiversity (BES-SIM cSAR-iDiv)*](https://portal.geobon.org/ebv-detail?id=30) is the running example used in this tutorial. It provides the dataset metadata, available downloads, and its official citation [@martins2022].
+
+When referring to that published dataset, cite its DOI: [10.25829/5zmy41](https://doi.org/10.25829/5zmy41). Do not cite the package in place of the dataset. The package and the EBVCube design are described in the methods paper [@quoss2022].
+
+For the complete submission workflow, return to [@sec-uploading]. If a file is not ready to upload, repeat the checks in [@sec-validating] before creating or updating a portal submission.
+
+## Getting help and reporting problems
+
+For a reproducible package error or a feature request, open an issue in the [`ebvcube` GitHub issue tracker](https://github.com/EBVcube/ebvcube/issues). For a question about how to use the package, begin with the function reference and troubleshooting guide; if you need to open an issue, include the error message, `sessionInfo()`, the installed package version, and a minimal reproducible example where possible.
+
+For a portal upload, metadata-form, review, or dataset-specific problem, use the contact route provided by the portal. The troubleshooting guide in [@sec-troubleshooting] will help you identify whether the issue belongs with the package or the portal before you ask for help.
+
+::: {.callout-tip appearance="simple"}
+**Checkpoint.** You can now locate the documentation and specification that match your task, find the appropriate support route, and cite both the software and the dataset used in your work. All external links in this unit were checked on 1 September 2026.
+:::
 
 ## References
 

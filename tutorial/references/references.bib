@@ -36,28 +36,32 @@
   urldate      = {2026-08-13},
 }
 
-% TO-VERIFY: author list and DOI reconstructed from the article URL
-% (https://biss.pensoft.net/article/91215/) referenced in OUTLINE.md.
-% Confirm against the published record before this goes out.
-@Article{quoss2022,
-  author  = {Quo{\ss}, Luise and Fernandez, Nestor and Langer, Christian and Valdez, Jose and Pereira, Henrique M.},
-  title   = {Ebvcube: An {R} Package to Work with the {EBV} {netCDF} Standard},
-  journal = {Biodiversity Information Science and Standards},
-  volume  = {6},
-  pages   = {e91215},
-  year    = {2022},
-  doi     = {10.3897/biss.6.e91215},
+@article{quoss2022,
+	author = {Luise Quoß and Néstor Fernández and Christian Langer and Jose Valdez and Miguel Alejandro Fernández and Henrique M. Pereira},
+	title = {Building Essential Biodiversity Variable netCDFs with the ebvcube R Package},
+	volume = {6},
+	number = {},
+	year = {2022},
+	doi = {10.3897/biss.6.91215},
+	publisher = {Pensoft Publishers},
+	abstract = {The concept of Essential Biodiversity Variables (EBVs) was conceived to study, report, and manage biodiversity change. The EBV netCDF structure was developed in order to support publication and interoperability of biodiversity data. This standard is based on the Network Common Data Format (netCDF). Additionally, it follows the Climate and Forecast Conventions (CF, version 1.8) and the Attribute Convention for Data Discovery (ACDD, version 1.3).The standard allows several datacubes per netCDF file (see Fig. 1). These cubes have four dimensions: longitude, latitude, time and entity, whereby the last dimension can, for example, encompass different species or groups of species, ecosystem types or other aspects. The usage of hierarchical groups enables the coexistence of multiple EBV cubes (see Fig. 2). The first level (netCDF group) are scenarios, e.g., the modelling for different Shared Socioeconomic Pathways (SSP) scenarios. The second level (netCDF group) are metrics, e.g., the percentage of protected area per pixel and its proportional loss over a certain time span per pixel. All metrics are repeated per scenario, if any are present. The result is a rather complex raster dataset (see example dataset in Fig. 3).This is where the ebvcube R package comes into play. This R package enables scientists to create their own netCDFs in the EBV cube standard. Its functionality covers the creation, opening/reading and visualizing the EBV netCDFs. The ebvcube package is part of the overall EBV infrastructure and works together with the EBV Data Portal. Users can work with the downloaded EBV netCDFs or upload their own EBV netCDFs to the portal.Generally, the package aims to condense the output for the users and assist in the understanding of the file structure to overcome the complexity. The output is reduced to the necessary information, e.g., not displaying coordinate variables or any technical attributes. Moreover, functionality for a quick data exploration is implemented.},
+	issn = {},
+	pages = {e91215},
+	URL = {https://doi.org/10.3897/biss.6.91215},
+	eprint = {https://doi.org/10.3897/biss.6.91215},
+	journal = {Biodiversity Information Science and Standards}
 }
 
-% TO-VERIFY: run citation("ebvcube") in R and paste the BibTeX it prints,
-% which is authoritative for the author list, year and version.
+
 @Manual{ebvcube2025,
-  title  = {ebvcube: Working with netCDF for Essential Biodiversity Variables},
-  author = {Quo{\ss}, Luise and Fernandez, Nestor and Langer, Christian and Valdez, Jose and Pereira, Henrique M.},
-  year   = {2025},
-  note   = {R package},
-  url    = {https://github.com/EBVcube/ebvcube},
-}
+    title = {ebvcube: Working with netCDF for Essential Biodiversity Variables},
+    author = {Luise Quoss and Nestor Fernandez and Christian Langer and Jose Valdez and Henrique Miguel Pereira},
+    year = {2024},
+    note = {R package version 0.5.3},
+    organization = {German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig},
+    address = {Germany},
+    url = {https://github.com/EBVcube/ebvcube},
+  }
 
 @Misc{martins2022,
   author       = {Martins, In{\^e}s and Pereira, Henrique M.},

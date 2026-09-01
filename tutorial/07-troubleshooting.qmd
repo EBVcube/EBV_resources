@@ -3,147 +3,207 @@
 ::: {.callout-note appearance="simple" title="In this unit"}
 By the end you will be able to:
 
--   diagnose the installation errors that come up most often;
--   fix the errors `ebv_create()` and `ebv_add_data()` raise when inputs do not line up;
--   resolve the common problems you meet when reading a file back;
--   know what to do when a portal upload or review stalls;
--   write a useful bug report and find the right place to ask for help.
+- identify common installation problems and apply the appropriate fix;
+- check the inputs that cause `ebv_create()` and `ebv_add_data()` to fail;
+- resolve common problems when reading, validating, or mapping an EBVCube;
+- respond to upload and review problems in the EBV Data Portal; and
+- prepare a useful request for help or bug report.
 :::
 
-This unit is a reference, not a walkthrough. It is organized by stage, in the same order as the earlier units, so you can jump to wherever you got stuck. Each entry below is collapsed to its symptom — open the one that matches yours for the shortest fix that has worked in practice.
+This unit is a reference for problems that can occur while following the earlier units. The sections follow the same order as the tutorial, so you can go directly to the stage where the problem occurred. Open the entry that best matches the message or result you see, apply the suggested check, and then repeat the affected step.
 
-## Installation
+## Installing the package
 
-These are the problems that stop `library(ebvcube)` from loading. The full setup is in [@sec-installation].
+These problems can prevent `library(ebvcube)` from loading. Return to [@sec-installation] for the full installation steps.
 
-::: {.callout-note collapse="true" title="The Bioconductor packages are not found"}
-`there is no package called 'rhdf5'` (or `DelayedArray`, or `HDF5Array`). These live on Bioconductor, not CRAN, so `install.packages("ebvcube")` cannot pull them in on its own:
+::: {.callout-note collapse="true" title="A Bioconductor package is not found"}
+An error such as `there is no package called 'rhdf5'`, `DelayedArray`, or `HDF5Array` means that a required Bioconductor dependency is unavailable. Install the dependencies, then restart R and try loading `ebvcube` again:
 
 ```{r}
 #| eval: false
 install.packages("BiocManager")
 BiocManager::install(c("rhdf5", "DelayedArray", "HDF5Array"))
+
+library(ebvcube)
 ```
 
-Then retry `library(ebvcube)`.
+If `BiocManager` is already installed, the first line can be skipped. It selects the Bioconductor release that is compatible with your R version.
 :::
 
 ::: {.callout-note collapse="true" title="package 'ebvcube' is not available for this version of R"}
-You are on an older R, and Bioconductor releases are tied to specific R versions. Either update R to the current release, which is the cleaner fix, or install an older `ebvcube` that supports your R version:
+First check the installed R version:
 
 ```{r}
 #| eval: false
-devtools::install_github("EBVcube/ebvcube@v0.5.0")   # adjust the tag
+R.version.string
 ```
+
+`ebvcube` requires R 4.2.0 or later. Update R if the installed version is older, then repeat the installation in [@sec-installation]. If updating R is not possible, use a package version documented as compatible with your R version; check the package release notes before selecting a version.
+:::
+
+::: {.callout-note collapse="true" title="Installation fails on Linux with HDF5, GDAL, or PROJ errors"}
+This can indicate that the system libraries required by `rhdf5` or `terra` are missing. On Debian or Ubuntu, install the libraries from a terminal:
+
+```bash
+sudo apt-get install libhdf5-dev libgdal-dev libproj-dev libgeos-dev libudunits2-dev
+```
+
+Then reinstall the dependency named in the error message, rather than only reinstalling `ebvcube`. Package names and installation commands differ on other Linux distributions; use the equivalent packages supplied by that distribution.
 :::
 
 ::: {.callout-note collapse="true" title="HDF5 library version mismatched"}
-Your installed `rhdf5` was built against a different HDF5 library than the one loaded at runtime. Reinstall it from a clean R session:
+An `HDF5 library version mismatched` error can occur when `rhdf5` was built against a different HDF5 library from the one loaded by R. Close all R sessions, start a clean session, and reinstall `rhdf5`:
 
 ```{r}
 #| eval: false
 remove.packages("rhdf5")
 BiocManager::install("rhdf5", force = TRUE)
 ```
+
+Then restart R once more and retry the operation.
 :::
 
 ## Preparing data and metadata
 
-Most metadata trouble comes from the controlled vocabularies. See [@sec-preparing] for the full form.
+Problems at this stage usually concern controlled vocabulary values or inputs that do not describe the same dataset. The complete preparation workflow is in [@sec-preparing].
 
 ::: {.callout-note collapse="true" title="A metadata value is rejected"}
-Fields such as `ebv_class`, `ebv_name`, and `ebv_entity_type` accept only the terms the portal knows. If `ebv_metadata()` or the upload form refuses a value, it almost always does not match one of those terms. Copy the wording from the portal form's pick lists, or check `?ebv_metadata` for the accepted list, rather than typing your own phrasing.
+Fields such as `ebv_class`, `ebv_name`, and `ebv_entity_type` accept controlled vocabulary values. If `ebv_metadata()` or the portal form rejects a value, compare it with the available options in the portal form or the accepted values in `?ebv_metadata`. Use the listed wording rather than a close alternative.
+:::
+
+::: {.callout-note collapse="true" title="The metadata, rasters, and creation settings do not agree"}
+Before creating the file, confirm that the spatial layers have a common coordinate reference system, extent, and resolution; that their ordering matches the entity names and time steps; and that the metadata JSON describes the same metrics and scenarios. These checks prevent most dimension and indexing problems during cube creation.
 :::
 
 ## Creating the cube
 
-Errors here usually mean the metadata and the data disagree about shape. The build itself is in [@sec-creating].
+Errors here often indicate that the metadata, creation settings, and supplied data do not describe the same dimensions. See [@sec-creating] for the complete workflow.
 
 ::: {.callout-note collapse="true" title="entities length does not match metadata"}
-The `entities` vector you passed to `ebv_create()` has a different length than the entity count declared in the JSON. Fix one so the two agree.
+`ebv_create()` requires one entity name for each entity declared by the metadata JSON. Compare the vector you supplied with the metadata, then correct the vector or JSON so their entity counts agree. Keep the entity order consistent with the order of the data supplied later.
 :::
 
 ::: {.callout-note collapse="true" title="ebv_add_data() fails with a dimension mismatch"}
-The GeoTIFF you are adding does not sit on the same grid as the netCDF, so its resolution, extent, or CRS is off. Reproject it onto the netCDF's grid before adding it:
+This error can occur when the raster does not match the target cube's coordinate reference system, resolution, extent, or number of layers. Read one target slice to use as a grid template, then align the input raster before adding it:
 
 ```{r}
 #| eval: false
-target_r <- ebv_read(new_nc, "scenario_1/metric_1/ebv_cube",
-                     entity = 1, timestep = 1, type = "r")
+target_r <- ebv_read(
+  new_nc, "scenario_1/metric_1/ebv_cube",
+  entity = 1, timestep = 1, type = "r", verbose = FALSE
+)
 
-r  <- terra::rast("your_data.tif")
-r2 <- terra::project(r, target_r)          # match CRS, resolution, extent
-terra::writeRaster(r2, "your_data_aligned.tif", overwrite = TRUE)
+r <- terra::rast("your_data.tif")
+r_aligned <- terra::project(r, target_r)
+terra::writeRaster(r_aligned, "your_data_aligned.tif", overwrite = TRUE)
 ```
 
-Add `your_data_aligned.tif` instead of the original.
+Replace the data-cube path, entity, and time step with a valid target in your file. Before calling `ebv_add_data()`, also check that the raster layers correspond to the time steps you provide.
 :::
 
-::: {.callout-note collapse="true" title="Units, titles, or descriptions look wrong after ebv_create()"}
-You do not need to rebuild the file. Fix the attribute in place with `ebv_attribute()`, as shown in [@sec-creating].
+::: {.callout-note collapse="true" title="Units, titles, or descriptions are incorrect after ebv_create()"}
+Correct the affected attribute with `ebv_attribute()`, as shown in [@sec-creating], then repeat the relevant checks in [@sec-validating]. Rebuilding the netCDF is not required solely to correct an attribute.
 :::
 
-## Reading the file back
+## Reading and validating the file
 
-These come up when you validate your file or read a published one. The checks are in [@sec-validating].
+These issues can occur while checking your own file or reading a published EBVCube. The standard validation checks are in [@sec-validating].
 
-::: {.callout-note collapse="true" title="ebv_read() says \"Not enough RAM\""}
-The cube you asked for is larger than the package thinks your machine can hold. Two ways out: subset it spatially first with `ebv_read_bb()` or `ebv_read_shp()`, or read it lazily with `type = "da"` to get a `DelayedArray`. Note that `ignore_RAM = TRUE` only switches off the safety check; it does not make the read lazy.
+::: {.callout-note collapse="true" title="ebv_read() reports \"Not enough RAM\""}
+The selected cube or slice is larger than the available memory limit. Reduce the amount read by using `ebv_read_bb()` for a bounding box or `ebv_read_shp()` for a polygon, or use `type = "da"` to work with a `DelayedArray` on disk. `ignore_RAM = TRUE` disables the package's safety check; it does not reduce the amount of memory a normal read requires.
 :::
 
-::: {.callout-note collapse="true" title="ebv_read_shp() returns an array full of NA"}
-Two usual causes. Either the shapefile is in a different projection from the netCDF, so reproject it to match:
+::: {.callout-note collapse="true" title="ebv_read_shp() returns only NA values"}
+First check whether the polygon overlaps the cube's extent. If it does, compare its coordinate reference system with a raster read from the cube. Reproject the polygon to the target raster's CRS before saving it and trying the subset again:
 
 ```{r}
 #| eval: false
-shp_p <- sf::st_transform(sf::st_read(shp), 4326)
-sf::st_write(shp_p, "shp_wgs84.shp")
+target_r <- ebv_read(nc, dc, entity = 1, timestep = 1, type = "r",
+                     verbose = FALSE)
+shp_aligned <- sf::st_transform(sf::st_read(shp), terra::crs(target_r))
+sf::st_write(shp_aligned, "shp_aligned.shp", delete_dsn = TRUE)
+
+terra::ext(target_r)
+sf::st_bbox(shp_aligned)
 ```
 
-Or the shapefile and the file's extent do not overlap at all. Compare them before reading:
+The final two lines provide the two extents for comparison. Use the saved, aligned shapefile in `ebv_read_shp()` only when the extents overlap.
+:::
+
+::: {.callout-note collapse="true" title="The map appears shifted by 180°"}
+This can occur when the raster uses longitudes from `[0, 360]` and a basemap uses `[-180, 180]`. When creating a custom map from `ebv_read()`, rotate the display raster before plotting:
 
 ```{r}
 #| eval: false
-ebv_properties(nc, verbose = FALSE)@spatial$extent   # c(xmin, xmax, ymin, ymax)
-sf::st_bbox(sf::st_read(shp))
+r <- ebv_read(nc, dc, entity = entity, timestep = timestep, type = "r")
+r <- terra::rotate(r)
 ```
-:::
 
-::: {.callout-note collapse="true" title="The map looks shifted by 180\u00b0"}
-The file uses the `[0, 360]` longitude convention while your basemap expects `[-180, 180]`. Read the slice and wrap it with `terra::rotate()`, as described in [@sec-validating].
+This changes the raster used for display, not the EBVCube file.
 :::
 
 ## Uploading to the portal
 
-The submission steps are in [@sec-uploading]; here are the snags that interrupt them.
+The submission steps are in [@sec-uploading]. Use the portal's validation feedback to identify whether the file, metadata, or submission information needs attention.
 
-::: {.callout-note collapse="true" title="The upload is rejected"}
-The portal validates your file when you upload it. If it pushes the file back, the fault is almost always something the pre-flight checks in [@sec-validating] would have caught, so re-run those, fix the file, and upload again. A very large file can also be slow or time out; before you assume the portal is at fault, make sure the file is not larger than it needs to be.
+::: {.callout-note collapse="true" title="The upload is rejected or does not complete"}
+Run the checklist in [@sec-validating] again and correct any reported issue before uploading a revised file. Confirm that the file and portal fields refer to the same dataset and that the upload has finished before leaving the page. If the problem continues after a successful local validation, record the portal message, the time of the attempt, and the dataset draft or submission identifier, then contact the portal team through the dataset page or GEO BON contact route.
 :::
 
-::: {.callout-note collapse="true" title="A value you need is not in a pick list"}
-The form's controlled vocabularies are deliberate. Choose the closest listed term rather than forcing your own, and if nothing fits, ask the portal team through the contact route on the dataset page rather than working around it.
+::: {.callout-note collapse="true" title="A value is not available in a portal list"}
+The portal lists the values it accepts for controlled fields. Select a term only when it accurately describes the dataset. If none of the available terms fits, ask the portal team for guidance rather than substituting an inaccurate value or editing the metadata to bypass the form.
 :::
 
-::: {.callout-note collapse="true" title="The dataset is stuck in review"}
-Review is done by people, so it takes time, and a request for small changes is normal. If a long stretch passes with no word, follow up through the dataset page contact or GEO BON.
+::: {.callout-note collapse="true" title="The dataset remains in review"}
+Review requires action by the portal team and may result in a request for changes. Check the submission page and the email address associated with the account for feedback. If there has been no update after a reasonable review period, contact the portal team with the dataset identifier and submission date.
+:::
+
+## Working with large files
+
+::: {.callout-note collapse="true" title="Reads are slow from a network drive"}
+netCDF/HDF5 files can require many small reads. A network drive can add delay to each one. Where your data-handling policy permits it, copy the file to a local working directory before reading it:
+
+```{r}
+#| eval: false
+local_nc <- file.path(tempdir(), basename(nc))
+file.copy(nc, local_nc, overwrite = TRUE)
+```
+
+Use `local_nc` for the read, while retaining the original file unchanged.
+:::
+
+::: {.callout-note collapse="true" title="Plotting a full-resolution raster is slow"}
+For an exploratory map, read a selected slice and aggregate it before plotting. Choose a factor that retains the geographic pattern needed for the check:
+
+```{r}
+#| eval: false
+r <- ebv_read(nc, dc, entity = entity, timestep = timestep, type = "r")
+r_small <- terra::aggregate(r, fact = 4, fun = "mean")
+plot(r_small)
+```
+
+Use the original-resolution data for the final analysis or export when required.
+:::
+
+## Keep a recoverable workflow
+
+::: {.callout-tip appearance="simple" title="Before and after each correction"}
+Keep a copy of the metadata JSON, the netCDF you validated before upload, and the script used to create the file. Record what you changed, then repeat the relevant validation checks in [@sec-validating]. When referring to a published dataset, cite its DOI from the portal page; use `citation("ebvcube")` when citing the software itself.
 :::
 
 ## Getting help and reporting bugs
 
-If none of the above fixes it, a good bug report is the fastest way forward. Package bugs go to the [GitHub issue tracker](https://github.com/EBVcube/ebvcube/issues), and a report the maintainers can act on includes:
+If the entries above do not resolve the problem, first identify whether it occurs in the package or in the portal. Report package errors through the [GitHub issue tracker](https://github.com/EBVcube/ebvcube/issues). For a question about using the package, use [GitHub Discussions](https://github.com/EBVcube/ebvcube/discussions). For a portal upload, review, or metadata-form issue, use the portal contact route.
 
-- the output of `sessionInfo()`,
-- a minimal reproducible example, ideally on a dataset that ships with the package,
-- the full error message, and
-- what you expected to happen.
+A report is easier to investigate when it includes:
 
-For open questions rather than bugs, use the [GitHub Discussions](https://github.com/EBVcube/ebvcube/discussions) board. Before posting either, check you are on the latest release with `packageVersion("ebvcube")`, since the fix may already be out.
+- the complete error message;
+- the output of `sessionInfo()` and `packageVersion("ebvcube")`;
+- a minimal reproducible example, where possible; and
+- the result you expected and the result you observed.
 
-::: {.callout-tip appearance="simple" title="Citing and licensing"}
-To cite the package, run `citation("ebvcube")`, which prints both a plain-text and a BibTeX entry; to cite a dataset, use its own DOI from the portal page rather than the package citation (see [@sec-uploading]). The package is open source under [GPL-3](https://www.gnu.org/licenses/gpl-3.0.en.html), with the source on [GitHub](https://github.com/EBVcube/ebvcube), so pull requests are welcome.
-:::
+Do not include data that you are not permitted to share. If the problem has already been fixed in a newer release, updating the package may resolve it; check the installed version before posting.
 
 ::: {.callout-tip appearance="simple"}
-**Checkpoint.** You can find the stage where you got stuck, apply the fix, and, if it turns out to be a genuine bug, file a report the maintainers can act on. That closes the whole arc, from a raster on your disk to a published dataset with a DOI. For further reading and references, see [@sec-resources].
+**Checkpoint.** You can identify the stage where a problem occurred, apply the relevant check or correction, and collect the information needed for further help. For additional documentation and references, see [@sec-resources].
 :::

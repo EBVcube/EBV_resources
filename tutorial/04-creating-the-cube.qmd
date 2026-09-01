@@ -172,7 +172,7 @@ ebv_add_data(
 
 For your own dataset, `data` would contain the values produced by your analysis or model. Depending on your workflow, these can be supplied as an array or from a GeoTIFF. When using a multi-band GeoTIFF, use `band` to specify which raster bands correspond to the selected time steps.
 
-## Verify the reconstructed data
+## Verify the reconstructed EBVCube
 
 Before extending the workflow, verify that the values were written correctly. First, use `ebv_analyse()` to compare simple summaries of the source and reconstructed data:
 
