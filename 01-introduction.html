@@ -171,13 +171,13 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05-validating.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Validating and visualising your EBVCube</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./06-uploading.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading a dataset to the EBV Data Portal</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -309,7 +309,7 @@ Canonical classes vs.&nbsp;what you see on the portal
 <section id="why-netcdf-the-ebvcube-format" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="why-netcdf-the-ebvcube-format"><span class="header-section-number">1.3</span> Why netCDF? The EBVCube format</h2>
 <p>An EBVCube is designed for <em>gridded</em> biodiversity data: values arranged across geographic space and, often, through time. Storing each map or time step as a separate file quickly becomes difficult to manage and interpret. The <a href="https://www.unidata.ucar.edu/software/netcdf/">Network Common Data Form (netCDF)</a>, long used in the climate sciences, keeps the data and the information that explains it together in one <em>self-describing</em> file: units, dates, entities, and coordinate reference system travel with the values.</p>
-<p>The <strong>EBVCube</strong> is the standardised, netCDF-based data format defined for EBVs. It follows two established conventions: <strong>CF v1.8</strong> <span class="citation" data-cites="cfconventions">(<a href="08-resources.html#ref-cfconventions" role="doc-biblioref">Eaton et al., 2020</a>)</span>, which defines how coordinates, units, and time are encoded; and <strong>ACDD v1.3</strong> <span class="citation" data-cites="acdd">(<a href="08-resources.html#ref-acdd" role="doc-biblioref">Earth Science Information Partners, 2015</a>)</span>, which defines metadata that makes a dataset easier to discover and understand. EBVCube-specific biodiversity terms complete the format <span class="citation" data-cites="ebvcube2025">(<a href="08-resources.html#ref-ebvcube2025" role="doc-biblioref">Quoß et al., 2025</a>)</span>.</p>
+<p>The <strong>EBVCube</strong> is the standardised, netCDF-based data format defined for EBVs. It follows two established conventions: <strong>CF v1.8</strong> <span class="citation" data-cites="cfconventions">(<a href="08-resources.html#ref-cfconventions" role="doc-biblioref">Eaton et al., 2020</a>)</span>, which defines how coordinates, units, and time are encoded; and <strong>ACDD v1.3</strong> <span class="citation" data-cites="acdd">(<a href="08-resources.html#ref-acdd" role="doc-biblioref">Earth Science Information Partners, 2015</a>)</span>, which defines metadata that makes a dataset easier to discover and understand. EBVCube-specific biodiversity terms complete the format <span class="citation" data-cites="ebvcube2025">(<a href="08-resources.html#ref-ebvcube2025" role="doc-biblioref">Quoss et al., 2024</a>)</span>.</p>
 <p>Every data cube inside an EBVCube shares the same four dimensions. Together, they locate each data value: <em>where</em>, <em>when</em>, and for <em>which</em> biological entity.</p>
 <div class="grid">
 <div class="g-col-6 border rounded p-3">
@@ -404,7 +404,7 @@ Figure&nbsp;1.2: The <em>Discover</em> page showing the EBV class filters and a 
 </section>
 <section id="where-ebvcube-fits" class="level2" data-number="1.5">
 <h2 data-number="1.5" class="anchored" data-anchor-id="where-ebvcube-fits"><span class="header-section-number">1.5</span> Where <code>ebvcube</code> fits</h2>
-<p>The portal is where EBV data is <em>published and discovered</em>. The <strong><code>ebvcube</code></strong> R package <span class="citation" data-cites="ebvcube2025 quoss2022">(<a href="08-resources.html#ref-quoss2022" role="doc-biblioref">Quoß et al., 2022</a>, <a href="08-resources.html#ref-ebvcube2025" role="doc-biblioref">2025</a>)</span> lets you discover, access, visualise, and create EBVCubes.</p>
+<p>The portal is where EBV data is <em>published and discovered</em>. The <strong><code>ebvcube</code></strong> R package <span class="citation" data-cites="ebvcube2025 quoss2022">(<a href="08-resources.html#ref-quoss2022" role="doc-biblioref">Quoß et al., 2022</a>; <a href="08-resources.html#ref-ebvcube2025" role="doc-biblioref">Quoss et al., 2024</a>)</span> lets you discover, access, visualise, and create EBVCubes.</p>
 <div class="grid">
 <div class="g-col-12 g-col-md-6 border rounded p-3">
 <p><span class="small text-success">DISCOVER</span><br>
@@ -456,11 +456,11 @@ Martins, I., &amp; Pereira, H. M. (2022). <em><span class="nocase">Global trends
 <div id="ref-pereira2013" class="csl-entry" role="listitem">
 Pereira, H. M., Ferrier, S., Walters, M., Geller, G. N., Jongman, R. H., Scholes, R. J., Bruford, M. W., Brummitt, N., Butchart, S. H., Cardoso, A., et al. (2013). Essential biodiversity variables. <em>Science</em>, <em>339</em>(6117), 277–278.
 </div>
-<div id="ref-quoss2022" class="csl-entry" role="listitem">
-Quoß, L., Fernandez, N., Langer, C., Valdez, J., &amp; Pereira, H. M. (2022). Ebvcube: An <span>R</span> package to work with the <span>EBV</span> <span class="nocase">netCDF</span> standard. <em>Biodiversity Information Science and Standards</em>, <em>6</em>, e91215. <a href="https://doi.org/10.3897/biss.6.e91215">https://doi.org/10.3897/biss.6.e91215</a>
-</div>
 <div id="ref-ebvcube2025" class="csl-entry" role="listitem">
-Quoß, L., Fernandez, N., Langer, C., Valdez, J., &amp; Pereira, H. M. (2025). <em>Ebvcube: Working with netCDF for essential biodiversity variables</em>. <a href="https://github.com/EBVcube/ebvcube">https://github.com/EBVcube/ebvcube</a>
+Quoss, L., Fernandez, N., Langer, C., Valdez, J., &amp; Pereira, H. M. (2024). <em>Ebvcube: Working with netCDF for essential biodiversity variables</em>. German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig. <a href="https://github.com/EBVcube/ebvcube">https://github.com/EBVcube/ebvcube</a>
+</div>
+<div id="ref-quoss2022" class="csl-entry" role="listitem">
+Quoß, L., Fernández, N., Langer, C., Valdez, J., Fernández, M. A., &amp; Pereira, H. M. (2022). Building essential biodiversity variable netCDFs with the ebvcube r package. <em>Biodiversity Information Science and Standards</em>, <em>6</em>, e91215. <a href="https://doi.org/10.3897/biss.6.91215">https://doi.org/10.3897/biss.6.91215</a>
 </div>
 </div>
 </section>
@@ -1061,7 +1061,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"loop":false,"selector":".lightbox","closeEffect":"zoom","openEffect":"zoom","descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","selector":".lightbox","loop":false,"openEffect":"zoom","closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

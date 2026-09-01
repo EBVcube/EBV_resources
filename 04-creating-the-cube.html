@@ -185,13 +185,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05-validating.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Validating and visualising your EBVCube</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./06-uploading.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading a dataset to the EBV Data Portal</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -219,7 +219,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#prepare-the-inputs" id="toc-prepare-the-inputs" class="nav-link active" data-scroll-target="#prepare-the-inputs"><span class="header-section-number">4.1</span> Prepare the inputs</a></li>
   <li><a href="#create-the-empty-netcdf-with-ebv_create" id="toc-create-the-empty-netcdf-with-ebv_create" class="nav-link" data-scroll-target="#create-the-empty-netcdf-with-ebv_create"><span class="header-section-number">4.2</span> Create the empty netCDF with <code>ebv_create()</code></a></li>
   <li><a href="#populate-a-data-cube-with-ebv_add_data" id="toc-populate-a-data-cube-with-ebv_add_data" class="nav-link" data-scroll-target="#populate-a-data-cube-with-ebv_add_data"><span class="header-section-number">4.3</span> Populate a data cube with <code>ebv_add_data()</code></a></li>
-  <li><a href="#verify-the-reconstructed-data" id="toc-verify-the-reconstructed-data" class="nav-link" data-scroll-target="#verify-the-reconstructed-data"><span class="header-section-number">4.4</span> Verify the reconstructed data</a></li>
+  <li><a href="#verify-the-reconstructed-ebvcube" id="toc-verify-the-reconstructed-ebvcube" class="nav-link" data-scroll-target="#verify-the-reconstructed-ebvcube"><span class="header-section-number">4.4</span> Verify the reconstructed EBVCube</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/04-creating-the-cube.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -394,8 +394,8 @@ Optional extensions</p>
 </div>
 <p>For your own dataset, <code>data</code> would contain the values produced by your analysis or model. Depending on your workflow, these can be supplied as an array or from a GeoTIFF. When using a multi-band GeoTIFF, use <code>band</code> to specify which raster bands correspond to the selected time steps.</p>
 </section>
-<section id="verify-the-reconstructed-data" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="verify-the-reconstructed-data"><span class="header-section-number">4.4</span> Verify the reconstructed data</h2>
+<section id="verify-the-reconstructed-ebvcube" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="verify-the-reconstructed-ebvcube"><span class="header-section-number">4.4</span> Verify the reconstructed EBVCube</h2>
 <p>Before extending the workflow, verify that the values were written correctly. First, use <code>ebv_analyse()</code> to compare simple summaries of the source and reconstructed data:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>orig_stats <span class="ot">&lt;-</span> <span class="fu">ebv_analyse</span>(orig, source_cube, <span class="at">entity =</span> source_entity,</span>
@@ -1197,8 +1197,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./05-validating.html" class="pagination-link" aria-label="Validating your EBVCube before uploading">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./05-validating.html" class="pagination-link" aria-label="Validating and visualising your EBVCube">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Validating and visualising your EBVCube</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -1221,7 +1221,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","closeEffect":"zoom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","selector":".lightbox","closeEffect":"zoom","loop":false,"openEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

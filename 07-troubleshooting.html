@@ -185,13 +185,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05-validating.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Validating your EBVCube before uploading</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Validating and visualising your EBVCube</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./06-uploading.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading a dataset to the EBV Data Portal</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -216,12 +216,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation"><span class="header-section-number">7.1</span> Installation</a></li>
+  <li><a href="#installing-the-package" id="toc-installing-the-package" class="nav-link active" data-scroll-target="#installing-the-package"><span class="header-section-number">7.1</span> Installing the package</a></li>
   <li><a href="#preparing-data-and-metadata" id="toc-preparing-data-and-metadata" class="nav-link" data-scroll-target="#preparing-data-and-metadata"><span class="header-section-number">7.2</span> Preparing data and metadata</a></li>
   <li><a href="#creating-the-cube" id="toc-creating-the-cube" class="nav-link" data-scroll-target="#creating-the-cube"><span class="header-section-number">7.3</span> Creating the cube</a></li>
-  <li><a href="#reading-the-file-back" id="toc-reading-the-file-back" class="nav-link" data-scroll-target="#reading-the-file-back"><span class="header-section-number">7.4</span> Reading the file back</a></li>
+  <li><a href="#reading-and-validating-the-file" id="toc-reading-and-validating-the-file" class="nav-link" data-scroll-target="#reading-and-validating-the-file"><span class="header-section-number">7.4</span> Reading and validating the file</a></li>
   <li><a href="#uploading-to-the-portal" id="toc-uploading-to-the-portal" class="nav-link" data-scroll-target="#uploading-to-the-portal"><span class="header-section-number">7.5</span> Uploading to the portal</a></li>
-  <li><a href="#getting-help-and-reporting-bugs" id="toc-getting-help-and-reporting-bugs" class="nav-link" data-scroll-target="#getting-help-and-reporting-bugs"><span class="header-section-number">7.6</span> Getting help and reporting bugs</a></li>
+  <li><a href="#working-with-large-files" id="toc-working-with-large-files" class="nav-link" data-scroll-target="#working-with-large-files"><span class="header-section-number">7.6</span> Working with large files</a></li>
+  <li><a href="#keep-a-recoverable-workflow" id="toc-keep-a-recoverable-workflow" class="nav-link" data-scroll-target="#keep-a-recoverable-workflow"><span class="header-section-number">7.7</span> Keep a recoverable workflow</a></li>
+  <li><a href="#getting-help-and-reporting-bugs" id="toc-getting-help-and-reporting-bugs" class="nav-link" data-scroll-target="#getting-help-and-reporting-bugs"><span class="header-section-number">7.8</span> Getting help and reporting bugs</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/EBVcube/EBV_resources/edit/main/07-troubleshooting.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/EBVcube/EBV_resources/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -259,36 +261,38 @@ In this unit
 <div class="callout-body-container callout-body">
 <p>By the end you will be able to:</p>
 <ul>
-<li>diagnose the installation errors that come up most often;</li>
-<li>fix the errors <code>ebv_create()</code> and <code>ebv_add_data()</code> raise when inputs do not line up;</li>
-<li>resolve the common problems you meet when reading a file back;</li>
-<li>know what to do when a portal upload or review stalls;</li>
-<li>write a useful bug report and find the right place to ask for help.</li>
+<li>identify common installation problems and apply the appropriate fix;</li>
+<li>check the inputs that cause <code>ebv_create()</code> and <code>ebv_add_data()</code> to fail;</li>
+<li>resolve common problems when reading, validating, or mapping an EBVCube;</li>
+<li>respond to upload and review problems in the EBV Data Portal; and</li>
+<li>prepare a useful request for help or bug report.</li>
 </ul>
 </div>
 </div>
-<p>This unit is a reference, not a walkthrough. It is organized by stage, in the same order as the earlier units, so you can jump to wherever you got stuck. Each entry below is collapsed to its symptom — open the one that matches yours for the shortest fix that has worked in practice.</p>
-<section id="installation" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="installation"><span class="header-section-number">7.1</span> Installation</h2>
-<p>These are the problems that stop <code>library(ebvcube)</code> from loading. The full setup is in <a href="02-installation.html" class="quarto-xref"><span>Chapter 2</span></a>.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="The Bioconductor packages are not found">
+<p>This unit is a reference for problems that can occur while following the earlier units. The sections follow the same order as the tutorial, so you can go directly to the stage where the problem occurred. Open the entry that best matches the message or result you see, apply the suggested check, and then repeat the affected step.</p>
+<section id="installing-the-package" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="installing-the-package"><span class="header-section-number">7.1</span> Installing the package</h2>
+<p>These problems can prevent <code>library(ebvcube)</code> from loading. Return to <a href="02-installation.html" class="quarto-xref"><span>Chapter 2</span></a> for the full installation steps.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="A Bioconductor package is not found">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-The Bioconductor packages are not found
+A Bioconductor package is not found
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><code>there is no package called 'rhdf5'</code> (or <code>DelayedArray</code>, or <code>HDF5Array</code>). These live on Bioconductor, not CRAN, so <code>install.packages("ebvcube")</code> cannot pull them in on its own:</p>
+<p>An error such as <code>there is no package called 'rhdf5'</code>, <code>DelayedArray</code>, or <code>HDF5Array</code> means that a required Bioconductor dependency is unavailable. Install the dependencies, then restart R and try loading <code>ebvcube</code> again:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">"rhdf5"</span>, <span class="st">"DelayedArray"</span>, <span class="st">"HDF5Array"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">"rhdf5"</span>, <span class="st">"DelayedArray"</span>, <span class="st">"HDF5Array"</span>))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ebvcube)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then retry <code>library(ebvcube)</code>.</p>
+<p>If <code>BiocManager</code> is already installed, the first line can be skipped. It selects the Bioconductor release that is compatible with your R version.</p>
 </div>
 </div>
 </div>
@@ -304,15 +308,34 @@ package ‘ebvcube’ is not available for this version of R
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You are on an older R, and Bioconductor releases are tied to specific R versions. Either update R to the current release, which is the cleaner fix, or install an older <code>ebvcube</code> that supports your R version:</p>
+<p>First check the installed R version:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"EBVcube/ebvcube@v0.5.0"</span>)   <span class="co"># adjust the tag</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>R.version.string</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><code>ebvcube</code> requires R 4.2.0 or later. Update R if the installed version is older, then repeat the installation in <a href="02-installation.html" class="quarto-xref"><span>Chapter 2</span></a>. If updating R is not possible, use a package version documented as compatible with your R version; check the package release notes before selecting a version.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Installation fails on Linux with HDF5, GDAL, or PROJ errors">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Installation fails on Linux with HDF5, GDAL, or PROJ errors
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>This can indicate that the system libraries required by <code>rhdf5</code> or <code>terra</code> are missing. On Debian or Ubuntu, install the libraries from a terminal:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install libhdf5-dev libgdal-dev libproj-dev libgeos-dev libudunits2-dev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then reinstall the dependency named in the error message, rather than only reinstalling <code>ebvcube</code>. Package names and installation commands differ on other Linux distributions; use the equivalent packages supplied by that distribution.</p>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="HDF5 library version mismatched">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -321,22 +344,23 @@ HDF5 library version mismatched
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Your installed <code>rhdf5</code> was built against a different HDF5 library than the one loaded at runtime. Reinstall it from a clean R session:</p>
+<p>An <code>HDF5 library version mismatched</code> error can occur when <code>rhdf5</code> was built against a different HDF5 library from the one loaded by R. Close all R sessions, start a clean session, and reinstall <code>rhdf5</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">remove.packages</span>(<span class="st">"rhdf5"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"rhdf5"</span>, <span class="at">force =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">remove.packages</span>(<span class="st">"rhdf5"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"rhdf5"</span>, <span class="at">force =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Then restart R once more and retry the operation.</p>
 </div>
 </div>
 </div>
 </section>
 <section id="preparing-data-and-metadata" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="preparing-data-and-metadata"><span class="header-section-number">7.2</span> Preparing data and metadata</h2>
-<p>Most metadata trouble comes from the controlled vocabularies. See <a href="03-preparing-data.html" class="quarto-xref"><span>Chapter 3</span></a> for the full form.</p>
+<p>Problems at this stage usually concern controlled vocabulary values or inputs that do not describe the same dataset. The complete preparation workflow is in <a href="03-preparing-data.html" class="quarto-xref"><span>Chapter 3</span></a>.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="A metadata value is rejected">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -345,18 +369,34 @@ A metadata value is rejected
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Fields such as <code>ebv_class</code>, <code>ebv_name</code>, and <code>ebv_entity_type</code> accept only the terms the portal knows. If <code>ebv_metadata()</code> or the upload form refuses a value, it almost always does not match one of those terms. Copy the wording from the portal form’s pick lists, or check <code>?ebv_metadata</code> for the accepted list, rather than typing your own phrasing.</p>
+<p>Fields such as <code>ebv_class</code>, <code>ebv_name</code>, and <code>ebv_entity_type</code> accept controlled vocabulary values. If <code>ebv_metadata()</code> or the portal form rejects a value, compare it with the available options in the portal form or the accepted values in <code>?ebv_metadata</code>. Use the listed wording rather than a close alternative.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="The metadata, rasters, and creation settings do not agree">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+The metadata, rasters, and creation settings do not agree
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Before creating the file, confirm that the spatial layers have a common coordinate reference system, extent, and resolution; that their ordering matches the entity names and time steps; and that the metadata JSON describes the same metrics and scenarios. These checks prevent most dimension and indexing problems during cube creation.</p>
 </div>
 </div>
 </div>
 </section>
 <section id="creating-the-cube" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="creating-the-cube"><span class="header-section-number">7.3</span> Creating the cube</h2>
-<p>Errors here usually mean the metadata and the data disagree about shape. The build itself is in <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 4</span></a>.</p>
+<p>Errors here often indicate that the metadata, creation settings, and supplied data do not describe the same dimensions. See <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 4</span></a> for the complete workflow.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="entities length does not match metadata">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -365,14 +405,14 @@ entities length does not match metadata
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The <code>entities</code> vector you passed to <code>ebv_create()</code> has a different length than the entity count declared in the JSON. Fix one so the two agree.</p>
+<p><code>ebv_create()</code> requires one entity name for each entity declared by the metadata JSON. Compare the vector you supplied with the metadata, then correct the vector or JSON so their entity counts agree. Keep the entity order consistent with the order of the data supplied later.</p>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="ebv_add_data() fails with a dimension mismatch">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -381,181 +421,239 @@ ebv_add_data() fails with a dimension mismatch
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>The GeoTIFF you are adding does not sit on the same grid as the netCDF, so its resolution, extent, or CRS is off. Reproject it onto the netCDF’s grid before adding it:</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>target_r <span class="ot">&lt;-</span> <span class="fu">ebv_read</span>(new_nc, <span class="st">"scenario_1/metric_1/ebv_cube"</span>,</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">entity =</span> <span class="dv">1</span>, <span class="at">timestep =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"r"</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>r  <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="st">"your_data.tif"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">project</span>(r, target_r)          <span class="co"># match CRS, resolution, extent</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">writeRaster</span>(r2, <span class="st">"your_data_aligned.tif"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Add <code>your_data_aligned.tif</code> instead of the original.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled" title="Units, titles, or descriptions look wrong after ebv_create()">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Units, titles, or descriptions look wrong after ebv_create()
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>You do not need to rebuild the file. Fix the attribute in place with <code>ebv_attribute()</code>, as shown in <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 4</span></a>.</p>
-</div>
-</div>
-</div>
-</section>
-<section id="reading-the-file-back" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="reading-the-file-back"><span class="header-section-number">7.4</span> Reading the file back</h2>
-<p>These come up when you validate your file or read a published one. The checks are in <a href="05-validating.html" class="quarto-xref"><span>Chapter 5</span></a>.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="ebv_read() says &quot;Not enough RAM&quot;">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-ebv_read() says “Not enough RAM”
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The cube you asked for is larger than the package thinks your machine can hold. Two ways out: subset it spatially first with <code>ebv_read_bb()</code> or <code>ebv_read_shp()</code>, or read it lazily with <code>type = "da"</code> to get a <code>DelayedArray</code>. Note that <code>ignore_RAM = TRUE</code> only switches off the safety check; it does not make the read lazy.</p>
+<p>This error can occur when the raster does not match the target cube’s coordinate reference system, resolution, extent, or number of layers. Read one target slice to use as a grid template, then align the input raster before adding it:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>target_r <span class="ot">&lt;-</span> <span class="fu">ebv_read</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  new_nc, <span class="st">"scenario_1/metric_1/ebv_cube"</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">entity =</span> <span class="dv">1</span>, <span class="at">timestep =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"r"</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="st">"your_data.tif"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>r_aligned <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">project</span>(r, target_r)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">writeRaster</span>(r_aligned, <span class="st">"your_data_aligned.tif"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Replace the data-cube path, entity, and time step with a valid target in your file. Before calling <code>ebv_add_data()</code>, also check that the raster layers correspond to the time steps you provide.</p>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="ebv_read_shp() returns an array full of NA">
+<div class="callout callout-style-default callout-note callout-titled" title="Units, titles, or descriptions are incorrect after ebv_create()">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-ebv_read_shp() returns an array full of NA
+Units, titles, or descriptions are incorrect after ebv_create()
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Two usual causes. Either the shapefile is in a different projection from the netCDF, so reproject it to match:</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>shp_p <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_transform</span>(sf<span class="sc">::</span><span class="fu">st_read</span>(shp), <span class="dv">4326</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_write</span>(shp_p, <span class="st">"shp_wgs84.shp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Or the shapefile and the file’s extent do not overlap at all. Compare them before reading:</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ebv_properties</span>(nc, <span class="at">verbose =</span> <span class="cn">FALSE</span>)<span class="sc">@</span>spatial<span class="sc">$</span>extent   <span class="co"># c(xmin, xmax, ymin, ymax)</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_bbox</span>(sf<span class="sc">::</span><span class="fu">st_read</span>(shp))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Correct the affected attribute with <code>ebv_attribute()</code>, as shown in <a href="04-creating-the-cube.html" class="quarto-xref"><span>Chapter 4</span></a>, then repeat the relevant checks in <a href="05-validating.html" class="quarto-xref"><span>Chapter 5</span></a>. Rebuilding the netCDF is not required solely to correct an attribute.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled" title="The map looks shifted by 180\u00b0">
+</section>
+<section id="reading-and-validating-the-file" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="reading-and-validating-the-file"><span class="header-section-number">7.4</span> Reading and validating the file</h2>
+<p>These issues can occur while checking your own file or reading a published EBVCube. The standard validation checks are in <a href="05-validating.html" class="quarto-xref"><span>Chapter 5</span></a>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="ebv_read() reports &quot;Not enough RAM&quot;">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-The map looks shifted by 1800b0
+ebv_read() reports “Not enough RAM”
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The file uses the <code>[0, 360]</code> longitude convention while your basemap expects <code>[-180, 180]</code>. Read the slice and wrap it with <code>terra::rotate()</code>, as described in <a href="05-validating.html" class="quarto-xref"><span>Chapter 5</span></a>.</p>
+<p>The selected cube or slice is larger than the available memory limit. Reduce the amount read by using <code>ebv_read_bb()</code> for a bounding box or <code>ebv_read_shp()</code> for a polygon, or use <code>type = "da"</code> to work with a <code>DelayedArray</code> on disk. <code>ignore_RAM = TRUE</code> disables the package’s safety check; it does not reduce the amount of memory a normal read requires.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="ebv_read_shp() returns only NA values">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+ebv_read_shp() returns only NA values
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>First check whether the polygon overlaps the cube’s extent. If it does, compare its coordinate reference system with a raster read from the cube. Reproject the polygon to the target raster’s CRS before saving it and trying the subset again:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>target_r <span class="ot">&lt;-</span> <span class="fu">ebv_read</span>(nc, dc, <span class="at">entity =</span> <span class="dv">1</span>, <span class="at">timestep =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"r"</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>shp_aligned <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_transform</span>(sf<span class="sc">::</span><span class="fu">st_read</span>(shp), terra<span class="sc">::</span><span class="fu">crs</span>(target_r))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_write</span>(shp_aligned, <span class="st">"shp_aligned.shp"</span>, <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">ext</span>(target_r)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_bbox</span>(shp_aligned)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The final two lines provide the two extents for comparison. Use the saved, aligned shapefile in <code>ebv_read_shp()</code> only when the extents overlap.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="The map appears shifted by 180°">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+The map appears shifted by 180°
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>This can occur when the raster uses longitudes from <code>[0, 360]</code> and a basemap uses <code>[-180, 180]</code>. When creating a custom map from <code>ebv_read()</code>, rotate the display raster before plotting:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">ebv_read</span>(nc, dc, <span class="at">entity =</span> entity, <span class="at">timestep =</span> timestep, <span class="at">type =</span> <span class="st">"r"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rotate</span>(r)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This changes the raster used for display, not the EBVCube file.</p>
 </div>
 </div>
 </div>
 </section>
 <section id="uploading-to-the-portal" class="level2" data-number="7.5">
 <h2 data-number="7.5" class="anchored" data-anchor-id="uploading-to-the-portal"><span class="header-section-number">7.5</span> Uploading to the portal</h2>
-<p>The submission steps are in <a href="06-uploading.html" class="quarto-xref"><span>Chapter 6</span></a>; here are the snags that interrupt them.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="The upload is rejected">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-The upload is rejected
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>The portal validates your file when you upload it. If it pushes the file back, the fault is almost always something the pre-flight checks in <a href="05-validating.html" class="quarto-xref"><span>Chapter 5</span></a> would have caught, so re-run those, fix the file, and upload again. A very large file can also be slow or time out; before you assume the portal is at fault, make sure the file is not larger than it needs to be.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled" title="A value you need is not in a pick list">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-A value you need is not in a pick list
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>The form’s controlled vocabularies are deliberate. Choose the closest listed term rather than forcing your own, and if nothing fits, ask the portal team through the contact route on the dataset page rather than working around it.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled" title="The dataset is stuck in review">
+<p>The submission steps are in <a href="06-uploading.html" class="quarto-xref"><span>Chapter 6</span></a>. Use the portal’s validation feedback to identify whether the file, metadata, or submission information needs attention.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="The upload is rejected or does not complete">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-The dataset is stuck in review
+The upload is rejected or does not complete
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Review is done by people, so it takes time, and a request for small changes is normal. If a long stretch passes with no word, follow up through the dataset page contact or GEO BON.</p>
+<p>Run the checklist in <a href="05-validating.html" class="quarto-xref"><span>Chapter 5</span></a> again and correct any reported issue before uploading a revised file. Confirm that the file and portal fields refer to the same dataset and that the upload has finished before leaving the page. If the problem continues after a successful local validation, record the portal message, the time of the attempt, and the dataset draft or submission identifier, then contact the portal team through the dataset page or GEO BON contact route.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="A value is not available in a portal list">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+A value is not available in a portal list
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The portal lists the values it accepts for controlled fields. Select a term only when it accurately describes the dataset. If none of the available terms fits, ask the portal team for guidance rather than substituting an inaccurate value or editing the metadata to bypass the form.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="The dataset remains in review">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+The dataset remains in review
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Review requires action by the portal team and may result in a request for changes. Check the submission page and the email address associated with the account for feedback. If there has been no update after a reasonable review period, contact the portal team with the dataset identifier and submission date.</p>
 </div>
 </div>
 </div>
 </section>
-<section id="getting-help-and-reporting-bugs" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="getting-help-and-reporting-bugs"><span class="header-section-number">7.6</span> Getting help and reporting bugs</h2>
-<p>If none of the above fixes it, a good bug report is the fastest way forward. Package bugs go to the <a href="https://github.com/EBVcube/ebvcube/issues">GitHub issue tracker</a>, and a report the maintainers can act on includes:</p>
-<ul>
-<li>the output of <code>sessionInfo()</code>,</li>
-<li>a minimal reproducible example, ideally on a dataset that ships with the package,</li>
-<li>the full error message, and</li>
-<li>what you expected to happen.</li>
-</ul>
-<p>For open questions rather than bugs, use the <a href="https://github.com/EBVcube/ebvcube/discussions">GitHub Discussions</a> board. Before posting either, check you are on the latest release with <code>packageVersion("ebvcube")</code>, since the fix may already be out.</p>
-<div class="callout callout-style-simple callout-tip callout-titled" title="Citing and licensing">
+<section id="working-with-large-files" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="working-with-large-files"><span class="header-section-number">7.6</span> Working with large files</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Reads are slow from a network drive">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reads are slow from a network drive
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>netCDF/HDF5 files can require many small reads. A network drive can add delay to each one. Where your data-handling policy permits it, copy the file to a local working directory before reading it:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>local_nc <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="fu">basename</span>(nc))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">file.copy</span>(nc, local_nc, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Use <code>local_nc</code> for the read, while retaining the original file unchanged.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Plotting a full-resolution raster is slow">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Plotting a full-resolution raster is slow
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>For an exploratory map, read a selected slice and aggregate it before plotting. Choose a factor that retains the geographic pattern needed for the check:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">ebv_read</span>(nc, dc, <span class="at">entity =</span> entity, <span class="at">timestep =</span> timestep, <span class="at">type =</span> <span class="st">"r"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>r_small <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">aggregate</span>(r, <span class="at">fact =</span> <span class="dv">4</span>, <span class="at">fun =</span> <span class="st">"mean"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(r_small)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Use the original-resolution data for the final analysis or export when required.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="keep-a-recoverable-workflow" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="keep-a-recoverable-workflow"><span class="header-section-number">7.7</span> Keep a recoverable workflow</h2>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Before and after each correction">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Citing and licensing
+Before and after each correction
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>To cite the package, run <code>citation("ebvcube")</code>, which prints both a plain-text and a BibTeX entry; to cite a dataset, use its own DOI from the portal page rather than the package citation (see <a href="06-uploading.html" class="quarto-xref"><span>Chapter 6</span></a>). The package is open source under <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GPL-3</a>, with the source on <a href="https://github.com/EBVcube/ebvcube">GitHub</a>, so pull requests are welcome.</p>
+<p>Keep a copy of the metadata JSON, the netCDF you validated before upload, and the script used to create the file. Record what you changed, then repeat the relevant validation checks in <a href="05-validating.html" class="quarto-xref"><span>Chapter 5</span></a>. When referring to a published dataset, cite its DOI from the portal page; use <code>citation("ebvcube")</code> when citing the software itself.</p>
 </div>
 </div>
+</section>
+<section id="getting-help-and-reporting-bugs" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="getting-help-and-reporting-bugs"><span class="header-section-number">7.8</span> Getting help and reporting bugs</h2>
+<p>If the entries above do not resolve the problem, first identify whether it occurs in the package or in the portal. Report package errors through the <a href="https://github.com/EBVcube/ebvcube/issues">GitHub issue tracker</a>. For a question about using the package, use <a href="https://github.com/EBVcube/ebvcube/discussions">GitHub Discussions</a>. For a portal upload, review, or metadata-form issue, use the portal contact route.</p>
+<p>A report is easier to investigate when it includes:</p>
+<ul>
+<li>the complete error message;</li>
+<li>the output of <code>sessionInfo()</code> and <code>packageVersion("ebvcube")</code>;</li>
+<li>a minimal reproducible example, where possible; and</li>
+<li>the result you expected and the result you observed.</li>
+</ul>
+<p>Do not include data that you are not permitted to share. If the problem has already been fixed in a newer release, updating the package may resolve it; check the installed version before posting.</p>
 <div class="callout callout-style-simple callout-tip">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>Checkpoint.</strong> You can find the stage where you got stuck, apply the fix, and, if it turns out to be a genuine bug, file a report the maintainers can act on. That closes the whole arc, from a raster on your disk to a published dataset with a DOI. For further reading and references, see <a href="08-resources.html" class="quarto-xref"><span>Chapter 8</span></a>.</p>
+<p><strong>Checkpoint.</strong> You can identify the stage where a problem occurred, apply the relevant check or correction, and collect the information needed for further help. For additional documentation and references, see <a href="08-resources.html" class="quarto-xref"><span>Chapter 8</span></a>.</p>
 </div>
 </div>
 </div>
@@ -1130,8 +1228,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./06-uploading.html" class="pagination-link" aria-label="Uploading the dataset to the EBV Data Portal">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading the dataset to the EBV Data Portal</span></span>
+      <a href="./06-uploading.html" class="pagination-link" aria-label="Uploading a dataset to the EBV Data Portal">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Uploading a dataset to the EBV Data Portal</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -1159,7 +1257,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","descPosition":"bottom","closeEffect":"zoom","loop":false,"selector":".lightbox"});
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
