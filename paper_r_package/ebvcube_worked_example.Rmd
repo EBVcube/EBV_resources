@@ -1,0 +1,219 @@
+---
+title: "Code example for the ebvcube R package paper"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: null
+---
+
+This notebook accompanies Section 3 of *ebvcube: An R package for multidimensional geospatial data of Essential Biodiversity Variables*. [DOI]
+
+## Before starting
+
+Open this file in RStudio. The example is based on `ebvcube` version 0.5.3.
+
+If needed, install the CRAN release:
+
+```{r install-cran, eval=FALSE}
+install.packages("ebvcube")
+```
+
+Alternatively, install the development version from GitHub (requires `devtools`):
+
+```{r install-development, eval=FALSE}
+devtools::install_github("EBVcube/ebvcube", ref = "dev")
+```
+
+# 3. Software and Example
+
+This workflow combines discovery, access, visualisation, and creation using [*Global trends in biodiversity (BES-SIM cSAR-iDiv)*](https://portal.geobon.org/ebv-detail?id=30) (Martins and Pereira, 2022), a community-composition EBV available on the [EBV Data Portal](https://portal.geobon.org/) as dataset 30.
+
+## 3.1 Discovering the contents of EBV Data Cubes
+
+The workflow begins by downloading the dataset with `ebv_download` and inspecting its structure and metadata with `ebv_datacubepaths` and `ebv_properties`.
+
+```{r load-package}
+library(ebvcube)
+```
+
+```{r download-dataset}
+# Download dataset (id = 30) from the EBV Data Portal.
+# ebv_download returns the path to the netCDF it writes.
+file <- ebv_download(id = 30, outputdir = tempdir(), overwrite = TRUE)
+```
+
+```{r discover-cubes}
+# List all data cubes and read the file-level metadata.
+datacubes <- ebv_datacubepaths(file)
+print(datacubes)
+```
+
+The file contains nine data cubes: three SSP-RCP scenarios crossed with three biodiversity metrics. Species richness corresponds to rows 1, 4, and 7 of `datacubes`.
+
+```{r inspect-metadata}
+prop <- ebv_properties(file, verbose = FALSE)
+prop@general[c("title", "ebv_class")]
+prop@temporal$dates
+prop@general$entity_names
+```
+
+The dataset contains three entities (all birds, forest birds, and non-forest birds) for 1900, 2015, and 2050. Entity forms the fourth cube dimension alongside longitude, latitude, and time.
+
+## 3.2 Accessing and subsetting EBV Data Cubes
+
+`ebv_read` retrieves forest-bird species richness under SSP1xRCP2.6 for all three timesteps as a `terra` SpatRaster.
+
+```{r select-cube}
+# Species richness (number of species); forest birds, SSP1xRCP2.6.
+dc <- datacubes[1, 1]
+print(dc)
+```
+
+```{r read-raster}
+# All three time steps (1900, 2015, 2050) for forest birds (entity 2).
+data <- ebv_read(file, dc, entity = 2, timestep = 1:3, type = "r")
+print(data)
+```
+
+The SpatRaster contains one layer per timestep on a global one-degree grid (180 rows and 360 columns) in EPSG:4326.
+
+`ebv_analyse` calculates summary statistics for a bounding box covering Mexico and Central America.
+
+```{r analyse-region}
+# Define a bounding box (area of interest) for subsetting data.
+bb <- c(xmin = -118, xmax = -86, ymin = 14, ymax = 33)
+reg <- ebv_analyse(
+  file, dc, entity = 2, timestep = 1:3, subset = bb, verbose = FALSE
+)
+reg[c("mean", "n")]
+```
+
+For this subset, the paper reports a mean of 65.95752 species per cell and `n = 1824`, corresponding to 608 cells per timestep.
+
+## 3.3 Visualising EBV Data Cubes in space and time
+
+`ebv_map` shows the spatial distribution of forest-bird species richness in 2050 (Figure 3).
+
+```{r map-richness}
+# Map forest-bird species richness in 2050 under SSP1xRCP2.6.
+ebv_map(file, dc, entity = 2, timestep = 3, classes = 5, verbose = FALSE)
+```
+
+`ebv_trend` compares global mean species richness across timesteps for each SSP-RCP scenario (Figure 4).
+
+```{r trend-ssp1}
+# Mean species richness per time step under SSP1xRCP2.6.
+trend_ssp1 <- ebv_trend(file, datacubes[1, 1], entity = 2, verbose = FALSE)
+```
+
+```{r trend-ssp3}
+# Mean species richness per time step under SSP3xRCP6.0.
+trend_ssp3 <- ebv_trend(file, datacubes[4, 1], entity = 2, verbose = FALSE)
+```
+
+```{r trend-ssp5}
+# Mean species richness per time step under SSP5xRCP8.5.
+trend_ssp5 <- ebv_trend(file, datacubes[7, 1], entity = 2, verbose = FALSE)
+```
+
+The resulting plots allow temporal patterns to be compared across scenarios, while the returned summaries can be used in further analyses.
+
+## 3.4 Creating and publishing an EBVCube
+
+The creation workflow uses metadata prepared in the EBV Data Portal to build an empty EBVCube, add data, and update attributes. Here, dataset 30 supplies the metadata and source data.
+
+The metadata JSON downloaded with the dataset is used to create a new EBVCube, saved as `newEBVCube.nc` in R’s temporary directory.
+
+```{r prepare-creation}
+# Locate the metadata downloaded alongside the original netCDF.
+json <- paste0(tools::file_path_sans_ext(file), "_metadata.json")
+
+new_nc <- file.path(tempdir(), "newEBVCube.nc")
+entities <- ebv_properties(file, verbose = FALSE)@general$entity_names
+entities
+```
+
+`ebv_create` combines the metadata, spatial definition, and timesteps to create the blank netCDF structure.
+
+```{r create-cube}
+ebv_create(
+  jsonpath = json,
+  outputpath = new_nc,
+  entities = entities,
+  epsg = 4326,
+  extent = c(-180, 180, -90, 90),
+  resolution = c(1, 1),
+  timesteps = c("1900", "2015", "2050"),
+  fillvalue = -3.4e38,
+  overwrite = TRUE,
+  verbose = FALSE
+)
+```
+
+`ebv_add_data` populates the new cube with forest-bird species richness under SSP1xRCP2.6 for all three timesteps, read from the original dataset.
+
+```{r read-source-slice}
+# Read the selected scenario/metric/entity as a base R array.
+slice <- ebv_read(
+  file, dc, entity = 2, timestep = 1:3, type = "a", verbose = FALSE
+)
+```
+
+```{r add-data}
+ebv_add_data(
+  filepath_nc = new_nc,
+  scenario = 1,
+  metric = 1,
+  entity = 2,
+  timestep = 1:3,
+  data = slice,
+  verbose = FALSE
+)
+```
+
+The new file retains the complete hierarchy, with data populated for one scenario, metric, and entity. Its structure and populated slice can be inspected with the same discovery and mapping functions.
+
+```{r inspect-new-cube}
+new_datacubes <- ebv_datacubepaths(new_nc)
+new_dc <- new_datacubes[1, 1]
+print(new_datacubes)
+ebv_properties(new_nc)@general$title
+```
+
+```{r map-new-cube}
+ebv_map(new_nc, new_dc, entity = 2, timestep = 3, classes = 5)
+```
+
+`ebv_attribute` edits existing metadata. This example changes the units label to `Number of species changed` to illustrate its use; the data values remain unchanged.
+
+```{r edit-attribute}
+ebv_attribute(
+  new_nc,
+  attribute_name = "units",
+  value = "Number of species changed",
+  levelpath = "scenario_1/metric_1",
+  verbose = FALSE
+)
+```
+
+```{r check-attribute}
+# Inspect the updated attribute.
+ebv_properties(new_nc, new_dc, verbose = FALSE)@metric$units
+```
+
+The same workflow can be applied to users’ own biodiversity datasets to prepare EBVCubes for publication through the [EBV Data Portal](https://portal.geobon.org/).
+
+# Session information
+
+Record the package version and R session information.
+
+```{r session-information}
+packageVersion("ebvcube")
+sessionInfo()
+```
+
+# References
+
+Martins, I., and Pereira, H. (2022). *Global trends in biodiversity (BES-SIM cSAR-iDiv)* (Version 1) [Dataset]. German Centre for Integrative Biodiversity Research (iDiv) Halle-Jena-Leipzig. [Dataset DOI](https://doi.org/10.25829/5zmy41).
+
+Package resources: [CRAN](https://cran.r-project.org/package=ebvcube) and [GitHub](https://github.com/EBVcube/ebvcube).

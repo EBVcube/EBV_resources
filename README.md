@@ -4,7 +4,7 @@ This repository contains public resources from the [EBV Data Portal](https://por
 team for working with Essential Biodiversity Variables (EBVs) and the EBVCube format.
 
 ## Resources
-
+- [Code supporting the ebvcube R package paper](paper_r_package/ebvcube_paper_example.Rmd): R notebook for Section 3 of *ebvcube: An R package for multidimensional geospatial data of Essential Biodiversity Variables*, in preparation. The worked example demonstrates the package’s main functions for discovering, accessing, visualising, and creating EBVCubes.
 - [Tutorial](https://ebvcube.github.io/EBV_resources/): a step-by-step guide to creating, validating and publishing
   an EBVCube using the `ebvcube` R package. The tutorial is part of the
   [NaturaConnect Learning Platform](https://www.europeannatureacademy.com/course/naturaconnect)
